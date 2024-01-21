@@ -1,0 +1,94 @@
+
+/*ESTILOS PARA MOVIL*/
+#main-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: end;
+    z-index: -100;
+}
+#formulario-registro{
+    
+    height: 80vh;
+    width: 80vw;
+    background-color: black;
+    opacity: 0.80;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    border-radius: 1em;
+    margin-bottom: 1em;
+    
+}
+form{
+    
+    
+    width: 90%;
+    margin: 0, auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    gap:5vh;
+}
+#con-google{
+    width: 80%;
+    height: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color:#d9d9d9;
+    border-radius: 1em;
+    cursor:pointer;
+    font-size: 0.8em;
+}
+#con-google i, #con-google span{
+    margin-right: 1em;
+    color: black;
+    font-weight: 600;
+    font-size: 1.1em;
+}
+.item-form{
+    width: 70%;
+    height: 20%;
+    padding: 0.5em;
+    border: solid 1px #d9d9d9;
+}
+.item-form:focus{
+    outline: none;
+}
+.item-registro{
+    background-color: black;
+}
+#enlace-login, #registrar, #iniciar-sesion{
+    text-align: center;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0.8em;
+    text-underline-offset: 0.3em;
+}
+/*ESTILOS PARA TABLET*/
+@media (min-width: 768px){
+    #formulario-registro{
+        
+        width: 70vw;
+    }
+}
+/*ESTILOS PARA PANTALLA PEQ*/
+@media (min-width: 1350px){
+    #formulario-registro{
+        
+        width: 50vw;
+    }
+}
+/*ESTILOS PARA PANTALLA GRANDE*/
+@media (min-width: 1900px){
+    #formulario-registro{
+        
+        width: 30vw;
+    }
+}

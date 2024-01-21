@@ -1,0 +1,90 @@
+
+
+@keyframes growAndMove {
+  0% {
+    transform: scale(1);
+    margin-left: 0;
+  }
+  50% {
+    transform: scale(1.1); /* Reducir el factor de escala */
+    margin-left: 0.4em;   /* Reducir la distancia de desplazamiento */
+  }
+  100% {
+    transform: scale(1);
+    margin-left: 0;
+  }
+}
+/**Estilos movil**/
+@media (min-width: 0px){
+  main{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+}
+#letsgo{
+    display: none;    
+}
+
+  #eslogan{
+    width: 80vw;
+    height:20%;
+    margin-left: 10vw;
+    margin-bottom: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    flex-wrap: wrap;
+    animation: growAndMove 2s ease-in-out infinite;
+    
+    
+}
+h1{
+    
+    width: auto;
+    color: #D9D9D9;
+    font-size: 3em;
+    font-weight: 400;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    letter-spacing: 0.3em;
+
+}
+}
+/**ESTILOS TABLET**/
+@media (min-width: 601px){
+
+h1{
+  animation: none;
+  text-align: center;
+}
+}
+/**ESTILOS PANTALLA PEQ**/
+@media (min-width: 1350px){
+  main{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+}
+#eslogan{
+    width: 80vw;
+    height:35%;
+    margin-bottom: 5%;
+    margin-left: 0vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:center;
+    flex-wrap: wrap;
+    text-align: center;
+    animation: growAndMove 2s ease-in-out infinite;
+  
+}
+#eslogan:hover{
+  text-decoration: underline;
+  text-underline-offset: 0.6em;
+}
+}

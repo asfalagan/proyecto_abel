@@ -1,0 +1,19 @@
+nav{
+    height: 8vh;
+    background-color: transparent;
+}
+#opaca-nav{
+    opacity: 0.5;
+    z-index: -5;
+    width: 100%;
+    height: 100%;
+    background-color:black;
+}
+#barra-busqueda{
+    display: flex;
+    
+    align-items: center;
+    width: 70%;
+    height: 60%;
+    background-color: blue;
+}
