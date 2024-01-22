@@ -37,8 +37,8 @@
     justify-content: center;
 
     flex-wrap: wrap;
-    animation: growAndMove 2s ease-in-out infinite;
-    
+    /*animation: growAndMove 2s ease-in-out infinite;
+    */
     
 }
 h1{
@@ -80,8 +80,8 @@ h1{
     align-items:center;
     flex-wrap: wrap;
     text-align: center;
-    animation: growAndMove 2s ease-in-out infinite;
-  
+    /*animation: growAndMove 2s ease-in-out infinite;
+    */
 }
 #eslogan:hover{
   text-decoration: underline;
