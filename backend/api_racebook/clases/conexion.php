@@ -1,7 +1,7 @@
 <?php
     Class Conexion extends mysqli {
         private $host = 'localhost';
-        private $db = 'pruebas_api';
+        private $db = 'racebook';
         private $user = 'abeldes';
         private $pass = '1234';
 

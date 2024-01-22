@@ -71,6 +71,10 @@ form{
     padding: 0.8em;
     text-underline-offset: 0.2em;
 }
+#iniciar-sesion{
+    text-decoration: none;
+    border: solid 1px #d9d9d9;
+}
 /*ESTILOS PARA TABLET*/
 @media (min-width: 768px){
     #formulario-registro{
