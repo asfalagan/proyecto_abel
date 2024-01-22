@@ -10,12 +10,16 @@ $con = new Conexion();
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     if(isset($_POST['email'])&& isset($_POST['passwd'])){
+    $email;
+    $passwd;
+    $id;
         try {
             $sql = "SELECT * FROM usuario WHERE email = ?";
             $stmt = $con -> prepare($sql);
-            $stmt = $stmt -> bind_param('s', $_POST['email']);
-            $result = $con -> execute($stmt);
-            $usuarios = $result->fetch_all(MYSQLI_ASSOC);
+            $stmt -> bind_param('s', $_POST['email']);
+            $stmt -> execute($stmt);
+            $stmt -> bind_result($id, $email, $passwd);
+            $usuarios = $stmt->fetch_all(MYSQLI_ASSOC);
             $con -> close();
             header("HTTP/1.1 200 OK");
             echo json_encode($usuarios);

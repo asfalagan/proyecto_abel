@@ -116,3 +116,4 @@ CREATE TABLE usuario_carrera_favorita(
     FOREIGN KEY (id_carrera) REFERENCES carrera(id),
     FOREIGN KEY (id_usuario) REFERENCES usuario(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO usuario (email, passwd) VALUES ('abel@email.com','1234');
