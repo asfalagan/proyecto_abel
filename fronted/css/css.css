@@ -1,3 +1,7 @@
+html,body{
+    height: 100%;
+    margin: 0;
+}
 html{
     font-size: 16px;
 }
@@ -35,19 +39,19 @@ header{
         background-image: url("../images/background_movil_def.jpeg");
         background-repeat: no-repeat;
         background-size: cover;
-        height: 100vh;
+        height: 100%;
         width: 100vw;
 
     }
     /*HEADERBAR - STYLES */
     header{
-        height: 5vh;
+        height: 5%;
         width: 100vw;
     }
     #headerbar{
         background-color: black;
         color: #D9D9D9;
-        height: 5vh;
+        height: 5%;
         width: 100%;
 
         display: flex;
@@ -76,7 +80,7 @@ header{
     }
     #enlaces-menu-desplegable{
         width: 90vw;
-        height: 50vh;
+        height: 50%;
         position: fixed;
         top:6vh;
         right: 5vw;
@@ -103,7 +107,7 @@ header{
     }
     /*MAIN - STYLES */
     main{
-        height: 95vh;
+        height: 95%;
         width: 100vw;
     }
 
@@ -120,20 +124,20 @@ header{
         background-image: url("../images/background_tablet-def.jpeg");
         background-repeat: no-repeat;
         background-size: cover;
-        height: 100vh;
+        height: 100%;
         width: 100vw;
 
     }
     /*HEADERBAR - STYLES */
     header{
-        height: 5vh;
+        height: 5%;
         width: 100vw;
         
     }
     #headerbar{
         background-color: black;
         color: #D9D9D9;
-        height: 5vh;
+        height: 5%;
         width: 100%;
 
         display: flex;
@@ -162,7 +166,7 @@ header{
     }
     #enlaces-menu-desplegable{
         width: 40vw;
-        height: 60vh;
+        height: 60%;
         position: fixed;
         top:6vh;
         right: 5vw;
@@ -209,19 +213,19 @@ header{
         background-image: url("../images/background_tablet-def.jpeg");
         background-repeat: no-repeat;
         background-size: cover;
-        height: 100vh;
+        height: 100%;
         width: 100vw;
 
     }
     /*HEADERBAR - STYLES */
     header{
-        height: 5vh;
+        height: 5%;
         width: 100vw;
     }
     #headerbar{
         background-color: black;
         color: #D9D9D9;
-        height: 5vh;
+        height: 5%;
         width: 100vw;
 
         display: flex;
@@ -276,7 +280,7 @@ header{
     }
     /*MAIN - STYLES */
     main{
-        height: 95vh;
+        height: 95%;
         width: 100vw;
     }
 
@@ -296,7 +300,7 @@ body{
     background-image: url("../images/background.jpg");
     background-repeat: no-repeat;
     background-size: cover;
-    height: 100vh;
+    height: 100%;
     width: 100vw;
 
 }

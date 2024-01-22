@@ -14,7 +14,9 @@
 		- Detalle Carrera
 		- Inscripcion Carrera
 		- Perfil Usuario 
-
+	-> EN MOVIL:
+		100VH EXCEDE EL TAMAÑO DE LA VENTANA
+			¿Puedo definir cuantos px es el 100vh? o algo similar
 - Cliente 
 	-> Solamente tiene comprobaciones en formulario 
 		. Falta trim() formulario
