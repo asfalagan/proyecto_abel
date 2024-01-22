@@ -35,7 +35,7 @@ header{
         background-image: url("../images/background_movil_def.jpeg");
         background-repeat: no-repeat;
         background-size: cover;
-        height: 100%;
+        height: 100vh;
         width: 100vw;
 
     }
@@ -120,7 +120,7 @@ header{
         background-image: url("../images/background_tablet-def.jpeg");
         background-repeat: no-repeat;
         background-size: cover;
-        height: 100%;
+        height: 100vh;
         width: 100vw;
 
     }
@@ -209,7 +209,7 @@ header{
         background-image: url("../images/background_tablet-def.jpeg");
         background-repeat: no-repeat;
         background-size: cover;
-        height: 100%;
+        height: 100vh;
         width: 100vw;
 
     }
@@ -296,7 +296,7 @@ body{
     background-image: url("../images/background.jpg");
     background-repeat: no-repeat;
     background-size: cover;
-    height: 100%;
+    height: 100vh;
     width: 100vw;
 
 }
