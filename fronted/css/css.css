@@ -16,9 +16,7 @@ html{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     
 }
-body{
-    margin-bottom: 10%;
-}
+
 ul{
     list-style: none;
 }
@@ -210,9 +208,6 @@ header{
 }
 
 /**ESTILOS PANTALLA PEQUEÑA**/
-body{
-    margin-bottom: 0;
-}
 @media (min-width: 1350px){
     body{
         background-color: black;
