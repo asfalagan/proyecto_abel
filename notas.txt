@@ -1,7 +1,8 @@
 20240122
 - DB 
-	-> Preguntar a Dani que Modelo ER es mas adecuado y decidir cual desarrollo 
+	-> TENEMOS EL v3 -> tiramos por ahi
 	-> Script DB para comenzar con la API 
+		.revisar ondelete
 	
 - INTERFAZ
 	-> Diseño completo de: 
@@ -16,6 +17,7 @@
 
 - Cliente 
 	-> Solamente tiene comprobaciones en formulario 
+		. Falta trim() formulario
 	-> Pendiente de avanzar con API (?)
 	
 - SERVIDOR 

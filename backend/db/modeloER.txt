@@ -1,3 +1,32 @@
+################################
+v.2
+################################
+usuario(#id, nombre, nickname, email, passwd, imagen, salt, fecha_nacim, jwtkey)
+
+usuario_organizador(#(-id_usuario), telefono, entidad_organizadora)
+
+clasificacion(usuario_hace_carrera)(#id, -id_usuario, -id_carrera, puesto, fecha_hora_inicio, tiempo)
+
+evento(#id, nombre, fecha_inicio, fecha_fin, web, url, likes)
+
+imagen(#id, -id_evento, url, nombre, descripcion, autor)
+
+carrera(#id, -id_evento, nombre, modalidad, categoria, sexo, fecha_nacim_min, fecha_nacim_max, likes)
+
+recorrido(#id, -id_carrera, nombre, desnivel, distancia, dificultad)
+coordenada(#id, -id_recorrido, longitud, latitud, orden)
+
+premio(#id, -id_carrera, puesto, hay_trofeo)
+dinero(#id, -id_premio, cantidad)
+detalle(#id, -id_premio, descripcion)
+
+clasificacion(#id, -id_usuario, -id_carrera, fecha, tiempo, puesto)
+
+usuario_inscribe_carrera(#(-id_usuario, -id_carrera), fecha_inscripcion, talla_camiseta)
+usuario_favorita_carrera(#(-id_usuario, -id_carrera))
+################################
+v.1
+################################
 usuario(#id, nombre, nickname, email, passwd, imagen, salt, fecha_nacim)
 
 usuario_organizador(#(-id_usuario), telefono, entidad_organizadora)
