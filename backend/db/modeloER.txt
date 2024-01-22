@@ -1,0 +1,25 @@
+usuario(#id, nombre, nickname, email, passwd, imagen, salt, fecha_nacim)
+
+usuario_organizador(#(-id_usuario), telefono, entidad_organizadora)
+
+carrera(#id, -id_usuario_organizador, nombre, url_reglamento, likes, web)
+
+clasificacion(usuario_hace_recorrido)(#id, -id_usuario, -id_recorrido, puesto, fecha_hora_inicio, tiempo)
+
+inscripciones(usuario_inscribe_recorrido)(#(-id_usuario, -id_recorrido), fecha_inscripcion, talla_camiseta)
+
+favoritas(#(-id_usuario, -id_carrera))
+
+modalidad(#id, -id_carrera, nombre)
+
+categoria(#id, -id_modalidad, nombre, sexo, fecha_nacim_min, fecha_nacim_max)
+
+premio(#id, -id_categoria, puesto, hay_trofeo)
+
+dinero (#id, -id_premio, cantidad)
+
+detalle(#id, -id_premio, descripcion)
+
+recorrido(#id, -id_categoria, distancia, desnivel, nombre, dificultad)
+
+coordenada(#id, orden, longitud, latitud)

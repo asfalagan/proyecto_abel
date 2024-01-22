@@ -1,0 +1,22 @@
+20240122
+- DB 
+	-> Preguntar a Dani que Modelo ER es mas adecuado y decidir cual desarrollo 
+	-> Script DB para comenzar con la API 
+	
+- INTERFAZ
+	-> Diseño completo de: 
+		- landing
+		- login 
+		- registro 
+	-> Falta: 
+		- Main
+		- Detalle Carrera
+		- Inscripcion Carrera
+		- Perfil Usuario 
+
+- Cliente 
+	-> Solamente tiene comprobaciones en formulario 
+	-> Pendiente de avanzar con API (?)
+	
+- SERVIDOR 
+	-> PRIORITARIO API, DB y POBLAR CON DATOS DE PRUEBA 
