@@ -31,11 +31,22 @@ async function validarDatos(e){
         .then(response => {
             console.log(response);
             if(response.status == 201){
-                window.location.href = './main.html';
+                return response.json();
+                //window.location.href = './main.html';
                 
             }else if(response.status == 401){
                 loginAlert.innerHTML='Correo electrónico o contraseña incorrectos';
             }
+        })
+        .then(data => {
+            //para gestionar el token lo guardo en localstorage
+            // para gestionar si le queda poco tiempo... 
+            // cada vez que voy a pedir algo al servidor, compruebo si el token esta a punto de caducar
+            // si le queda poco tiempo le pido otro 
+            // tengo que controlar en el servidor si me pide un token nuevo
+            // como son pares clave valor, al escribir un nuevo token sobre la misma clave, se sobreescribe. Borrando el anterior
+            // Tengo que dar al usuario la opcion de cerrar sesion -> borro el JWT
+            console.log(data);
         })
     }else{
         loginAlert.innerHTML='Completa los campos para iniciar sesión';
