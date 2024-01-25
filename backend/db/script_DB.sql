@@ -15,9 +15,9 @@ CREATE TABLE usuario(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50),
     nickname VARCHAR(64),
-    email VARCHAR(128),
-    passwd VARCHAR(32),
-    jwtkey VARCHAR(32),
+    email VARCHAR(128) UNIQUE,
+    passwd VARCHAR(64),
+    salt VARCHAR(10),
     imagen VARCHAR(64),
     fecha_nacimiento DATE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -117,3 +117,19 @@ CREATE TABLE usuario_carrera_favorita(
     FOREIGN KEY (id_usuario) REFERENCES usuario(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 INSERT INTO usuario (email, passwd) VALUES ('abel@email.com','1234');
+INSERT INTO usuario_organizador (id_usuario) VALUES (1);
+DELIMITER $$
+CREATE FUNCTION is_admin(p_email VARCHAR(128))
+RETURNS BOOLEAN
+BEGIN 
+	DECLARE v_is_admin INT;
+    SET v_is_admin = (SELECT id_usuario FROM usuario_organizador UO JOIN usuario U ON UO.id_usuario = U.id WHERE U.email = p_email);
+    IF v_is_admin IS NOT NULL THEN
+		RETURN TRUE;
+	ELSE 
+		RETURN FALSE;
+	END IF;
+END;
+$$
+DELIMITER ;
+# SELECT is_admin('abel@email.com');

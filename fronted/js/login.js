@@ -10,27 +10,29 @@ iniciarSesion.addEventListener('click', validarDatos);
 
 
 async function validarDatos(e){
-    const url = 'http://localhost:3000/api/auth/login';
+    const url = 'http://localhost:3000/backend/api_racebook/login/';
     let emailValue = email.value;
     let passwdValue = passwd.value;
     //compruebo que esten seteados los campos
     if((emailValue != '') && (passwdValue != '')){
         //consulto en el servidor si existe el usuario
-        const dataProvisional = {
-            username: 'Abelin77',
-            password: passwdValue
+        const data = {
+            email: emailValue,
+            passwd: passwdValue
         }
         fetch(url, {
             method: 'POST',
             headers:{
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json;utf-8',
             },
-            body: JSON.stringify(dataProvisional),
+            body: JSON.stringify(data),
+            mode: 'cors',
         })
         .then(response => {
             console.log(response);
-            if(response.status == 200){
+            if(response.status == 201){
                 window.location.href = './main.html';
+                
             }else if(response.status == 401){
                 loginAlert.innerHTML='Correo electrónico o contraseña incorrectos';
             }

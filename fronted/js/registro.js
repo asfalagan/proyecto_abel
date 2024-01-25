@@ -4,7 +4,7 @@ const email = document.getElementById('email');
 const passwd = document.getElementById('password');
 const passwd2 = document.getElementById('password2');
 const loginAlert = document.getElementById('login-alert');
-const registrar = document.getElementById('registrar');
+const registrar = document.getElementById('iniciar-sesion');
 
 //evento para validar los datos del formulario
 registrar.addEventListener('click', validarDatos);
@@ -46,24 +46,25 @@ function validarDatos(e){
 }
 
 
-const url = 'http://localhost:3000/api/user/register';
+const url = 'http://localhost:3000/backend/api_racebook/signup/';
 
 //funcion para registrar el usuario a traves de la api
 async function signUp(data){
     //mientras usemos la api de victor.. adaptamos el formato de los datos a lo que espera la api
     
-        let dataProvisional = {
-            name : "Abel",
-            username: "Abelin77",
-            mail: "data@email.com",
-            password: "paso",
-        };
+        // let dataProvisional = {
+        //     name : "Abel",
+        //     username: "Abelin77",
+        //     mail: "data@email.com",
+        //     password: "paso",
+        // };
         fetch(url, {
             method: 'POST',
             headers:{
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json;utf-8'
             },
-            body: JSON.stringify(dataProvisional),
+            body: JSON.stringify(data),
+            mode: 'cors',
         })
         .then(response => {
             console.log(response);
@@ -73,7 +74,7 @@ async function signUp(data){
             }else if(response.status == 400){
                 loginAlert.innerHTML = 'Usuario ya registrado';
             }else{
-                loginAlert.innerHTML = 'Otro error';
+                loginAlert.innerHTML = 'Error desconocido :(';
             }
         })
         .then(data => {

@@ -1,35 +1,98 @@
 <?php
+
 ##recibe un correo y contraseña 
 ##devuelve:
 ##200 -> JWT
-##201 -> Combinacion incorrecta de email y contraseña
+##401 -> Combinacion incorrecta de email y contraseña
 ##400 -> BadRequest
-
+##usuario de pruebas prueba@email.com #Aa1234#
 require_once '../clases/conexion.php';
-$con = new Conexion();
+require_once '../../../vendor/autoload.php';
+use \Firebase\JWT\JWT;
+use \Firebase\JWT\Key;
 
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    if(isset($_POST['email'])&& isset($_POST['passwd'])){
-    $email;
-    $passwd;
-    $id;
+
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $json_data = file_get_contents("php://input");
+    $data = json_decode($json_data, true);
+    $formPasswd = $data['passwd'];
+    $email = $data['email'];
+    // echo $formPasswd;
+    // echo $email;
+
+    $con = new Conexion();
+    if(isset($formPasswd) && isset($email)){
+    
+        $salt;
+        $jwtkey;
+        $nombre;
+        $nickname;
+        $is_admin;  
+        $passwd;
+        $imagen;
+        $fechaNacimiento;
+        $user_id;
+        
         try {
-            $sql = "SELECT * FROM usuario WHERE email = ?";
-            $stmt = $con -> prepare($sql);
-            $stmt -> bind_param('s', $_POST['email']);
-            $stmt -> execute($stmt);
-            $stmt -> bind_result($id, $email, $passwd);
-            $usuarios = $stmt->fetch_all(MYSQLI_ASSOC);
-            $con -> close();
-            header("HTTP/1.1 200 OK");
-            echo json_encode($usuarios);
+            $sql = "SELECT id, nombre, nickname, email, passwd, salt,  imagen, fecha_nacimiento, is_admin(?) FROM usuario WHERE email = ?";
+            if($stmt = $con -> prepare($sql)){
+                $stmt -> bind_param("ss", $email, $email);
+                $stmt -> execute();
+                $stmt -> bind_result($user_id, $nombre, $nickname, $email, $passwd, $salt, $imagen, $fechaNacimiento, $is_admin);               
+                $stmt -> fetch();
+                $con -> close();
+                
+            }else{
+                exit();
+            }
+            //compruebo que la contraseña sea correcta
+            $formPasswd = hash('sha256', $formPasswd.$salt);
+
+            if($formPasswd === $passwd){
+            //compruebo si el usuario es administrador
+            //construyo el JWT
+                // $header = '{"alg":"HS256","typ":"JWT"}';
+                // $payload = '{"email":"'.$email.'","nombre":"'.$nombre.'","nickname":"'.$nickname.'","imagen":"'.$imagen.'","fechaNacimiento":"'.$fechaNacimiento.'"}';
+                // $header = base64_encode($header);
+                // $payload = base64_encode($payload);
+                // $signature = hash_hmac('sha256', $header.".".$payload, $jwtkey, true);
+                // $signature = base64_encode($signature);
+                // $jwt = $header.".".$payload.".".$signature;
+                // header("HTTP/1.1 201 OK	");
+                
+                // echo json_encode($jwt);
+                $payload = [
+                    'exp' => time() + 3600,
+                    'user_id' => $user_id,
+                    'user_nick' => $nickname,
+                    'is_admin' => $is_admin,
+                ];
+                //echo 'ES ADMIN: '.$is_admin.'<br>'; -> FUNCIONA CORRECTAMENTE
+                $codificada = JWT::encode($payload, $jwtkey, 'HS256');
+                // $decodificada = JWT::decode($codificada,new key($jwtkey, 'HS256')); -> Decodificia el JWT
+                // echo $codificada;
+                // echo '<br>';
+                // echo '<pre>';
+                // var_dump($decodificada);
+                // echo '</pre>';
+                // echo '<br>';
+                echo json_encode($codificada);
+                header("HTTP/1.1 201 Inicio de sesion correcto");
+                exit();
+            }else{
+                header("HTTP/1.1 401 Combinacion incorrecta de email y contraseña");
+                exit();
+            }
         } catch (mysqli_sql_exception $e) {
             header("HTTP/1.1 404 Not Found");
+            exit();
         }
     }
     
     
 }
 header("HTTP/1.1 400 Bad Request");
+exit();
 
 ?>
