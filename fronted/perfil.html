@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esqueleto</title>
+    <link rel="stylesheet" href="./css/css.css">
+    <link rel="stylesheet" href="./css/landing.css">
+    <script src="https://kit.fontawesome.com/a5191f3c7b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header id="headerbar">
+        <a href="./main.html" class="enlace-header">
+            <i class="fa-solid fa-person-running">
+                <span class="header-span">RaceBook</span>
+            </i>
+        </a>
+        <!-- Si la pantalla es suficientemente grande se mostrará el #headerbarlinks ; en movil se mostrara un menú desplegable-->
+        <div id="headerbarlinks">
+            <a class="enlace-header" href="./main.html">Catálogo de Carreras</a>
+            <!--Cuando el usuario se ha logeado el contenido de este elemento cambia; será un acceso a la cuenta del usuario-->
+            <a class="enlace-header" id="enlace-cuenta" href="./login.html" id="loginbuttonheader">
+                <i class="fa-regular fa-user">
+                    <span  class="header-span">Login</span>
+                </i>
+            </a>
+        </div>
+        <div id="menu-desplegable">
+            <div id="burguer-menu">
+                <i class="fa-solid fa-bars" id="menu-hamburguesa"></i>
+                <ul id="enlaces-menu-desplegable" class="hidden">
+                    <li><a class="enlace-menu-hambuerguesa" href="./main.html">Catálogo de Carreras</a></li>
+                    <li><a class="enlace-menu-hambuerguesa" href="./registro.html">Registro</a></li>
+                    <li><a class="enlace-menu-hambuerguesa" href="./login.html">Login</a></li>
+                    <li><a class="enlace-menu-hambuerguesa" href="./politica.html">Términos Legales</a></li>
+                    <li><a class="enlace-menu-hambuerguesa" href="./contancto.html">Atención al Cliente</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <!--Estos dos divs corresponden a la capa de fondo de pantalla mas la capa de transparencia ocupan todo el alto que no ocupa el header-->
+    <div id="background"></div>
+    <div id="opaca"></div>
+    <nav>
+        <div id="searchbar"></div>
+        <div id="breadcrumbs"></div>
+    </nav>
+    <main id="mainContainer">
+        
+    </main>
+    <!--El footer no se muestra en dispositivos moviles-->
+    <footer>
+        <a href="./politica.html">Política de Privacidad</a>
+        <a href="./contacto.html">Atención al Cliente</a>
+    </footer>
+</body>
+<script>
+    let iconoMenu = document.getElementById('menu-hamburguesa');
+    let menuDesplegable = document.getElementById('enlaces-menu-desplegable');
+    let mainContainer = document.getElementById('mainContainer');
+    iconoMenu.addEventListener('click', (event) => {
+        menuDesplegable.classList.toggle('hidden');
+    })
+    mainContainer.addEventListener('click', (event) => {
+        if(!menuDesplegable.classList.contains('hidden')){
+            menuDesplegable.classList.toggle('hidden');
+        }
+    })
+</script>
+</html>

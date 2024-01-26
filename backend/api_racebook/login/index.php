@@ -35,7 +35,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $user_id;
         
         try {
-            $sql = "SELECT id, nombre, nickname, email, passwd, salt,  imagen, fecha_nacimiento, is_admin(?) FROM usuario WHERE email = ?";
+            $sql = "SELECT id, nombre, nickname, email, passwd, salt,  imagen, fecha_nacimiento, email_is_admin(?) FROM usuario WHERE email = ?";
             if($stmt = $con -> prepare($sql)){
                 $stmt -> bind_param("ss", $email, $email);
                 $stmt -> execute();
@@ -62,22 +62,25 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 // header("HTTP/1.1 201 OK	");
                 
                 // echo json_encode($jwt);
-                $payload = [
-                    'exp' => time() + 3600,
+                $data = [
                     'user_id' => $user_id,
                     'user_nick' => $nickname,
                     'is_admin' => $is_admin,
                 ];
+                $payload = [
+                    'exp' => time() + 3600,
+                    'user_data' => $data,
+                ];
                 //echo 'ES ADMIN: '.$is_admin.'<br>'; -> FUNCIONA CORRECTAMENTE
                 $codificada = JWT::encode($payload, $jwtkey, 'HS256');
-                // $decodificada = JWT::decode($codificada,new key($jwtkey, 'HS256')); -> Decodificia el JWT
-                // echo $codificada;
-                // echo '<br>';
-                // echo '<pre>';
-                // var_dump($decodificada);
-                // echo '</pre>';
-                // echo '<br>';
-                echo json_encode($codificada);
+                $decodificada = JWT::decode($codificada,new key($jwtkey, 'HS256')); //-> Decodificia el JWT
+                echo $codificada;
+                echo '<br>';
+                echo '<pre>';
+                var_dump($decodificada);
+                echo '</pre>';
+                echo '<br>';
+                //echo json_encode($codificada);
                 header("HTTP/1.1 201 Inicio de sesion correcto");
                 exit();
             }else{
