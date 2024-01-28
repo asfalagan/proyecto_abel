@@ -15,7 +15,7 @@ function validarDatos(e){
     let emailValue = email.value;
     let passwdValue = passwd.value;
     let passwd2Value = passwd2.value;   
-    var regPasswd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,16}$/;
+    var regPasswd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?#&])([A-Za-z\d$@$!%*?&#]|[^ ]){8,16}$/;
     var regEmail = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
     //me falta un campo por rellenar
     if(emailValue == '' || passwdValue == '' || passwd2Value == ''){

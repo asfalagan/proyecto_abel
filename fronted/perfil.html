@@ -7,6 +7,55 @@
     <link rel="stylesheet" href="./css/css.css">
     <link rel="stylesheet" href="./css/landing.css">
     <script src="https://kit.fontawesome.com/a5191f3c7b.js" crossorigin="anonymous"></script>
+    <style>
+        #main-container{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 50%;
+            margin: 0 auto;
+        }
+        #mod-datos{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 50%;
+            margin: 0 auto;
+        }
+        #mod-datos input{
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+        #mod-datos label{
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+        #mod-datos legend{
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        #mod-datos input[type="submit"]{
+            width: 50%;
+            margin: 1rem 0;
+        }
+        #modificar-datos, #eliminar-usuario{
+            width: 100%;
+            background-color:#dedede;
+            color: black;
+            padding: 1rem;
+            text-align: center;
+            margin-top:2em;
+            border-radius: 1em;
+            cursor: pointer;
+        }
+        #eliminar-usuario{
+            background-color: #ff0000;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <header id="headerbar">
@@ -45,8 +94,25 @@
         <div id="searchbar"></div>
         <div id="breadcrumbs"></div>
     </nav>
-    <main id="mainContainer">
-        
+    <main id="main-container">
+        <form action="" enctype="multipart/form-data" id="mod-datos">
+            <legend>Formulario Modificacion Datos Usuario</legend>
+            <div id="login-alert">Rellena los datos que quieras modificar</div>
+            <label for="nombre">Nombre</label>
+            <input type="text" name="nombre" id="nombre" placeholder="Nombre">
+            <label for="apellidos">Nickname</label>
+            <input type="text" name="nickname" id="nickname" placeholder="Apellidos">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" placeholder="Email">
+            <label for="password">Contraseña</label>
+            <input type="password" name="password" id="password" placeholder="Contraseña">
+            <label for="password2">Repite la Contraseña</label>
+            <input type="password" name="password2" id="password2" placeholder="Repite la Contraseña">
+            <label for="imagen">Imagen de Perfil</label>
+            <input type="file" name="imagen" id="imagen">
+            <span id="modificar-datos">Modificar Datos de Usuario</span>
+            <span id="eliminar-usuario">Eliminar Usuario</span>
+        </form>
     </main>
     <!--El footer no se muestra en dispositivos moviles-->
     <footer>
@@ -54,10 +120,11 @@
         <a href="./contacto.html">Atención al Cliente</a>
     </footer>
 </body>
+<script src="./js/perfil.js"></script>
 <script>
     let iconoMenu = document.getElementById('menu-hamburguesa');
     let menuDesplegable = document.getElementById('enlaces-menu-desplegable');
-    let mainContainer = document.getElementById('mainContainer');
+    let mainContainer = document.getElementById('main-container');
     iconoMenu.addEventListener('click', (event) => {
         menuDesplegable.classList.toggle('hidden');
     })
