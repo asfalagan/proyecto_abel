@@ -1,14 +1,14 @@
 <?php
 //FUNCIONES DML
 function getUserData($userId){
-    include './conexion.php';
+    // include './conexion.php';
     ##devuelve un array con todos los datos o -1 si no encuentra nada
     $nombre;
     $nickname;
     $email;
     $imagen;
     $fechaNacimiento;
-    $is_admin;
+    $isAdmin;
     $tel;
     $entidadOrganizadora;
 
@@ -17,11 +17,11 @@ function getUserData($userId){
         return -1;
         exit();
     }
-    $query = 'SELECT *, id_is_admin(?) FROM usuario WHERE id = ?';
+    $query = 'SELECT nombre, nickname, email, imagen, fecha_nacimiento, id_is_admin(?) FROM usuario WHERE id = ?';
     if($stmt = $con -> prepare($query)){
         $stmt -> bind_param('ii', $userId, $userId);
         $stmt -> execute();
-        $stmt -> bind_result($nombre, $nickname, $email, $imagen, $fechaNacimiento, $is_admin);
+        $stmt -> bind_result($nombre, $nickname, $email, $imagen, $fechaNacimiento, $isAdmin);
         $peliculas = [];
         while($stmt -> fetch()){
            $data = [
@@ -31,12 +31,12 @@ function getUserData($userId){
             'email' => $email,
             'imagen' => $imagen,
             'fechaNacimiento' => $fechaNacimiento,
-            'is_admin' => $is_admin,
+            'isAdmin' => $isAdmin,
            ];
         }
         $stmt -> close();
     }
-    if($data['is_admin'] == 1){
+    if($data['isAdmin'] == 1){
         $query = 'SELECT telefono, entidad_organizadora FROM usuario_organizador WHERE id_usuario = ?';
         if($stmt = $con -> prepare($query)){
             $stmt -> bind_param('i', $userId);
@@ -54,7 +54,7 @@ function getUserData($userId){
     return count($data) == 0 ? -1: $data;
 }
 function updateUserdata($userId, $userData){
-    include './conexion.php';
+    // include './conexion.php';
     //pido los datos del usuario
     $userOldData = getUserData($userId);
     //compruebo los datos que quiere cambiar el usuario
@@ -66,7 +66,7 @@ function updateUserdata($userId, $userData){
         exit();
     }
     //si admin actualizo los datos de admin
-    if($userNewData['is_admin'] == 1){
+    if($userNewData['isAdmin'] == 1){
         $query = 'UPDATE usuario_organizador SET telefono = ?, entidad_organizadora = ? WHERE id_usuario = ?';
         if($stmt = $con -> prepare($query)){
             $stmt -> bind_param('ssi', $userNewData['tel'], $userNewData['entidadOrganizadora'], $userId);
@@ -100,6 +100,10 @@ function updateUserdata($userId, $userData){
     }
     return $userNewData;
 }
-
-
+function getEvents(){
+    
+}
+function getRaces($eventId){
+    
+}
 ?>

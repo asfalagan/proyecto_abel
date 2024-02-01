@@ -1,11 +1,5 @@
 <?php
-
-##recibe un correo y contraseña 
-##devuelve:
-##200 -> JWT
-##401 -> Combinacion incorrecta de email y contraseña
-##400 -> BadRequest
-##usuario de pruebas prueba@email.com #Aa1234#
+//esta llamada completa el registro de un usuario organizador
 require_once '../clases/conexion.php';
 require_once '../../../vendor/autoload.php';
 require_once '../clases/dml.php';

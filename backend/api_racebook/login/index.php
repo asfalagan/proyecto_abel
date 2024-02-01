@@ -20,6 +20,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $email = $data['email'];
     // echo $formPasswd;
     // echo $email;
+    // $formPasswd = '#Aa1234#';
+    // $email = 'prueba@email.com';
 
     $con = new Conexion();
     if(isset($formPasswd) && isset($email)){
@@ -39,7 +41,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if($stmt = $con -> prepare($sql)){
                 $stmt -> bind_param("ss", $email, $email);
                 $stmt -> execute();
-                $stmt -> bind_result($user_id, $nombre, $nickname, $email, $passwd, $salt, $imagen, $fechaNacimiento, $is_admin);               
+                $stmt -> bind_result($user_id, $nombre, $nickname, $email, $passwd, $salt, $imagen, $fechaNacimiento, 
+            
+            
+            );               
                 $stmt -> fetch();
                 $con -> close();
                 
@@ -62,26 +67,31 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 // header("HTTP/1.1 201 OK	");
                 
                 // echo json_encode($jwt);
+                $mtime = time() * 1000;
+                $exp = $mtime + 3600;
                 $data = [
-                    'user_id' => $user_id,
-                    'user_nick' => $nickname,
-                    'is_admin' => $is_admin,
+                    'userId' => $user_id,
+                    'userNickname' => $nickname,
+                    'isAdmin' => $is_admin,
                 ];
                 $payload = [
-                    'exp' => time() + 3600,
-                    'user_data' => $data,
+                    'exp' => $exp,
+                    'userData' => $data,
                 ];
                 //echo 'ES ADMIN: '.$is_admin.'<br>'; -> FUNCIONA CORRECTAMENTE
                 $codificada = JWT::encode($payload, $jwtkey, 'HS256');
-                $decodificada = JWT::decode($codificada,new key($jwtkey, 'HS256')); //-> Decodificia el JWT
-                echo $codificada;
-                echo '<br>';
-                echo '<pre>';
-                var_dump($decodificada);
-                echo '</pre>';
-                echo '<br>';
+                //$decodificada = JWT::decode($codificada,new key($jwtkey, 'HS256')); //-> Decodificia el JWT
+                //echo $codificada;
+                // echo '<br>';
+                // echo '<pre>';
+                // var_dump($decodificada);
+                // echo '</pre>';
+                // echo '<br>';
                 //echo json_encode($codificada);
                 header("HTTP/1.1 201 Inicio de sesion correcto");
+                //envio $codificada como cuerpo de la solicitud HTTP
+                echo json_encode($codificada);
+
                 exit();
             }else{
                 header("HTTP/1.1 401 Combinacion incorrecta de email y contraseña");

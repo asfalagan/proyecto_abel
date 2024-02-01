@@ -46,7 +46,16 @@ async function validarDatos(e){
             // tengo que controlar en el servidor si me pide un token nuevo
             // como son pares clave valor, al escribir un nuevo token sobre la misma clave, se sobreescribe. Borrando el anterior
             // Tengo que dar al usuario la opcion de cerrar sesion -> borro el JWT
+            console.log('obtenido de la api: ');
             console.log(data);
+            let jwt = data;
+            if(data != undefined && data != null){
+                localStorage.setItem('jwt', jwt);
+                window.location.href = './main.html';
+            }else{
+                loginAlert.innerHTML='Completa los campos para iniciar sesión'
+                console.log('El jwt tiene valor null o undefined');
+            }
         })
     }else{
         loginAlert.innerHTML='Completa los campos para iniciar sesión';

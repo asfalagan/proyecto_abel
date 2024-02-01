@@ -8,55 +8,6 @@
     <link rel="stylesheet" href="./css/landing.css">
     <script src="https://kit.fontawesome.com/a5191f3c7b.js" crossorigin="anonymous"></script>
     <script src="./js/jwt.js"></script>
-    <style>
-        #main-container{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 50%;
-            margin: 0 auto;
-        }
-        #mod-datos{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 50%;
-            margin: 0 auto;
-        }
-        #mod-datos input{
-            width: 100%;
-            margin: 0.5rem 0;
-        }
-        #mod-datos label{
-            width: 100%;
-            margin: 0.5rem 0;
-        }
-        #mod-datos legend{
-            font-size: 2rem;
-            font-weight: bold;
-            margin: 1rem 0;
-        }
-        #mod-datos input[type="submit"]{
-            width: 50%;
-            margin: 1rem 0;
-        }
-        #modificar-usuario, #eliminar-usuario{
-            width: 100%;
-            background-color:#dedede;
-            color: black;
-            padding: 1rem;
-            text-align: center;
-            margin-top:2em;
-            border-radius: 1em;
-            cursor: pointer;
-        }
-        #eliminar-usuario{
-            background-color: #ff0000;
-            color: white;
-        }
-    </style>
 </head>
 <body>
     <header id="headerbar">
@@ -95,28 +46,29 @@
         <div id="searchbar"></div>
         <div id="breadcrumbs"></div>
     </nav>
-    <main id="main-container">
-        <form action="" id="mod-datos">
-            <p>FALTA DIVIDIR ESTE FORMULARIO EN DOS; LA IMAGEN VA EN OTRO A PARTE</p>
-            <legend>Formulario Modificacion Datos Usuario</legend>
-            <div id="login-alert">Rellena los datos que quieras modificar</div>
+    <main id="mainContainer">
+        <form action="">
+            <!--Formulario para recoger los datos que faltan para finalizar el registro de usuario-->
+            <div id="login-alert">Rellena los datos para completar el registro</div>
             <label for="nombre">Nombre</label>
             <input type="text" name="nombre" id="nombre" placeholder="Nombre">
             <label for="apellidos">Nickname</label>
             <input type="text" name="nickname" id="nickname" placeholder="Apellidos">
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" placeholder="Email">
-            <label for="password">Contraseña</label>
-            <input type="password" name="password" id="password" placeholder="Contraseña">
-            <label for="password2">Repite la Contraseña</label>
-            <input type="password" name="password2" id="password2" placeholder="Repite la Contraseña">
             <label for="fechaNacimiento">Fecha de Nacimiento</label>
             <input type="date" name="fechaNacimiento" id="fechaNacimiento" placeholder="Fecha de Nacimiento">
-            <label for="imagen">Imagen de Perfil</label>
-            <input type="file" name="imagen" id="imagen">
-            <span id="modificar-usuario">Modificar Datos de Usuario</span>
-            <span id="eliminar-usuario">Eliminar Usuario</span>
+            <label for="telefono">Teléfono</label>
+            <input type="tel" id="telefono" name="telefono" placeholder="Teléfono">
+            <label for="entidad">Nombre de la Entidad</label>
+            <input type="text" id="entidad" name="entidad" placeholder="Nombre de la Entidad">
         </form>
+        <form action="../backend/api_racebook/signup/organizador/imagen.php" enctype="multipart/form-data" method="post">
+            <!--Formulario para recoger la imagen de usuario; se manda directo a la API-->
+            <div>Sube una imagen de perfil</div>
+            <input type="file" name="imagen" id="imagen">
+            <input type="number" name="idUsuario" id="idUsuario" style="display: none;">
+            <input type="submit" value="Cargar Imagen" name="imagen" id="cargarImagen">
+        </form>
+        <div id="finalizarRegistro">Finalizar Registro</div>
     </main>
     <!--El footer no se muestra en dispositivos moviles-->
     <footer>
@@ -124,12 +76,10 @@
         <a href="./contacto.html">Atención al Cliente</a>
     </footer>
 </body>
-<script src="./js/handleUser.js"></script>
-<script src="./js/perfil.js"></script>
 <script>
     let iconoMenu = document.getElementById('menu-hamburguesa');
     let menuDesplegable = document.getElementById('enlaces-menu-desplegable');
-    let mainContainer = document.getElementById('main-container');
+    let mainContainer = document.getElementById('mainContainer');
     iconoMenu.addEventListener('click', (event) => {
         menuDesplegable.classList.toggle('hidden');
     })
@@ -138,5 +88,51 @@
             menuDesplegable.classList.toggle('hidden');
         }
     })
+    //Se recoge el idUsuario del JWT y se guarda en el dataset del elemento #idUsuario
+    let idUsuario = document.getElementById('idUsuario');
+    let jwt = getLocalJWT();
+    let decodedJWT = decodeJWT(jwt);
+    idUsuario.dataset.idUsuario = decodedJWT.idUsuario;
+    //al pulsar en finalizarRegistro se envian los datos a la API
+    let finalizarRegistro = document.getElementById('finalizarRegistro');
+    finalizarRegistro.addEventListener('click', validarDatos);
+    function validarDatos(){
+        let tel = document.getElementById('telefono');
+        let reg = /^[679]\d{8}$/;
+        if(tel.value.match(reg)){
+            handleSignUp();
+        }else{
+            alert('Has introducido un número de teléfono incorrecto');
+            tel.value='';
+        }
+    }
+    async function handleSignUp(){
+        let alert = document.getElementById('login-alert');
+        let data = {
+            nombre: document.getElementById('nombre').value,
+            nickname: document.getElementById('nickname').value,
+            fechaNacimiento: document.getElementById('fechaNacimiento').value,
+            idUsuario: document.getElementById('idUsuario').dataset.idUsuario,
+        }
+        let url = '../backend/api_racebook/signup/usuario/';
+        fetch(url,{
+            method: 'POST',
+            body: JSON.stringify(datos),
+            headers:{
+                'Content-Type': 'application/json;utf-8'
+            },
+            body: JSON.stringify(data),
+            mode: 'cors'
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if(data.status == 200){
+                window.location.href = './login.html';
+            }else{
+                alert.innerText = 'Error al completar registro intentalo de nuevo';
+            }
+        })
+    }
 </script>
 </html>

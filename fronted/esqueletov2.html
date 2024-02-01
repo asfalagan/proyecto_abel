@@ -3,30 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing</title>
+    <title>Esqueleto</title>
     <link rel="stylesheet" href="./css/css.css">
     <link rel="stylesheet" href="./css/landing.css">
     <script src="https://kit.fontawesome.com/a5191f3c7b.js" crossorigin="anonymous"></script>
     <script src="./js/jwt.js"></script>
+    <script src="./js/main.js"></script>
 </head>
 <body>
-    <header id="headerbar">
+    <header>
         <a href="./main.html" class="enlace-header">
             <i class="fa-solid fa-person-running">
-                <span class="header-span">RaceBook</span>
+                <span class="headerSpan">RaceBook</span>
             </i>
         </a>
         <!-- Si la pantalla es suficientemente grande se mostrará el #headerbarlinks ; en movil se mostrara un menú desplegable-->
-        <div id="headerbarlinks">
-            <a class="enlace-header" href="./main.html">Catálogo de Carreras</a>
+        <div id="menuHeader">
+            <a class="enlaceHeader" href="./main.html">Catálogo de Carreras</a>
             <!--Cuando el usuario se ha logeado el contenido de este elemento cambia; será un acceso a la cuenta del usuario-->
-            <a class="enlace-header" id="enlace-cuenta" href="./login.html" id="loginbuttonheader">
+            <a class="enlaceHeader" id="enlaceCuenta" href="./login.html" id="cuentaButton">
                 <i class="fa-regular fa-user">
-                    <span  class="header-span">Login</span>
+                    <span  class="header-span" id="cuentaButtonText">Login</span>
                 </i>
             </a>
         </div>
-        <div id="menu-desplegable">
+        <div id="menuDesplegable">
             <div id="burguer-menu">
                 <i class="fa-solid fa-bars" id="menu-hamburguesa"></i>
                 <ul id="enlaces-menu-desplegable" class="hidden">
@@ -47,8 +48,7 @@
         <div id="breadcrumbs"></div>
     </nav>
     <main id="mainContainer">
-        <a id="eslogan" href="./main.html"><h1>El mejor catálogo de carreras</h1></a>
-        <!--<a href="./main.html" id="letsgo">Let's Go!!</a>-->
+        
     </main>
     <!--El footer no se muestra en dispositivos moviles-->
     <footer>

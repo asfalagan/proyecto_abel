@@ -1,33 +1,39 @@
 const nombre = document.getElementById('nombre');
-const nickName = document.getElementById('nickname');
+const nickname = document.getElementById('nickname');
 const email = document.getElementById('email');
 const passwd = document.getElementById('password');
 const passwd2 = document.getElementById('password2');
 const imagen = document.getElementById('imagen');
 const loginAlert = document.getElementById('login-alert');
+const fechaNacimiento = document.getElementById('fechaNacimiento');
 
-const botonModificar = document.getElementById('modificar-datos');
+const botonModificar = document.getElementById('modificar-usuario');
 botonModificar.addEventListener('click', modificarDatos);
 //las imagenes las mandamos en un form a parte para gestionarlo desde el servidor sin hacver nada js 
 function modificarDatos(e){
-    let passwdValue = passwd.value;
-    let passwd2Value = passwd2.value; 
     data = {}; 
-    if(passwd2Value != '' || passwdValue != ''){
+    if(passwd.value != '' && passwd2.value != ''){
         if(validarPasswd(passwdValue, passwd2Value)){
             data.passwd=passwdValue;
         }
     }
+    
+    
+        
     if (nombre.value.trim()) data.nombre=nombre.value.trim();
-    if (nickName.value.trim()) data.nickName=nickName.value.trim();
+    if (nickname.value.trim()) data.nickname=nickname.value.trim();
     if (email.value.trim()) data.email=email.value.trim();
+    if (fechaNacimiento.value.trim()) data.fechaNacimiento=fechaNacimiento.value.trim();
+    
     //compruebo que data tenga al menos una clave para enviar
     if(Object.keys(data).length != 0){
         console.log(data);
+        $bearer = getLocalJWT();
         fetch('http://localhost:3000/backend/api_racebook/user/', {
             method: 'PUT',
             headers:{
                 'Content-Type': 'application/json;utf-8',
+                'Authorization': $bearer,
             },
             body: JSON.stringify(data),
             mode: 'cors',
