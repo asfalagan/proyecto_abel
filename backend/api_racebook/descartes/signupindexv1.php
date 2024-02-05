@@ -1,18 +1,21 @@
 <?php
+//esta llamada funciona si no recibo un formData y recibo un json
 require_once '../clases/conexion.php';
 require_once '../../../vendor/autoload.php';
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $json_data = file_get_contents("php://input");
     $data = json_decode($json_data, true);
     $isAdmin = $data['isAdmin'];
     $passwd = $data['password'];
     $email = $data['email'];
+    // $passwd = '#Aa1234#';
+    // $email = 'prueba@email.com';
     $salt = base64_encode(random_bytes(6));
     $cryptedPasswd = hash('sha256', $passwd . $salt);
+
     $emailTest;
     $conTest = new Conexion();
     if ($conTest->connect_error) {
@@ -28,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->fetch();
     $stmt->close();
     $conTest->close();
-    
+
     if ($emailTest == $email) {
         enviarRespuesta(402, "Email ya registrado");
     
@@ -64,6 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $con->close();
                     $mtime = time() * 1000;
                     $exp = $mtime + 3600;
+                    echo 'Aqui va el id usuario: ';
+                    echo $idUsuario;
+                    echo '<br>';
                     $data = [
                         'userId' => $idUsuario,
                         'isAdmin' => $isAdmin,
@@ -73,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'userData' => $data,
                     ];
                     $jwt = JWT::encode($payload, $jwtkey, 'HS256');
-                    header("HTTP/1.1 201 Registro de usuario correcto");
+                    header("HTTP/1.1 201 Inicio de sesion correcto");
                     echo json_encode($jwt);
                 // enviarRespuesta(200, "Usuario registrado correctamente");
                 //construyo un JWT que contiene el id_usuario del nuevo usuario para poder completar el registro

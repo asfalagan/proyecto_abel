@@ -1,11 +1,9 @@
 const cuentaButton = document.getElementById('cuentaButton');
 const cuentaButtonText = document.getElementById('cuentaButtonText');
 const catalogo = localStorage.getItem('catalogo');
+const nuevoEvento = document.getElementById('nuevoEvento');
+window.addEventListener('load', renderPage)
 
-window.addEventListener('load', renderEvents)
-
-//cada cinco minutos ejecuto la funcion renderPage 
-let interval = setInterval(renderPage, 300);
 function renderPage(){
     //compruebo si se trata de un usuario anonimo o logeado buscando un JWT en el localstorage
     if(JWT_exists()){
@@ -19,9 +17,16 @@ function renderPage(){
         cuentaButton.href = './perfil.html';
         console.log(jwt);
         //pinto los eventos añadiendo un listener que redirija a la pagina del evento con sus carreras
+
+        //si es organizador añado un boton para crear eventos
+        if(decodedJWT.userData.isAdmin){
+            nuevoEvento.addEventListener('click', () => {
+                window.location.href = './registroEvento.html';
+            })
+        }
     }else{
         //navegacion anonima
-        alert('No has iniciado sesión o tu sesión ha expirado. Debes iniciar sesión para acceder a todo el contenido de esta aplicación');
+        alert('Debes iniciar sesión para acceder a todo el contenido de esta aplicación');
         cuentaButtonText.textContent = 'Login';
         cuentaButton.href = './login.html';
         //pinto los eventos NO añadiendo un listener que redirija a la pagina del evento con sus carreras

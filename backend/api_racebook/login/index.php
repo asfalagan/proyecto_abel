@@ -18,80 +18,102 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $data = json_decode($json_data, true);
     $formPasswd = $data['passwd'];
     $email = $data['email'];
-    // echo $formPasswd;
-    // echo $email;
-    // $formPasswd = '#Aa1234#';
-    // $email = 'prueba@email.com';
-
     $con = new Conexion();
-    if(isset($formPasswd) && isset($email)){
-    
+    if(isset($formPasswd) && isset($email)){   
         $salt;
         $jwtkey;
         $nombre;
         $nickname;
-        $is_admin;  
+        $isAdmin;  
         $passwd;
         $imagen;
         $fechaNacimiento;
-        $user_id;
-        
+        $userId;
+        $registroCompletado;
         try {
             $sql = "SELECT id, nombre, nickname, email, passwd, salt,  imagen, fecha_nacimiento, email_is_admin(?) FROM usuario WHERE email = ?";
             if($stmt = $con -> prepare($sql)){
                 $stmt -> bind_param("ss", $email, $email);
                 $stmt -> execute();
-                $stmt -> bind_result($user_id, $nombre, $nickname, $email, $passwd, $salt, $imagen, $fechaNacimiento, 
-            
-            
-            );               
+                $stmt -> bind_result($userId, $nombre, $nickname, $email, $passwd, $salt, $imagen, $fechaNacimiento, $isAdmin);
                 $stmt -> fetch();
+                $stmt -> close();
                 $con -> close();
-                
+                if(!isset($userId)){
+                    header("HTTP/1.1 401 Combinacion incorrecta de email y contraseña");
+                    exit();
+                }
             }else{
+                header("HTTP/1.1 400 Bad Request");
                 exit();
             }
-            //compruebo que la contraseña sea correcta
+            $con = new Conexion();
+            $sql = "SELECT comprobar_registro(?)";
+            if($stmt = $con -> prepare($sql)){
+                $stmt -> bind_param("i", $userId);
+                $stmt -> execute();
+                $stmt -> bind_result($registroCompletado);
+                $stmt -> fetch();
+                $stmt -> close();
+                $con -> close();
+            }else{
+                header("HTTP/1.1 400 Bad Request");
+                exit();
+            }
+            if(!isset($registroCompletado)){
+                $pld = [
+                    'exp' => time() * 1000 + 3600,
+                    'userData' => [
+                        'userId' => $userId,
+                        'isAdmin' => $isAdmin,
+                        'completado' => false
+                    ]
+                ];
+                $token = JWT::encode($pld, $jwtkey, 'HS256');
+                header("HTTP/1.1 201 Usuario no ha completado el registro");
+                echo json_encode($token);
+                exit();
+            }
             $formPasswd = hash('sha256', $formPasswd.$salt);
-
             if($formPasswd === $passwd){
-            //compruebo si el usuario es administrador
-            //construyo el JWT
-                // $header = '{"alg":"HS256","typ":"JWT"}';
-                // $payload = '{"email":"'.$email.'","nombre":"'.$nombre.'","nickname":"'.$nickname.'","imagen":"'.$imagen.'","fechaNacimiento":"'.$fechaNacimiento.'"}';
-                // $header = base64_encode($header);
-                // $payload = base64_encode($payload);
-                // $signature = hash_hmac('sha256', $header.".".$payload, $jwtkey, true);
-                // $signature = base64_encode($signature);
-                // $jwt = $header.".".$payload.".".$signature;
-                // header("HTTP/1.1 201 OK	");
-                
-                // echo json_encode($jwt);
                 $mtime = time() * 1000;
                 $exp = $mtime + 3600;
                 $data = [
-                    'userId' => $user_id,
+                    'userId' => $userId,
                     'userNickname' => $nickname,
-                    'isAdmin' => $is_admin,
+                    'isAdmin' => $isAdmin,
+                    'userEmail' => $email,
+                    'userNombre' => $nombre,
+                    'userImagen' => $imagen,
+                    'userFechaNacimiento' => $fechaNacimiento,
+                    'completado' => true,
                 ];
+                if($isAdmin){
+                    $telefono;
+                    $entidad_organizadora;
+                    $con = new Conexion();
+                    $sql = "SELECT telefono, entidad_organizadora FROM usuario_organizador WHERE id_usuario = ?";
+                    if($stmt = $con -> prepare($sql)){
+                        $stmt -> bind_param("i", $userId);
+                        $stmt -> execute();
+                        $stmt -> bind_result($telefono, $entidad_organizadora);
+                        $stmt -> fetch();
+                        $stmt -> close();
+                        $con -> close();
+                    }else{
+                        header("HTTP/1.1 400 Bad Request");
+                        exit();
+                    }
+                    $data['telefono'] = $telefono;
+                    $data['entidadOrganizadora'] = $entidad_organizadora;
+                }
                 $payload = [
-                    'exp' => $exp,
+                    'exp' => time() * 1000 + 3600,
                     'userData' => $data,
                 ];
-                //echo 'ES ADMIN: '.$is_admin.'<br>'; -> FUNCIONA CORRECTAMENTE
-                $codificada = JWT::encode($payload, $jwtkey, 'HS256');
-                //$decodificada = JWT::decode($codificada,new key($jwtkey, 'HS256')); //-> Decodificia el JWT
-                //echo $codificada;
-                // echo '<br>';
-                // echo '<pre>';
-                // var_dump($decodificada);
-                // echo '</pre>';
-                // echo '<br>';
-                //echo json_encode($codificada);
+                $jwtEncode = JWT::encode($payload, $jwtkey, 'HS256');          
                 header("HTTP/1.1 201 Inicio de sesion correcto");
-                //envio $codificada como cuerpo de la solicitud HTTP
-                echo json_encode($codificada);
-
+                echo json_encode($jwtEncode);
                 exit();
             }else{
                 header("HTTP/1.1 401 Combinacion incorrecta de email y contraseña");
@@ -99,11 +121,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             }
         } catch (mysqli_sql_exception $e) {
             header("HTTP/1.1 404 Not Found");
+            //MUESTRO LA EXCEPCI0N
+            echo $e;
             exit();
         }
-    }
-    
-    
+    }   
 }
 header("HTTP/1.1 400 Bad Request");
 exit();

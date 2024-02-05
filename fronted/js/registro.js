@@ -10,6 +10,13 @@ const isAdmin = document.getElementById('isAdmin');
 //evento para validar los datos del formulario
 registrar.addEventListener('click', validarDatos);
 console.log(email.value);
+//al presionar la tecla enter
+const body = document.querySelector('body');
+body.addEventListener('keydown', (event) => {
+    if(event.key == 'Enter'){
+        validarDatos();
+    }
+})
 
 //funcion para validar los datos del formulario y decidir si se envia o no
 function validarDatos(e){
@@ -54,14 +61,6 @@ const url = 'http://localhost:3000/backend/api_racebook/signup/';
 
 //funcion para registrar el usuario a traves de la api
 async function signUp(data){
-    //mientras usemos la api de victor.. adaptamos el formato de los datos a lo que espera la api
-    
-        // let dataProvisional = {
-        //     name : "Abel",
-        //     username: "Abelin77",
-        //     mail: "data@email.com",
-        //     password: "paso",
-        // };
         fetch(url, {
             method: 'POST',
             headers:{
@@ -76,7 +75,7 @@ async function signUp(data){
                 loginAlert.innerHTML = 'Usuario registrado correctamente';
                 return response.json();
 
-            }else if(response.status == 400){
+            }else if(response.status == 402){
                 loginAlert.innerHTML = 'Usuario ya registrado';
             }else{
                 loginAlert.innerHTML = 'Error desconocido :(';
@@ -85,11 +84,12 @@ async function signUp(data){
         .then(data => {
             console.log(data);
             //window.location.href = './login.html';
-            let jwt = data;
+            let userData = data;
             if(data != undefined && data != null){
-                localStorage.setItem('jwt', jwt);
-                let decodedJWT = JWT_decode(jwt);
-                if(decodedJWT.userData.isAdmin){
+                localStorage.setItem('userData', userData);
+                userData = JWT_decode(userData);
+                //
+                if(userData.userData.isAdmin){
                     //si es organizador le llevo al formulario de completar organizador
                     window.location.href = './completarOrganizador.html';
                 }else{

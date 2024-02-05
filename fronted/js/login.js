@@ -7,8 +7,13 @@ const iniciarSesion = document.getElementById('iniciar-sesion');
 
 //evento para validar los datos del formulario
 iniciarSesion.addEventListener('click', validarDatos);
-
-
+//al presionar la tecla enter
+const body = document.querySelector('body');
+body.addEventListener('keydown', (event) => {
+    if(event.key == 'Enter'){
+        validarDatos();
+    }
+})
 async function validarDatos(e){
     const url = 'http://localhost:3000/backend/api_racebook/login/';
     let emailValue = email.value;
@@ -32,28 +37,30 @@ async function validarDatos(e){
             console.log(response);
             if(response.status == 201){
                 return response.json();
-                //window.location.href = './main.html';
-                
+                //window.location.href = './main.html';           
             }else if(response.status == 401){
                 loginAlert.innerHTML='Correo electrónico o contraseña incorrectos';
             }
         })
         .then(data => {
-            //para gestionar el token lo guardo en localstorage
-            // para gestionar si le queda poco tiempo... 
-            // cada vez que voy a pedir algo al servidor, compruebo si el token esta a punto de caducar
-            // si le queda poco tiempo le pido otro 
-            // tengo que controlar en el servidor si me pide un token nuevo
-            // como son pares clave valor, al escribir un nuevo token sobre la misma clave, se sobreescribe. Borrando el anterior
-            // Tengo que dar al usuario la opcion de cerrar sesion -> borro el JWT
-            console.log('obtenido de la api: ');
-            console.log(data);
             let jwt = data;
             if(data != undefined && data != null){
                 localStorage.setItem('jwt', jwt);
-                window.location.href = './main.html';
+                let decoded = JWT_decode(jwt);
+                console.log(decoded);
+                console.log(decoded.userData);
+                if(!decoded.userData.completado){
+                   
+                    if(decoded.userData.isAdmin){
+                        window.location.href = './completarOrganizador.html';
+                    }else{
+                        window.location.href = './completarUsuario.html';
+                    }
+                }else{
+                    window.location.href = './main.html';
+                }
             }else{
-                loginAlert.innerHTML='Completa los campos para iniciar sesión'
+                loginAlert.innerHTML='Combinación de correo electrónico y contraseña incorrectos';
                 console.log('El jwt tiene valor null o undefined');
             }
         })

@@ -47,24 +47,21 @@
         <div id="breadcrumbs"></div>
     </nav>
     <main id="mainContainer">
-        <form action="">
+        <form action="" enctype="multipart/form-data" method="post">
             <!--Formulario para recoger los datos que faltan para finalizar el registro de usuario-->
-            <div>Rellena los datos para completar el registro</div>
+            <div id="loginAlert">Rellena los datos para completar el Registro</div>
             <label for="nombre">Nombre</label>
             <input type="text" name="nombre" id="nombre" placeholder="Nombre">
             <label for="apellidos">Nickname</label>
             <input type="text" name="nickname" id="nickname" placeholder="Apellidos">
             <label for="fechaNacimiento">Fecha de Nacimiento</label>
             <input type="date" name="fechaNacimiento" id="fechaNacimiento" placeholder="Fecha de Nacimiento">
-        </form>
-        <form action="../backend/api_racebook/signup/organizador/imagen.php" enctype="multipart/form-data" method="post">
-            <!--Formulario para recoger la imagen de usuario; se manda directo a la API-->
-            <div>Sube una imagen de perfil</div>
+            <label for="imagen">Foto de Perfil. Requiere formato 1:1</label>
+            <input type="hidden" name="MAX_FILE_SIZE" value="300000" />
             <input type="file" name="imagen" id="imagen">
-            <input type="number" name="idUsuario" id="idUsuario" style="display: none;">
-            <input type="submit" value="Cargar Imagen" name="imagen" id="cargarImagen">
+            <div id="finalizarRegistro">Finalizar Registro</div>
         </form>
-        <div id="finalizarRegistro">Finalizar Registro</div>
+        
     </main>
     <!--El footer no se muestra en dispositivos moviles-->
     <footer>
@@ -73,6 +70,7 @@
     </footer>
 </body>
 <script>
+    let loginAlert = document.getElementById('loginAlert');
     let iconoMenu = document.getElementById('menu-hamburguesa');
     let menuDesplegable = document.getElementById('enlaces-menu-desplegable');
     let mainContainer = document.getElementById('mainContainer');
@@ -84,37 +82,56 @@
             menuDesplegable.classList.toggle('hidden');
         }
     })
-    //Se recoge el idUsuario del JWT y se guarda en el dataset del elemento #idUsuario
-    let idUsuario = document.getElementById('idUsuario');
-    let jwt = getLocalJWT();
-    let decodedJWT = decodeJWT(jwt);
-    idUsuario.dataset.idUsuario = decodedJWT.idUsuario;
+    //recojo el idUsuario del token userData
+    let userIdentificationData = localStorage.getItem('userData');
+    userIdentificationData = JWT_decode(userIdentificationData);
+    let userId = userIdentificationData.userData.userId;
     //al pulsar en finalizarRegistro se envian los datos a la API
-    let finalizarRegistro = document.getElementById('finalizarRegistro');
-    finalizarRegistro.addEventListener('click', handleSignUp);
-    async function handleSignUp(){
-        let data = {
-            nombre: document.getElementById('nombre').value,
-            nickname: document.getElementById('nickname').value,
-            fechaNacimiento: document.getElementById('fechaNacimiento').value,
-            idUsuario: document.getElementById('idUsuario').dataset.idUsuario,
+    const finalizarRegistro = document.getElementById('finalizarRegistro');
+    finalizarRegistro.addEventListener('click', validarDatos);
+    //al presionar la tecla enter
+    const body = document.querySelector('body');
+    body.addEventListener('keydown', (event) => {
+        if(event.key == 'Enter'){
+            validarDatos();
         }
-        let url = '../backend/api_racebook/signup/usuario/';
+    })
+    function validarDatos(){
+        //comprueba que todos los datos del formulario esten rellenados
+        let nombre = document.getElementById('nombre').value;
+        let nickname = document.getElementById('nickname').value;
+        let fechaNacimiento = document.getElementById('fechaNacimiento').value;
+        let imagen = document.getElementById('imagen').files[0];
+        if(nombre == '' || nickname == '' || fechaNacimiento == '' || imagen == undefined){
+            loginAlert.innerHTML = 'Rellena todos los campos';
+        }else{
+            handleSignUp();
+        }
+    }
+    function handleSignUp(){
+        
+        //crea un objeto formData con los datos del formulario y el idUsuario del JWT y lo envia a la API
+        let formData = new FormData();
+        formData.append('nombre', document.getElementById('nombre').value);
+        formData.append('nickname', document.getElementById('nickname').value);
+        formData.append('fechaNacimiento', document.getElementById('fechaNacimiento').value);
+        formData.append('userId', userId);
+        formData.append('imagen', document.getElementById('imagen').files[0]);
+        let url = 'http://localhost:3000/backend/api_racebook/signup/usuario/';
         fetch(url,{
             method: 'POST',
-            body: JSON.stringify(datos),
-            headers:{
-                'Content-Type': 'application/json;utf-8'
-            },
-            body: JSON.stringify(data),
-            mode: 'cors'
+            body: formData,
+            mode: 'cors',
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            if(data.status == 200){
+        .then(response => {
+            if(response.status == 201){
                 window.location.href = './login.html';
+            }else{
+                loginAlert.innerHTML = 'Error al completar el registro. Inténtelo de nuevo';
             }
+        })
+        .catch(error => {
+            loginAlert.innerHTML = 'Error al completar el registro. Inténtelo de nuevo';
         })
     }
 </script>

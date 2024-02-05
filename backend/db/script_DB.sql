@@ -30,6 +30,8 @@ CREATE TABLE usuario_organizador(
 CREATE TABLE evento(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(64),
+    localidad VARCHAR(64),
+    provincia VARCHAR(64),
     fecha_inicio DATE,
     fecha_fin DATE,
     web VARCHAR(128),
@@ -117,6 +119,10 @@ CREATE TABLE usuario_carrera_favorita(
     FOREIGN KEY (id_usuario) REFERENCES usuario(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE completados(
+	id_usuario INT PRIMARY KEY,
+    FOREIGN KEY (id_usuario) REFERENCES usuario (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 DELIMITER $$
 CREATE FUNCTION email_is_admin(p_email VARCHAR(128))
 RETURNS BOOLEAN
@@ -145,5 +151,60 @@ BEGIN
 END;
 $$
 DELIMITER ;
+DELIMITER $$
+CREATE PROCEDURE insertar_organizador(p_email VARCHAR(128) , p_passwd VARCHAR(64), p_salt VARCHAR(10))
+BEGIN
+	 DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+ 
+ 
+    START TRANSACTION;
+ 
+        INSERT INTO usuario (email, passwd, salt) 
+			VALUES (p_email, p_passwd, p_salt);
+        INSERT INTO usuario_organizador (id_usuario)
+            VALUES (LAST_INSERT_ID());
+		
+            
+    COMMIT;
+END
+$$
+DELIMITER ; 
+DELIMITER $$
+CREATE PROCEDURE completar_organizador(p_id INT, p_nombre VARCHAR(128) , p_nickname VARCHAR(128), p_fecha_nacimiento DATE, p_imagen VARCHAR(128), p_telefono VARCHAR(15), p_entidad_organizadora VARCHAR(64))
+
+BEGIN
+	 DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+ 
+ 
+    START TRANSACTION;
+ 
+        UPDATE usuario 
+			SET nombre = p_nombre, nickname = p_nickname, fecha_nacimiento = p_fecha_nacimiento, imagen = p_imagen
+            WHERE id = p_id;
+        UPDATE usuario_organizador 
+			SET telefono = p_telefono, entidad_organizadora = p_entidad_organizadora
+            WHERE id_usuario = p_id;
+		INSERT INTO completados (id_usuario)
+			VALUES (p_id);
+    COMMIT;
+END
+$$
+DELIMITER ; 
+DELIMITER $$
+CREATE FUNCTION comprobar_registro(p_id INT)
+RETURNS INT
+BEGIN
+     DECLARE v_estado BOOLEAN;
+	 SET v_estado = (SELECT * FROM completados WHERE id_usuario = p_id);
+     RETURN v_estado;
+END;
+$$
+DELIMITER ; 
 
 # SELECT is_admin('abel@email.com');

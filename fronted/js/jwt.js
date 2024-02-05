@@ -58,6 +58,3 @@ function JWT_decode(tokenLocal){
     let decodedtokenLocal = JSON.parse(window.atob(base64Url));
     return decodedtokenLocal;
 }
-
-
-//console.log(JWT_decode(tokenLocal));

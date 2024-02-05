@@ -1,77 +1,70 @@
 <?php
-//esta llamada completa el registro de un usuario organizador
-require_once '../clases/conexion.php';
-require_once '../../../vendor/autoload.php';
-require_once '../clases/dml.php';
+require_once '../../clases/conexion.php';
+require_once '../../../../vendor/autoload.php';
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
 
 
-if($_SERVER['REQUEST_METHOD'] === 'PUT'){
-    //verifico que la cabecra authorization exista
-    if(!isset(apache_request_headers()['Authorization'])){//https://www.php.net/manual/en/function.apache-request-headers
-    header('HTTP/1.1 402 BAD REQUEST -> Authorization header not found');
-    exit();
-    }
-    $allHeaders = getallheaders();
-    //var_dump($allHeaders) ;
-    $authToken = $allHeaders['Authorization'];
-    //compruebo que sea valido
-    try{
-        $decodedJWT = JWT::decode($authToken,new key($jwtkey, 'HS256'));// -> Decodifica el JWT
-    }catch(Exception $e){
-        header('HTTP/1.1 403 BAD REQUEST -> Invalid JWT');
-        exit();
-    }
-    //guardo el Objeto correspondiente a los datos del usuario del Payload
-    //en una variable que recorrere para pasar a un array
-    $userDataStdObject = $decodedJWT->user_data;
-    //recupero los datos del usuario del JWT payload y los guardo en el array userData
-    $userData = [];
-    foreach($userDataStdObject as $key => $value){
-        $userData[$key] = $value;
-    }
-    //ahora $userData contiene todos los datos del usuario que contenia el JWT de la cabecera
-    //voy a obtener el cuerpo de la solicitud
-    $json_data = file_get_contents("php://input");
-    $data = json_decode($json_data, true);
-    //$data es un array que contiene los datos que voy a meter en la DB
-    //voy a obtener el id del usuario del $userData[]
-    $userId = $userData['user_id'];
 
-    //https://chat.openai.com/share/b33b1482-60fb-4676-8f8b-85194fe0d278
-    echo $json_data;
-    echo '<br> ^ Data segun llega en el request <br>';
-    var_dump($decodedJWT);
-    echo '<br> ^ decodedJWT <br>';
-    var_dump($decodedJWT->user_data);
-    echo '<br> ^ decodedJWT -> user_data <br>';
-    var_dump($data);
-    echo '<br> ^ decoded_json_data<br>';
-    // echo json_decode($data, true);
-    // echo '<br> ^ redecoded_json_data <br>'; -> ESTO LANZA ERROR PORQUE RECIBE UN ARRAY NO UN JSON 
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: X-API-KEY, Authorization, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+header("Allow: GET, POST, OPTIONS, PUT, DELETE");
+
+
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    //gestion de la imagen
+    if($_FILES['imagen']['error'] == UPLOAD_ERR_OK){// UPLOAD_ERR_OK da 0; no hay errores
+        $imagen = $_FILES['imagen'];
+        $rutaDestino = '../../../img/organizadores/';
+        #si la ruta de destino no existe -> la creo
+        if(!is_dir($rutaDestino)){
+            mkdir($rutaDestino, 0777, true);//ojo con los permisos que das aqui
+        }
+        #muevo el archivo a la carpeta de destino
+        $nombreImagen = basename($imagen['name']);
+        #de esta forma nos aseguramos que cada imagen subida tiene url unica
+        $nombreImagen = uniqid().date("Ymd").$nombreImagen;
+        $rutaDestino .= $nombreImagen;
+        move_uploaded_file($imagen["tmp_name"], $rutaDestino);
+
+    }
+    $nombre = $_POST['nombre'];
+    $nickname = $_POST['nickname'];
+    $fechaNacimiento = $_POST['fechaNacimiento'];
+    $userId = $_POST['userId'];
+    $imagen = $rutaDestino; //en la DB solo quiero guardar la url de la imagen
+    $telefono = $_POST['telefono'];
+    $entidadOrganizadora = $_POST['entidadOrganizadora'];
     echo $userId;
-    echo '<br> ^ id usuario <br>';
     echo '<br>';
-    $newData = updateUserdata($userId, $data);
-    //comprubo que he modificado los datos del usuario
-    if($newData == -1){
-        header('HTTP/1.1 500 SERVER ERROR -> Error updating user data');
-        exit();
-    }
-    $payload = [
-        'exp' => time() + (60*60), // 1 hora
-        'user_data' => $newData,
-    ];
-    $jwt = JWT::encode($payload, $jwtkey, 'HS256');
-    echo $jwt;
-    header("HTTP/1.1 200 All Ok");
-    exit();
-}else if($_SERVER['REQUEST_METHOD'] === 'DELETE'){
+    echo $nombre;
+    echo '<br>';
+    echo $nickname;
+    echo '<br>';
+    echo $fechaNacimiento;
+    echo '<br>';
+    echo $imagen;
+    echo '<br>';
+    echo $telefono;
+    echo '<br>';
+    echo $entidadOrganizadora;
 
-}else{
-    header('HTTP/1.1 400 BAD REQUEST -> Request method not valid');
-    exit();
+    $con = new Conexion();
+    $sql = "CALL completar_organizador(?, ?, ?, ?, ?, ?, ?)";
+    if($stmt = $con -> prepare($sql)){
+        $stmt -> bind_param("issssss", $userId, $nombre, $nickname, $fechaNacimiento, $imagen, $telefono, $entidadOrganizadora);
+        $stmt -> execute();
+        $stmt -> close();
+        $con -> close();   
+        header('HTTP/1.1 201 OK');       
+    }else{
+        header('HTTP/1.1 400 Bad Request');
+        echo 'Error al preparar la consulta: ' . $con->error;
+        exit();
+    
+    }
 }
 
 ?>
