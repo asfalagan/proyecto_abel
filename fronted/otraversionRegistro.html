@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/registrologin.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/a5191f3c7b.js" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        .card{
+          opacity: 0.8 !important;
+        }
+        .hidden{
+            display: none !important;
+        }
+        /* .pagination *{
+          color: black !important;
+        } */
+        #capaOpaca {
+            opacity: 0.40;
+            z-index: -100;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            background-color: black;
+        }
+        body{
+            background-image: url("images/background_movil_def.jpeg");
+            background-color: black;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+        .contenidoCentrado{
+            display: flex;
+            justify-content: center;
+            align-items:flex-end;
+        }
+        /**ESTILOS PANTALLA MEDIANA -> Tablet**/
+        @media (min-width: 768px){
+          body{
+              background-color: black;
+              background-image: url("images/background_tablet-def.jpeg");
+              background-repeat: no-repeat;
+              background-size: cover;
+              height: 100%;
+              width: 100vw;
+
+          }
+          .card{
+          opacity: 0.8 !important;
+          }
+          .card:hover{
+            opacity: 1 !important;
+          }
+        }
+        /**ESTILOS PANTALLA PEQUEÑA**/
+        @media (min-width: 1350px){
+            body{
+                background-color: black;
+                background-image: url("images/background_tablet-def.jpeg");
+                background-repeat: no-repeat;
+                background-size: cover;
+                height: 100%;
+                width: 100vw;
+
+            }
+        }
+      /**ESTILOS PANTALLA GRANDE**/
+      @media (min-width: 1600px){
+      body{
+          background-color: black;
+          background-image: url("images/background.jpg");
+          background-repeat: no-repeat;
+          background-size: cover;
+          height: 100%;
+          width: 100vw;
+
+      }
+      }
+    </style>
+</head>
+<body  data-bs-theme="dark">
+    <div id="capaOpaca"></div>
+  
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid ms-3">
+          <a class="navbar-brand" href="./otraversionMain.html">
+            <i class="fa-solid fa-person-running"></i>
+            <span>RaceBook</span>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="./otraversionMain.html">Catálogo de Carreras</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./otraversionRegistro.html" id="enlaceCuenta">Registro</a>
+              </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main class="container-fluid mt-5">
+      <div class="row justify-content-center">
+        <div class="col-10 col-sm-8 col-md-6 col-xl-4" id="formularioRegistro">
+            <div id="conGoogle" class="itemRegistro"><i class="fa-brands fa-google"></i><span>Registrarte con Google</span></div>
+            <form action="" method="">
+                <div id="loginAlert">Rellena los datos para registarte</div>
+                <input class="itemRegistro itemForm" type="email" id="email" name="email" placeholder="Correo Electrónico">
+                <input class="itemRegistro itemForm" type="password" id="password" name="password" placeholder="Contraseña"> 
+                <input class="itemRegistro itemForm" type="password" id="password2" name="password2" placeholder="Repetir Contraseña">
+                <label class="itemRegistro itemForm" for="isAdmin" style="border: none;"><input type="checkbox" name="isAdmin" id="isAdmin" placeholder="Marca para registrar cuenta de organizador" >&nbsp;Soy una entidad organizadora de eventos deportivos</label>
+            </form>
+            <div id="registrarUsuario" class="itemRegistro">Registrar Usuario</div>
+            <a href="./login.html" id="enlaceLogin" class="itemRegistro">¿Ya tienes una cuenta?<br>Inicia Sesión aquí</a>     
+        </div>
+      </div>
+    </main>
+    
+
+</body>
+</html>
