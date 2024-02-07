@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/a5191f3c7b.js" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        .active > .page-link{
+        background-color: #f8f9fa !important;
+        color: #2b3035 !important;
+        border-color: #f8f9fa !important;
+        font-weight: bold;
+        }
+        .redondeada{
+        border-radius: 1em;
+        }
+        .card{
+          opacity: 0.8 !important;
+        }
+        .hidden{
+            display: none !important;
+        }
+        #capaOpaca {
+            opacity: 0.60;
+            z-index: -100;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            background-color: black;
+        }
+        body{
+            background-image: url("images/background_movil_def.jpeg");
+            background-color: black;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100%;
+            width: 100vw;
+        }
+        .contenidoCentrado{
+            display: flex;
+            justify-content: center;
+            align-items:flex-end;
+        }
+        * {
+          color: #f8f9fa !important;
+        }
+        /**ESTILOS PANTALLA MEDIANA -> Tablet**/
+        @media (min-width: 768px){
+          body{
+              background-image: url("images/background_tablet-def.jpeg");
+          }
+          .card{
+            opacity: 0.8 !important;
+          }
+          .card:hover{
+            opacity: 1 !important;
+          }
+        }
+        /**ESTILOS PANTALLA PEQUEÑA**/
+        @media (min-width: 1350px){
+            body{
+                background-image: url("images/background_tablet-def.jpeg");
+            }
+        }
+      /**ESTILOS PANTALLA GRANDE**/
+        @media (min-width: 1600px){
+          body{
+              background-image: url("images/background.jpg");
+          }
+        }
+    </style>
+</head>
+<body  data-bs-theme="dark">
+    <div id="capaOpaca"></div>
+  
+    <nav class="navbar navbar-expand-lg bg-dark">
+        <div class="container-fluid ms-3 me-5">
+          <a class="navbar-brand" href="#">
+            <i class="fa-solid fa-person-running"></i>
+            <span>RaceBook</span>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Catálogo de Carreras</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" id="enlaceCuenta">Login</a>
+              </li>
+            </ul>
+        
+            
+          </div>
+        </div>
+    </nav>
+    <main class="container-fluid ">
+        
+        <div class="row justify-content-center mt-4 mb-3">
+            
+            <form class="col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pb-3 bg-dark"  style=" opacity: 0.9;">
+                <div class="row justify-content-center mt-3">
+                    <h1 class="col-10 text-left">Registro de Carrera</h1>
+                    <p class="col-9 text-left mt-3">Completa este formulario para asociar una nueva Carrera a este evento. Pulsa <strong>Continuar</strong> para registrar más carreras en el mismo evento. Pulsa <strong>Finalizar</strong> cuando hayas terminado</p>
+                    <hr class="divider">
+                </div>
+                <div class="row mt-3  justify-content-center">
+                    <div class="mb-3 col-10">
+                        
+                        <label for="nombre" class="form-label">Nombre de Carrera</label>
+                        <input type="email" class="form-control bg-transparent border border-light" id="nombre">
+                        
+                    </div>
+                    
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <p class="col-10 ">Rango de edad de los participantes: </p>
+                </div>
+                <div class="row justify-content-evenly">
+                    
+                    <div class="mb-3 col-10 col-md-4">
+                        <label for="fechaMin" class="form-label">Nacidos después de... </label>
+                        <input type="date" class="form-control bg-transparent border border-light" id="fechaMin">
+                    </div>
+                    <div class="mb-3 col-10 col-md-4">
+                        <label for="fechaMax" class="form-label">Nacidos antes de... </label>
+                        <input type="date" class="form-control bg-transparent border border-light" id="fechaMax">
+                    </div>
+                </div>
+                <div class="row justify-content-evenly">
+                    <div class="mb-3 col-10 col-md-4">
+                        <label for="modalidad" class="form-label">Modalidad: </label>
+                        <select class="form-select  border-light" id="modalidad">
+                            <option selected>Modalidad</option>
+                            <option value="maraton">Maratón</option>
+                            <option value="trail">Trail</option>
+                            <option value="ultra">Ultra</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 col-10 col-md-4">
+                        <label for="categoria" class="form-label">Categoría: </label>
+                        <select class="form-select border-light" id="categoria">
+                            <option selected>Categoría</option>
+                            <option value="hombres">Hombres</option>
+                            <option value="mujeres">Mujeres</option>
+                            <option value="mixto">Mixto</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="mb-3 col-10">
+                        <label for="webEvento" class="form-label">Web del Evento</label>
+                        <input type="text" class="form-control bg-transparent border border-light" id="webEvento">
+                    </div>
+                </div>
+                <div class="row  justify-content-center">
+                    <div class=" col-10">
+                        <label for="provincia" class="form-label">Recorrido de la Carrera (GPX)</label>
+                        <input type="file" class="form-control bg-transparent border border-light" id="provincia">
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div id="formAlert" class="mb-3 mt-3 col-10"></div>
+                </div>
+                <div class="row justify-content-around mb-2">
+                    
+                    <span  id="registrarOtraCarrera" class="col-4 btn btn-warning" ><strong style="color: #2b3035 !important;">Continuar</strong></span>
+                    <span  id="registrarCarrera" class="col-4 btn btn-success"><strong>Finalizar</strong></span>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+<script>
+    const coordenadasTrayecto = [];
+    const inputGPX = document.getElementById('gpx');
+    inputGPX.addEventListener('change', (e) => {
+        const gpxFile = inputGPX.files[0];
+        //obtengo el nombre del fichero para comprobar la extension
+        const gpxFileName = gpxFile.name;
+        const gpxFileExtension = gpxFileName.split('.').pop();
+        //compruebo que tenga contenido y sea un gpx
+        if (gpxFile && gpxFileExtension === 'gpx') {
+            const reader = new FileReader();
+            reader.readAsText(gpxFile);
+            reader.onload = (e) => {
+                const gpxContent = e.target.result;
+                // console.log(gpxContent);
+                const parser = new DOMParser();
+                const gpxXML = parser.parseFromString(gpxContent, 'application/xml');
+                const geoJSON = toGeoJSON.gpx(gpxXML);
+                const geoFeatures = geoJSON.features[0];
+                const geoCoordinates = geoFeatures.geometry.coordinates;
+                const cantidadPuntosTotal = geoCoordinates.length;
+                const intervaloProvisionalPuntos = cantidadPuntosTotal / 200;
+                const intervaloPuntos = Math.round(intervaloProvisionalPuntos) > 1 ? Math.round(intervaloProvisionalPuntos) : 1;
+                for(let i = 0; i < cantidadPuntosTotal; i += intervaloPuntos) {
+                    let punto = geoCoordinates[i];
+                    let coordinate = {
+                        lon: punto[1],
+                        lat: punto[0],
+                        alt: punto[2],
+                    };
+                    coordenadasTrayecto[i/intervaloPuntos] = coordinate;
+                }
+                console.log(coordenadasTrayecto);
+            }
+                
+        }
+            
+    });
+    function handleSignUp(){
+        //recojo todos los datos del formulario referidos a la carrera y los guardo en un objeto junto al eventId
+
+        //envio datos a la api y compruebo el estado
+    }
+</script>
+</html>

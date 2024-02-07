@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://kit.fontawesome.com/a5191f3c7b.js" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+      
+        .active > .page-link{
+        background-color: #f8f9fa !important;
+        color: #2b3035 !important;
+        border-color: #f8f9fa !important;
+        font-weight: bold;
+        }
+        .redondeada{
+        border-radius: 1em;
+        }
+        .card{
+          opacity: 0.8 !important;
+          cursor: pointer;
+        }
+        .hidden{
+            display: none !important;
+        }
+        #capaOpaca {
+            opacity: 0.85;
+            z-index: -100;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            background-color: black;
+        }
+        body{
+            background-image: url("images/background_movil_def.jpeg");
+            background-color: black;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100%;
+            width: 100vw;
+            max-width: 100vw !important;
+            overflow-x: hidden;
+        }
+        .contenidoCentrado{
+            display: flex;
+            justify-content: center;
+            align-items:flex-end;
+        }
+        * {
+          color: #f8f9fa !important;
+        }
+        /**ESTILOS PANTALLA MEDIANA -> Tablet**/
+        @media (min-width: 768px){
+          body{
+              background-image: url("images/background_tablet-def.jpeg");
+          }
+          .card{
+            opacity: 0.8 !important;
+          }
+          .card:hover{
+            opacity: 1 !important;
+          }
+        }
+        /**ESTILOS PANTALLA PEQUEÑA**/
+        @media (min-width: 1350px){
+            body{
+                background-image: url("images/background_tablet-def.jpeg");
+            }
+        }
+      /**ESTILOS PANTALLA GRANDE**/
+        @media (min-width: 1600px){
+          body{
+              background-image: url("images/background.jpg");
+          }
+        }
+    </style>
+</head>
+<body  data-bs-theme="dark">
+    <div id="capaOpaca"></div>
+  
+    <nav class="navbar navbar-expand-lg bg-dark">
+        <div class="container-fluid ms-3 me-5">
+          <a class="navbar-brand" href="#">
+            <i class="fa-solid fa-person-running"></i>
+            <span>RaceBook</span>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Catálogo de Carreras</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" id="enlaceCuenta">Login</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+    <main class="container">
+        <div class="row justify-content-center mt-5"></div>
+            <div class="row justify-content-center mt-5">
+                <h1 class="col-11  text-left" id="nombreEvento">XXV Solidaria por la paz entre todos los mundos</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-5">
+            <div class="col-10  col-lg-5 col-xl-4 pb-5 rounded-start">
+                <!-- Informacion del Evento -->
+                
+                <div class="row justify-content-center mt-3">
+                    <h2 class="col-10 fs-3" style="cursor: pointer"><i class="bi bi-heart me-2"></i>Añadir a favoritos</h2>
+                    
+                    <!-- <i class="bi bi-heart-fill"></i> -->
+                </div>
+                <div class="row justify-content-center mt-5">
+                    <h2 class="col-10 fs-3"><i class="bi bi-geo-alt-fill me-2"></i>Ubicación</h2>
+                    <div class="col-10 fs-5" id="ubicacion">Madrid, Palacio de las maravillas</div>
+                </div>
+                <div class="row justify-content-center mt-5">
+                    <h2 class="col-10 fs-3"><i class="bi bi-calendar-date me-2"></i>Fecha</h2>
+                    <div class="col-10 fs-5" id="fecha">18-21 de Junio de 2024</div>
+                </div>
+                <div class="row justify-content-center mt-5">
+                    <h2 class="col-10 fs-3"><i class="bi bi-at me-2"></i>Sitio web del evento</h2>
+                    <a class="col-10 fs-5" href="" id="web">www.lacarreradelmadril.com</a>
+                </div>
+                <div class="row justify-content-center mt-5">
+                    <h2 class="col-10 fs-3"><i class="bi bi-book me-2"></i>Reglamento</h2>
+                    <div onClick="DownloadFromUrl('http://127.0.0.1:5500/scrum_manager.pdf',
+                    'Fichero.pdf')" style="cursor: pointer;" class="col-10 fs-5"><i class="bi bi-download pe-2"></i>Descargar</div>
+                </div>
+                <div class="row justify-content-center mt-5">
+                    <a class="col-10 fs-3" href="mailto:abel@abel.com" style="text-decoration: none;"><i class="bi bi-envelope-open me-2"></i></i>Contactar</a>               
+                </div>
+            </div>
+            <div class="col-10  col-lg-6 col-xl-6 rounded-end mb-5">
+                <div class="row justify-content-center">                   
+                    <div class="col-10 col-md-10 col-lg-9 col-xl-8 mt-5">
+                        <img class="w-100 img-fluid rounded img-thumbnail" src="./images/carteles/cartel2.jpg"></img>
+                    </div>                    
+                </div>
+            </div>
+            <hr class="hr hr-blurry" />
+            <div class="col-10">
+                <div class="row justify-content-evenly">
+                    <!-- Lista de Carreras -->
+                    <h2 class="col-12 mt-5 mb-5">Listado de carreras: </h2>
+                    <div class="card mb-5 col-11 col-md-5" style="max-width: 540px; opacity: 0.9;">
+                        <div class="row g-0">
+                          <div class="col">
+                            <div class="card-body">
+                              <h5 class="card-title">Recorrido corto para niños</h5>
+                              <p class="card-text">Especialmente pensado para niños muy pequeños a los que no les gusta correr y lloran mucho</p>
+                              <p class="card-text"><small class="text-body-secondary">Edades: 12 - 14 años</small></p>
+                              <p class="card-text"><small class="text-body-secondary">Trail Mixto</small></p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="card mb-5 col-11 col-md-5" style="max-width: 540px; opacity: 0.9;">
+                        <div class="row g-0">
+                          <div class="col">
+                            <div class="card-body">
+                              <h5 class="card-title">Recorrido corto para niños</h5>
+                              <p class="card-text">Especialmente pensado para niños muy pequeños a los que no les gusta correr y lloran mucho</p>
+                              <p class="card-text"><small class="text-body-secondary">Edades: 12 - 14 años</small></p>
+                              <p class="card-text"><small class="text-body-secondary">Trail Mixto</small></p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="card mb-5 col-11 col-md-5" style="max-width: 540px; opacity: 0.9;">
+                        <div class="row g-0">
+                          <div class="col">
+                            <div class="card-body">
+                              <h5 class="card-title">Recorrido corto para niños</h5>
+                              <p class="card-text">Especialmente pensado para niños muy pequeños a los que no les gusta correr y lloran mucho</p>
+                              <p class="card-text"><small class="text-body-secondary">Edades: 12 - 14 años</small></p>
+                              <p class="card-text"><small class="text-body-secondary">Trail Mixto</small></p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="card mb-5 col-11 col-md-5" style="max-width: 540px; opacity: 0.9;">
+                        <div class="row g-0">
+                          <div class="col">
+                            <div class="card-body">
+                              <h5 class="card-title">Recorrido corto para niños</h5>
+                              <p class="card-text">Especialmente pensado para niños muy pequeños a los que no les gusta correr y lloran mucho</p>
+                              <p class="card-text"><small class="text-body-secondary">Edades: 12 - 14 años</small></p>
+                              <p class="card-text"><small class="text-body-secondary">Trail Mixto</small></p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="card mb-5 col-11 col-md-5" style="max-width: 540px; opacity: 0.9;">
+                        <div class="row g-0">
+                          <div class="col">
+                            <div class="card-body">
+                              <h5 class="card-title">Recorrido corto para niños</h5>
+                              <p class="card-text">Especialmente pensado para niños muy pequeños a los que no les gusta correr y lloran mucho</p>
+                              <p class="card-text"><small class="text-body-secondary">Edades: 12 - 14 años</small></p>
+                              <p class="card-text"><small class="text-body-secondary">Trail Mixto</small></p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="card mb-5 col-11 col-md-5" style="max-width: 540px; opacity: 0.9;">
+                        <div class="row g-0">
+                          <div class="col">
+                            <div class="card-body">
+                              <h5 class="card-title">Recorrido corto para niños</h5>
+                              <p class="card-text">Especialmente pensado para niños muy pequeños a los que no les gusta correr y lloran mucho</p>
+                              <p class="card-text"><small class="text-body-secondary">Edades: 12 - 14 años</small></p>
+                              <p class="card-text"><small class="text-body-secondary">Trail Mixto</small></p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <hr class="hr hr-blurry" />
+            <div class="col-10 mb-5">
+                <div class="row justify-content-center mb-5">
+                    <h2 class="col-12 mt-5 mb-5 text-left">Galería de Imágenes</h2>
+                <div id="carouselExampleIndicators" class="carousel slide col-12 col-md-10 col-lg-6 col-xl-5">
+                    <div class="carousel-indicators">
+                      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    </div>
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <img src="./images/carrera1.jpg" class="d-block w-100" alt="...">
+                      </div>
+                      <div class="carousel-item">
+                        <img src="./images/carrera2.jpeg" class="d-block w-100" alt="...">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+<script>
+    const coordenadasTrayecto = [];
+    const inputGPX = document.getElementById('gpx');
+    inputGPX.addEventListener('change', (e) => {
+        const gpxFile = inputGPX.files[0];
+        //obtengo el nombre del fichero para comprobar la extension
+        const gpxFileName = gpxFile.name;
+        const gpxFileExtension = gpxFileName.split('.').pop();
+        //compruebo que tenga contenido y sea un gpx
+        if (gpxFile && gpxFileExtension === 'gpx') {
+            const reader = new FileReader();
+            reader.readAsText(gpxFile);
+            reader.onload = (e) => {
+                const gpxContent = e.target.result;
+                // console.log(gpxContent);
+                const parser = new DOMParser();
+                const gpxXML = parser.parseFromString(gpxContent, 'application/xml');
+                const geoJSON = toGeoJSON.gpx(gpxXML);
+                const geoFeatures = geoJSON.features[0];
+                const geoCoordinates = geoFeatures.geometry.coordinates;
+                const cantidadPuntosTotal = geoCoordinates.length;
+                const intervaloProvisionalPuntos = cantidadPuntosTotal / 200;
+                const intervaloPuntos = Math.round(intervaloProvisionalPuntos) > 1 ? Math.round(intervaloProvisionalPuntos) : 1;
+                for(let i = 0; i < cantidadPuntosTotal; i += intervaloPuntos) {
+                    let punto = geoCoordinates[i];
+                    let coordinate = {
+                        lon: punto[1],
+                        lat: punto[0],
+                        alt: punto[2],
+                    };
+                    coordenadasTrayecto[i/intervaloPuntos] = coordinate;
+                }
+                console.log(coordenadasTrayecto);
+            }
+                
+        }
+            
+    });
+    function handleSignUp(){
+        //recojo todos los datos del formulario referidos a la carrera y los guardo en un objeto junto al eventId
+
+        //envio datos a la api y compruebo el estado
+    }
+</script>
+</html>
