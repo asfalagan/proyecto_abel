@@ -160,8 +160,8 @@
                 </div>
                 <div class="row  justify-content-center">
                     <div class=" col-10">
-                        <label for="provincia" class="form-label">Recorrido de la Carrera (GPX)</label>
-                        <input type="file" class="form-control bg-transparent border border-light" id="provincia">
+                        <label for="recorrido" class="form-label">Recorrido de la Carrera (GPX)</label>
+                        <input type="file" class="form-control bg-transparent border border-light" id="recorrido">
                     </div>
                 </div>
                 <div class="row justify-content-center">
@@ -215,9 +215,30 @@
             
     });
     function handleSignUp(){
-        //recojo todos los datos del formulario referidos a la carrera y los guardo en un objeto junto al eventId
+        //recojo el id del Evento
 
+        //recojo todos los datos del formulario referidos a la carrera y los guardo en un objeto junto al eventId
+        const nombre = document.getElementById('nombre');
+        const fechaNacimMin = document.getElementById('fechaMin');
+        const fechaNacimMax = document.getElementById('fechaMax');
+        const modalidad = document.getElementById('modalidad');
+        const categoria = document.getElementById('categoria');
+        const webEvento = document.getElementById('webEvento');
+        //creo el objeto data con los datos de la carrera 
+        
         //envio datos a la api y compruebo el estado
+        const url = 'http://localhost:3000/backend/api_racebook/eventos/new';
+        fetch(url, {
+            method: 'POST',
+            headers:{
+                'Content-Type':'application/json;utf-8'
+            },
+            body: JSON.stringify(data),
+            mode: 'cors',
+        })
+        .then(
+
+        );
     }
 </script>
 </html>
