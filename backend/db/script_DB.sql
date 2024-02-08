@@ -36,15 +36,7 @@ CREATE TABLE evento(
     fecha_fin DATE,
     web VARCHAR(128),
     url_reglamento VARCHAR(128),
-    likes INT
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-CREATE TABLE imagen(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    id_evento INT,
-    url VARCHAR(128),
-    nombre VARCHAR(64),
-    descripcion VARCHAR(128),
-    FOREIGN KEY (id_EVENTO) REFERENCES evento(id)
+    url_cartel VARCHAR(128)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE carrera (
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -52,56 +44,20 @@ CREATE TABLE carrera (
     nombre VARCHAR(50),
     modalidad ENUM('maratón', 'trail', 'ultra'),
     sexo ENUM('Hombres', 'Mujeres', 'Mixto'),
+    fecha DATE,
     fecha_nacim_min DATE,
     fecha_nacim_max DATE,
-    likes INT,
+    recorrido JSON,
     FOREIGN KEY (id_evento) REFERENCES evento(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-CREATE TABLE recorrido(
+CREATE TABLE clasificacion (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     id_carrera INT,
-    nombre VARCHAR(64),
-    desnivel FLOAT,
-    distancia FLOAT,
-    dificultad ENUM('1', '2', '3', '4', '5'),
+    primer_puesto VARCHAR(64),
+    segundo_puesto VARCHAR(64),
+    tercer_puesto VARCHAR(64),
+    edicion DATE,
     FOREIGN KEY (id_carrera) REFERENCES carrera(id)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-CREATE TABLE coordenada(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    id_recorrido INT,
-    longitud FLOAT,
-    latitud FLOAT,
-    orden INT,
-    FOREIGN KEY (id_recorrido) REFERENCES recorrido(id)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-CREATE TABLE premio(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    id_carrera INT,
-    puesto INT,
-    trofeo BOOLEAN,
-    FOREIGN KEY (id_carrera) REFERENCES carrera(id)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-CREATE TABLE dinero(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    id_premio INT,
-    cantidad FLOAT,
-    FOREIGN KEY (id_premio) REFERENCES premio(id)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-CREATE TABLE detalle(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    id_premio INT,
-    descripcion VARCHAR(512),
-    FOREIGN KEY (id_premio) REFERENCES premio(id)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-CREATE TABLE clasificacion(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    id_usuario INT,
-    id_carrera INT, 
-    fecha DATE,
-    tiempo TIME,
-    puesto INT,
-    FOREIGN KEY (id_carrera) REFERENCES carrera(id),
-    FOREIGN KEY (id_usuario) REFERENCES usuario(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE usuario_inscribe_carrera(
 	id_usuario INT,
@@ -203,6 +159,19 @@ BEGIN
      DECLARE v_estado BOOLEAN;
 	 SET v_estado = (SELECT * FROM completados WHERE id_usuario = p_id);
      RETURN v_estado;
+END;
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE FUNCTION insertar_evento(p_nombre VARCHAR(64), p_localidad VARCHAR(64), p_provincia VARCHAR(64), p_fecha_inicio DATE, p_fecha_fin DATE, p_web VARCHAR(128), p_url_reglamento VARCHAR(128), p_url_cartel  VARCHAR(128))
+RETURNS INT
+BEGIN
+	 DECLARE v_id INT;
+		INSERT INTO evento (nombre, localidad, provincia, fecha_inicio, fecha_fin, web, url_reglamento, url_cartel) 
+			VALUES (p_nombre, p_localidad, p_provincia, p_fecha_inicio, p_fecha_fin, p_web, p_url_reglamento, p_url_cartel);
+		
+        SET v_id = LAST_INSERT_ID();
+    RETURN v_id;
 END;
 $$
 DELIMITER ; 

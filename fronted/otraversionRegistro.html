@@ -15,11 +15,14 @@
         .hidden{
             display: none !important;
         }
+        .redondeada{
+        border-radius: 1em;
+        }
         /* .pagination *{
           color: black !important;
         } */
         #capaOpaca {
-            opacity: 0.40;
+            opacity: 0;
             z-index: -100;
             width: 100vw;
             height: 100vh;
@@ -72,7 +75,7 @@
       @media (min-width: 1600px){
       body{
           background-color: black;
-          background-image: url("images/background.jpg");
+          background-image: url("images/backgroundbig.jpg");
           background-repeat: no-repeat;
           background-size: cover;
           height: 100%;
@@ -105,21 +108,36 @@
             </ul>
         </div>
     </nav>
-    
     <main class="container-fluid mt-5">
       <div class="row justify-content-center">
-        <div class="col-10 col-sm-8 col-md-6 col-xl-4" id="formularioRegistro">
-            <div id="conGoogle" class="itemRegistro"><i class="fa-brands fa-google"></i><span>Registrarte con Google</span></div>
-            <form action="" method="">
-                <div id="loginAlert">Rellena los datos para registarte</div>
-                <input class="itemRegistro itemForm" type="email" id="email" name="email" placeholder="Correo Electrónico">
-                <input class="itemRegistro itemForm" type="password" id="password" name="password" placeholder="Contraseña"> 
-                <input class="itemRegistro itemForm" type="password" id="password2" name="password2" placeholder="Repetir Contraseña">
-                <label class="itemRegistro itemForm" for="isAdmin" style="border: none;"><input type="checkbox" name="isAdmin" id="isAdmin" placeholder="Marca para registrar cuenta de organizador" >&nbsp;Soy una entidad organizadora de eventos deportivos</label>
-            </form>
-            <div id="registrarUsuario" class="itemRegistro">Registrar Usuario</div>
-            <a href="./login.html" id="enlaceLogin" class="itemRegistro">¿Ya tienes una cuenta?<br>Inicia Sesión aquí</a>     
-        </div>
+        <form class="col-10 col-sm-8 mt-5 col-lg-6 col-xxl-3 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark redondeada"  style=" opacity: 0.9;">
+          <div class="row mt-2">
+              <h1 class="col-12 text-left">Registro de Usuario</h1>
+          </div>
+          <div class="row mt-3 justify-content-center">
+              <div class="mb-3 col-12">
+                  <label for="email" class="form-label">Correo Electrónico</label>
+                  <input type="email" class="form-control bg-transparent border border-light" id="email">
+              </div>
+              <div class="mb-3 col-12">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control bg-transparent border border-light" id="password">
+              </div>
+              <div class="mb-3 col-12">
+                <label for="password2" class="form-label">Confirmar Contraseña</label>
+                <input type="password2" class="form-control bg-transparent border border-light" id="password2">
+              </div>
+              <div class="mb-3 col-11">
+                <input type="checkbox" name="isAdmin" id="isAdmin" placeholder="Marca para registrar cuenta de organizador" >
+                <label class="form-label" for="isAdmin"></label>Soy una entidad organizadora de eventos deportivos</label>
+              </div>
+              <div class="row justify-content-center">
+                <div id="formAlert" class="m-3 col-10">&nbsp;</div>
+              </div>
+              <div id="iniciarSesion" class="border border-light mb-3 mt-5 col-8 col-md-6 col-xl-5 p-2 rounded text-center" style="cursor: pointer">Iniciar Sesión</div>
+              <a class="mb-3 mt-5 col-10 text-center underline" style="color: #f8f9fa; text-decoration: underline; text-underline-offset: 0.3em;">¿Todavía no tienes una cuenta?<br>Registrate aquí</a>
+          </div>
+        </form>
       </div>
     </main>
     

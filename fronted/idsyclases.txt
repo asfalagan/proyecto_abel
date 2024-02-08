@@ -12,3 +12,4 @@
 -> #conGoogle .itemRegistro #formularioRegistro #loginAlert .itemRegistro .itemLogin #iniciarSesion #enlaceLogin
 -> #registrarEvento
 -> #formAlert -> en registro de evento y carrera
+-> #loginAlert sustituye a #formAlert

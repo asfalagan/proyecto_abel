@@ -68,7 +68,7 @@
       /**ESTILOS PANTALLA GRANDE**/
         @media (min-width: 1600px){
           body{
-              background-image: url("images/background.jpg");
+              background-image: url("images/backgroundv0.jpg");
           }
         }
     </style>
@@ -103,14 +103,14 @@
         
         <div class="row justify-content-center mt-4 mb-3">
             
-            <form class="col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark"  style=" opacity: 0.9;">
+            <form class="col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark"  style=" opacity: 0.9;" action="" method="">
                 <div class="row mt-2">
                     <h1 class="col-12 text-left">Registro de Eventos</h1>
                 </div>
                 <div class="row mt-3">
                     <div class="mb-3 col-12">
                         <label for="nombre" class="form-label">Nombre del Evento</label>
-                        <input type="email" class="form-control bg-transparent border border-light" id="nombre">
+                        <input type="text" class="form-control bg-transparent border border-light" id="nombre">
                     </div>
                 </div>
                 <div class="row justify-content-between">
@@ -130,7 +130,61 @@
                     </div>
                     <div class="mb-3 col-12 col-md-5">
                         <label for="provincia" class="form-label">Provincia</label>
-                        <input type="text" class="form-control bg-transparent border border-light" id="provincia">
+                        <select required name="provincia" class="form-control border border-light" id="provincia">
+                          <option value="">. . .</option>
+                          <option value="Álava">Álava</option>
+                          <option value="Albacete">Albacete</option>
+                          <option value="Alicante">Alicante</option>
+                          <option value="Almería">Almería</option>
+                          <option value="Asturias">Asturias</option>
+                          <option value="Ávila">Ávila</option>
+                          <option value="Badajoz">Badajoz</option>
+                          <option value="Baleares">Baleares</option>
+                          <option value="Barcelona">Barcelona</option>
+                          <option value="Burgos">Burgos</option>
+                          <option value="Cáceres">Cáceres</option>
+                          <option value="Cádiz">Cádiz</option>
+                          <option value="Cantabria">Cantabria</option>
+                          <option value="Castellón">Castellón</option>
+                          <option value="Ceuta">Ceuta</option>
+                          <option value="Ciudad Real">Ciudad Real</option>
+                          <option value="Córdoba">Córdoba</option>
+                          <option value="Cuenca">Cuenca</option>
+                          <option value="Girona">Girona</option>
+                          <option value="Granada">Granada</option>
+                          <option value="Guadalajara">Guadalajara</option>
+                          <option value="Gipuzkoa">Gipuzkoa</option>
+                          <option value="Huelva">Huelva</option>
+                          <option value="Huesca">Huesca</option>
+                          <option value="Jaén">Jaén</option>
+                          <option value="A Coruña">A Coruña</option>
+                          <option value="La Rioja">La Rioja</option>
+                          <option value="Las Palmas">Las Palmas</option>
+                          <option value="León">León</option>
+                          <option value="Lleida">Lleida</option>
+                          <option value="Lugo">Lugo</option>
+                          <option value="Madrid">Madrid</option>
+                          <option value="Málaga">Málaga</option>
+                          <option value="Melilla">Melilla</option>
+                          <option value="Murcia">Murcia</option>
+                          <option value="Navarra">Navarra</option>
+                          <option value="Ourense">Ourense</option>
+                          <option value="Palencia">Palencia</option>
+                          <option value="Pontevedra">Pontevedra</option>
+                          <option value="Salamanca">Salamanca</option>
+                          <option value="Segovia">Segovia</option>
+                          <option value="Sevilla">Sevilla</option>
+                          <option value="Soria">Soria</option>
+                          <option value="Tarragona">Tarragona</option>
+                          <option value="Tenerife">Tenerife</option>
+                          <option value="Teruel">Teruel</option>
+                          <option value="Toledo">Toledo</option>
+                          <option value="Valencia">Valencia</option>
+                          <option value="Valladolid">Valladolid</option>
+                          <option value="Bizkaia">Bizkaia</option>
+                          <option value="Zamora">Zamora</option>
+                          <option value="Zaragoza">Zaragoza</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row">
@@ -141,8 +195,8 @@
                 </div>
                 <div class="row">
                     <div class="mb-3 col-12">
-                        <label for="provincia" class="form-label">Reglamento del Evento (PDF)</label>
-                        <input type="file" class="form-control bg-transparent border border-light" id="provincia">
+                        <label for="reglamento" class="form-label">Reglamento del Evento (PDF)</label>
+                        <input type="file" class="form-control bg-transparent border border-light" id="reglamento">
                     </div>
                 </div>
                 <div class="row">
@@ -150,21 +204,9 @@
                       <label for="cartel" class="form-label">Agregar cartel del Evento. Tamaño 9:16</label>
                       <input type="file" class="form-control bg-transparent border border-light" id="cartel">
                   </div>
-                </div>
-                <div class="row justify-content-between">
-                  <div class="mb-3 col-8">
-                      <label for="imagen" class="form-label">Agregar imagenes del Evento. Tamaño 16:9</label>
-                      <input type="file" class="form-control bg-transparent border border-light" id="imagen">
-                  </div>
-                  <div class="mb-3 col-4">
-                    <label for="imagen" class="form-label">Cargar la imagen</label>
-                    <span  id="registrarEvento" class="col-12 btn btn-light"><strong style="color: #2b3035 !important;">Cargar</strong></span>
-                </div>
-                      
-                  
-                </div>
+                </div>                 
                 <div class="row justify-content-center">
-                    <div id="formAlert" class="m-4">Pulsa Continuar para registrar las carreras de este evento</div>
+                    <div id="formAlert" class="m-4">Pulsa Continuar para registrar carreras</div>
                     <span  id="registrarEvento" class="col-3 btn btn-warning" style="color: #2b3035 !important;"><strong>Continuar</strong></span>
                 </div>
             </form>
@@ -176,7 +218,99 @@
 </body>
 <script>
   //https://www.npmjs.com/package/exif-js Libreria para controlar el tamaño de foto
+  const url = 'http://localhost:3000/backend/api_racebook/eventos/new/';
+  const formAlert = document.getElementById('formAlert');
+  const nombre = document.getElementById('nombre');
+  const fechaInicio = document.getElementById('fechaInicio');
+  const fechaFin = document.getElementById('fechaFin');
+  const localidad = document.getElementById('localidad');
+  const provincia = document.getElementById('provincia');
+  const webEvento = document.getElementById('webEvento');
+  const cartel = document.getElementById('cartel');
+  const registrarEvento = document.getElementById('registrarEvento');
+  const reglamento = document.getElementById('reglamento');
+  const body = document.querySelector('body');
+  let contadorImagenes = 0;
+  let nombreUltimaImagen = '';
 
-  //una vez has cargado una imagen el texto cambia a 'cargar otra foto'
+  let formData = new FormData();
+
+  registrarEvento.addEventListener('click', handleSignUp);
+  
+  body.addEventListener('keydown', (event) => {
+    if(event.key == 'Enter'){
+      handleSignUp();
+    }
+  })
+
+  reglamento.addEventListener('change', (event) => {
+    if(reglamento.files[0] == undefined){
+      formAlert.innerHTML = 'Parece que no has cargado el reglamento';
+    }else{
+      //compruebo que el archivo sea un pdf
+      let extension = reglamento.files[0].name.split('.').pop();
+      if(extension != 'pdf'){
+        formAlert.innerHTML = 'El archivo debe ser un PDF';
+        reglamento.value = '';
+      }
+    }
+  })
+  
+  
+  cartel.addEventListener('change', (event) => {
+    if(cartel.files[0] == undefined){
+      formAlert.innerHTML = 'Parece que no has cargado el cartel';
+    }else{
+      //compruebo que el archivo sea una imagen
+      let extension = cartel.files[0].name.split('.').pop();
+      if(extension != 'jpg' && extension != 'jpeg' && extension != 'png'){
+        formAlert.innerHTML = 'El archivo debe ser una imagen jpg, jpeg o png';
+        cartel.value = '';
+      }
+    }
+  })
+
+  function handleSignUp(event){
+    event.preventDefault();
+    if(nombre.value == '' || fechaInicio.value == '' || fechaFin.value == '' || localidad.value == '' || provincia.value == '' || webEvento.value == '' || cartel.files[0] == undefined || reglamento.files[0] == undefined){
+      formAlert.innerHTML = 'Rellena todos los campos';
+    }else{
+      formData.append('nombre', nombre.value);
+      formData.append('fechaInicio', fechaInicio.value);
+      formData.append('fechaFin', fechaFin.value);
+      formData.append('localidad', localidad.value);
+      formData.append('provincia', provincia.value);
+      formData.append('webEvento', webEvento.value);
+      formData.append('cartel', cartel.files[0]);
+      formData.append('reglamento', reglamento.files[0]);
+
+      console.log('Se viene form data: ');
+      console.log(formData);
+      //evito que la pagina se actualice de forma automatica
+      
+      fetch(url, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => {
+        if(response.status == 201){
+          formAlert.textContent = 'Evento registrado correctamente';
+          return response.json();
+        }else{
+          formAlert.textContent = 'Ha habido un error al registrar el evento';
+        }   
+      })
+      .then(data => {
+          console.log(data);
+          let eventoId = data.eventoId;
+          localStorage.setItem('eventoId', eventoId);
+          window.location.href = 'www.google.com';
+      })
+    }
+  }
+
 </script>
 </html>
