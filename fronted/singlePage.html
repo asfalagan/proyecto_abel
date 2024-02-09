@@ -33,11 +33,12 @@
         body{
             background-image: url("./images/bck576.jpg");
             background-color: black;
-            background-position: center 5vh;
+            /* background-position: center 5vh; */
             background-repeat: no-repeat;
             background-size: cover;
             height: 100%;
             width: 100vw;
+            background-attachment: fixed;
         }
         .contenidoCentrado{
             display: flex;
@@ -449,8 +450,7 @@
 
 </body>
 <script>
-//al iniciar la aplicacion reinicio el localstorage para evitar problemas con usuarios que no han cerrado sesion
-localStorage.clear();
+
 //////////////////////////
 //NOTAS
 /////////////////////////
@@ -469,6 +469,7 @@ localStorage.clear();
 ////
 let jwt;
 let formData;
+let token;
 //////////////////////////
 //FUNCIONALIDAD NAVBAR
 /////////////////////////
@@ -627,19 +628,25 @@ registrarUsuarioFormularioRegistro.addEventListener('click', (e) => {
         })
         .then(data => {
             if(data){
-            console.log(data);
             localStorage.setItem('jwt', data);
+            //decodifico el token 
+            token = data.split('.')[1];
+            console.log(token);
+            token = atob(token);       
+            console.log(token);
+            console.log(typeof token);
+            token = JSON.parse(token);
+            console.log(typeof token);
             
             if(isAdminFormularioRegistro.checked){
-                console.log('1');
                 formularioRegistro.classList.toggle('hidden');
                 formularioCompletarRegistroOrganizador.classList.toggle('hidden');
             }else{
-              console.log('2');
                 formularioRegistro.classList.toggle('hidden');
                 formularioCompletarRegistroUsuario.classList.toggle('hidden'); 
             }
-            console.log('3');
+            //vacio el formulario 
+            formularioRegistro.reset();
           }
         })
 
@@ -672,7 +679,16 @@ registrarUsuarioFormularioCompletarRegistroUsuario.addEventListener('click', (e)
       jwt = localStorage.getItem('jwt');
       //compruebo que esta seteado
       if(jwt){
-        if(!JWT_isValid(jwt)){
+        //decodifico el token 
+        token = jwt.split('.')[1];
+        console.log(token);
+        token = atob(token);       
+        console.log(token);
+        console.log(typeof token);
+        token = JSON.parse(token);
+        console.log(typeof token);
+        //compruebo que el token es valido
+        if(token.userData.userId){
           formData = new FormData(formularioCompletarRegistroUsuario);
           fetch(urlFormularioCompletarRegistroUsuario, {
             method: 'POST',
@@ -685,14 +701,25 @@ registrarUsuarioFormularioCompletarRegistroUsuario.addEventListener('click', (e)
           .then(response => {
             if(response.status == 201){
               return response.json();
+            }else if(response.status == 202){
+              formAlertFormularioCompletarRegistroUsuario.textContent = 'Error al completar el registro, vuelve a completar el formulario o registrate con otro email';
             }else{
               formAlertFormularioCompletarRegistroUsuario.textContent = 'Error al completar el registro';
+              //espero 6 segundos
+              setTimeout(() => {
+                  formularioCompletarRegistroUsuario.classList.toggle('hidden');
+                  //vacio el formulario 
+                  formularioCompletarRegistroUsuario.reset();
+                  formularioRegistro.classList.toggle('hidden');
+                }, 6000);
             }
           })
           .then(data => {
             if(data){
               localStorage.setItem('jwt', data);
               formularioCompletarRegistroUsuario.classList.toggle('hidden');
+              //vacio el formulario 
+              formularioCompletarRegistroUsuario.reset();
               formularioLogin.classList.toggle('hidden');
             }
           })
@@ -703,6 +730,8 @@ registrarUsuarioFormularioCompletarRegistroUsuario.addEventListener('click', (e)
           formularioRegistro.classList.toggle('hidden');
           //elimino el token del localstorage
           localStorage.clear();
+          //vacio el formulario 
+          formularioCompletarRegistroUsuario.reset();
       }
     }
   } 
@@ -730,29 +759,65 @@ registrarUsuarioFormularioCompletarRegistroOrganizador.addEventListener('click',
   if(nombreFormularioCompletarRegistroOrganizador.value == '' || nicknameFormularioCompletarRegistroOrganizador.value == '' || fechaNacimientoFormularioCompletarRegistroOrganizador.value == '' || fotoPerfilFormularioCompletarRegistroOrganizador.value == '' || nombreEntidadFormularioCompletarRegistroOrganizador.value == '' || telefonoFormularioCompletarRegistroOrganizador.value == ''){
     formAlertFormularioCompletarRegistroOrganizador.textContent = 'Rellena todos los campos';
   }else{
-    let formDataCompletarRegistroOrganizador = new FormData(formularioCompletarRegistroOrganizador);
-    fetch(urlFormularioCompletarRegistroOrganizador, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-      },
-      body: formDataCompletarRegistroOrganizador,
-    })
-    .then(response => {
-      if(response.status == 201){
-        return response.json();
-      }else{
-        formAlertFormularioCompletarRegistroOrganizador.textContent = 'Error al completar el registro';
+    //obtengo el token del localstorage
+    jwt = localStorage.getItem('jwt');
+      //compruebo que esta seteado
+      if(jwt){
+        //decodifico el token 
+        token = jwt.split('.')[1];
+        console.log(token);
+        token = atob(token);       
+        console.log(token);
+        console.log(typeof token);
+        token = JSON.parse(token);
+        console.log(typeof token);
+        //compruebo que el token es valido
+        if(token.userData.userId){
+            let formDataCompletarRegistroOrganizador = new FormData(formularioCompletarRegistroOrganizador);
+            fetch(urlFormularioCompletarRegistroOrganizador, {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+              },
+              body: formDataCompletarRegistroOrganizador,
+            })
+            .then(response => {
+              if(response.status == 201){
+                return response.json();
+              }else if(response.status == 202){
+                formAlertFormularioCompletarRegistroOrganizador.textContent = 'Error al completar el registro, vuelve a completar el formulario o registrate con otro email'; 
+              }else{
+                formAlertFormularioCompletarRegistroOrganizador.textContent = 'Error al completar el registro';
+                //espero 6 segundos
+                setTimeout(() => {
+                  formularioCompletarRegistroOrganizador.classList.toggle('hidden');
+                  //vacio el formulario
+                  formularioCompletarRegistroOrganizador.reset();
+                  formularioRegistro.classList.toggle('hidden');
+                }, 6000);
+              }
+            })
+            .then(data => {
+              if(data){
+                localStorage.setItem('jwt', data);
+                // console.log(data);
+                formularioCompletarRegistroOrganizador.classList.toggle('hidden');
+                //vacio el formulario
+                formularioCompletarRegistroOrganizador.reset();
+                formularioLogin.classList.toggle('hidden');
+              }
+            })
+        }else{
+            formAlertFormularioRegistro.textContent = 'No se pudo completar el registro. Prueba con otro email';;
+            //oculto el formulario de completar registro y muestro otra vez el de registro
+            formularioCompletarRegistroOrganizador.classList.toggle('hidden');
+            formularioRegistro.classList.toggle('hidden');
+            //elimino el token del localstorage
+            localStorage.clear();
+            //vacio el formulario
+            formularioCompletarRegistroOrganizador.reset();
+        }
       }
-    })
-    .then(data => {
-      if(data){
-        localStorage.setItem('jwt', data);
-        // console.log(data);
-        formularioCompletarRegistroOrganizador.classList.toggle('hidden');
-        formularioLogin.classList.toggle('hidden');
-      }
-    })
   }
 });
 
@@ -785,33 +850,42 @@ iniciarSesionFormularioLogin.addEventListener('click', (e) => {
   if(emailFormularioLogin.value == '' || passwordFormularioLogin.value == ''){
     formAlertFormularioLogin.textContent = 'Rellena todos los campos';
   }else{
+    console.log(emailFormularioLogin.value);
+    console.log(passwordFormularioLogin.value);
     formData = new FormData(formularioLogin);
     fetch(urlFormularioLogin, {
       method: 'POST',
       body: formData,
-      mode: 'cors',
     })
     .then(response => {
+      console.log('por aqui paso');
+      console.log(response.status);
+      console.log(response);
       if(response.status == 201){
+        console.log('se que es  un 201');
         return response.json();
       }else{
         formAlertFormularioLogin.textContent = 'Usuario o contraseña incorrectos';
       }
     })
     .then(data => {
+      console.log('por aqui si paso');
       if(data){
+        console.log(data);
         localStorage.setItem('jwt', data);
         //decodifico el token 
         let token = data.split('.')[1];
-        console.log(token);
+        // console.log(token);
         token = atob(token);       
-        console.log(token);
-        // //le quito las comillas al token
-        // token = token.replace(/['"]+/g, '');
-        console.log(token);
-        if(token.completado){
+        // console.log(token);
+        // console.log(token);
+        // console.log(typeof token);//es un string
+        token = JSON.parse(token);
+        if(token.userData.completado){
+          window.alert('completado');
           formularioLogin.classList.toggle('hidden');
-          renderMainPage();
+          
+          // renderMainPage();
         }else if(token.isAdmin){
           formularioLogin.classList.toggle('hidden');
           formularioCompletarRegistroOrganizador.classList.toggle('hidden');
@@ -821,6 +895,9 @@ iniciarSesionFormularioLogin.addEventListener('click', (e) => {
         }
       }
     })
+    .catch(error => {
+      formAlertFormularioLogin.textContent = 'Error al iniciar sesión';
+    });
   }
 });
 

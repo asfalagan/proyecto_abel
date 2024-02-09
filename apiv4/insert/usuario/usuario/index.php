@@ -55,7 +55,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $con -> close();
         //agrego a este usuarioId a la tabla de completados
         $con = new Conexion();
-        $sql = "INSERT INTO completados (usuario_id) VALUES (?)";
+        $sql = "INSERT INTO completados (id_usuario) VALUES (?)";
         if($stmt = $con -> prepare($sql)){
             $stmt -> bind_param("i", $usuarioId);
             $stmt -> execute();
@@ -65,7 +65,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             header('HTTP/1.1 400 Bad Request');
             exit();
         }
-        header('HTTP/1.1 201 OK');
+        
         //construyo un JWT nuevo con los datos del usuario
         $pld = [
             'exp' => time() * 1000 + 3600,
@@ -76,11 +76,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             ]
         ];
         $token = JWT::encode($pld, $jwtkey, 'HS256');
-        header("HTTP/1.1 201 Usuario no ha completado el registro");
+        header('HTTP/1.1 201 OK');
         echo json_encode($token);
     }else{
-        header('HTTP/1.1 400 Bad Request');
-        echo 'Error al preparar la consulta: ' . $con->error;
+        header("HTTP/1.1 202 Usuario no ha completado el registro");
         exit();
     
     }

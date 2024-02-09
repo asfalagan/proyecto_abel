@@ -79,11 +79,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             ]
         ];
         $token = JWT::encode($pld, $jwtkey, 'HS256');
-        header("HTTP/1.1 201 Usuario no ha completado el registro");
         echo json_encode($token);
     }else{
-        header('HTTP/1.1 400 Bad Request');
-        echo 'Error al preparar la consulta: ' . $con->error;
+        header("HTTP/1.1 202 Usuario no ha completado el registro");
         exit();
     
     }

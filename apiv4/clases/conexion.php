@@ -21,7 +21,7 @@
                 parent::__construct($this->host, $this->user, $this->pass, $this->db);
             } catch (mysql_sql_exception $e){
                 echo "ERROR: {$e -> getMessage()}";
-                //header("HTTP/1.1 400 Bad Request");
+                //header("HTTP/1.1 404 No he podido abrir conexion a la db");
             }
         }
     }

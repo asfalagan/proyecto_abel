@@ -11,14 +11,17 @@ require_once '../../vendor/autoload.php';
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
 
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: X-API-KEY, Authorization, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+header("Allow: GET, POST, OPTIONS, PUT, DELETE");
+
 
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    $json_data = file_get_contents("php://input");
-    $data = json_decode($json_data, true);
     $formPasswd = $_POST['password'];
     $email = $_POST['email'];
-    $con = new Conexion();
+    
     if(isset($formPasswd) && isset($email)){   
         $salt;
         $jwtkey;
@@ -30,7 +33,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $fechaNacimiento;
         $userId;
         $registroCompletado;
-        try {
+        // try {
+            $con = new Conexion();
             $sql = "SELECT id, nombre, nickname, email, passwd, salt,  imagen, fecha_nacimiento, email_is_admin(?) FROM usuario WHERE email = ?";
             if($stmt = $con -> prepare($sql)){
                 $stmt -> bind_param("ss", $email, $email);
@@ -47,6 +51,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 header("HTTP/1.1 400 Bad Request");
                 exit();
             }
+            // echo 'El id con el que lo intento es: '.$userId.'<br>';
             $con = new Conexion();
             $sql = "SELECT comprobar_registro(?)";
             if($stmt = $con -> prepare($sql)){
@@ -57,10 +62,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $stmt -> close();
                 $con -> close();
             }else{
-                header("HTTP/1.1 400 Bad Request");
+                header("HTTP/1.1 400 Bad Request -> fallo en la segunda conexion DB");
                 exit();
             }
-            if(!isset($registroCompletado)){
+            // echo 'El registro completado es: '.$registroCompletado.'<br>';
+            if(!isset($registroCompletado) || $registroCompletado == NULL || $registroCompletado < 1){
                 $pld = [
                     'exp' => time() * 1000 + 3600,
                     'userData' => [
@@ -101,7 +107,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                         $stmt -> close();
                         $con -> close();
                     }else{
-                        header("HTTP/1.1 400 Bad Request");
+                        header("HTTP/1.1 400 Bad Request -> fallo en la tercera conexion DB");
                         exit();
                     }
                     $data['telefono'] = $telefono;
@@ -119,13 +125,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 header("HTTP/1.1 401 Combinacion incorrecta de email y contraseña");
                 exit();
             }
-        } catch (mysqli_sql_exception $e) {
-            header("HTTP/1.1 404 Not Found");
-            exit();
-        }
+        // } catch (mysqli_sql_exception $e) {
+        //     header("HTTP/1.1 404 Not Found -> fallo en la primera conexion DB");
+        //     exit();
+        // }
     }   
 }
 header("HTTP/1.1 400 Bad Request");
+echo json_encode("Error en la peticion necesdito metodo post");
 exit();
 
 ?>
