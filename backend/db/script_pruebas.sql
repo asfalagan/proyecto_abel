@@ -1,8 +1,8 @@
 use racebook;
-select * from evento;
+select * from usuario;
 select * from usuario_organizador;
 SELECT * FROM completados;
-
+SELECT insertar_evento('a','a','a','a','a','a',1);
 CREATE TABLE jsonPruebas (
 	jsonUsuario json
 );
@@ -23,3 +23,6 @@ $$
 DELIMITER ; 
 
 SELECT comprobar_registro(29);
+
+INSERT INTO usuario (nombre) VALUES ('aa');
+INSERT INTO usuario_organizador (id_usuario) VALUES(last_insert_id());

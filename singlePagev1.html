@@ -31,11 +31,12 @@
             background-color: black;
         }
         body{
-            background-image: url("./images/bck576.jpg");
+            background-image: url("images/background_movil_def.jpeg");
             background-color: black;
-            background-position: center 5vh;
             background-repeat: no-repeat;
             background-size: cover;
+            /*la imagen de fondo empieza 5vh por debajo*/
+            background-position: center 5vh;
             height: 100%;
             width: 100vw;
         }
@@ -56,10 +57,10 @@
         .sombra{
             box-shadow: 0 1px 3px 0 rgba(248, 249, 250,0.2), 0 1px 3px -1px rgba(248, 249, 250,0.2);
         }
-        /**ESTILOS PANTALLA SMALL**/
-        @media (min-width: 576px){
+        /**ESTILOS PANTALLA MEDIANA -> Tablet**/
+        @media (min-width: 768px){
           body{
-              background-image: url("./images/bck576.jpg");
+              background-image: url("images/background_tablet-def.jpeg");
           }
           .card{
             opacity: 0.8 !important;
@@ -68,28 +69,16 @@
             opacity: 1 !important;
           }
         }
-        /**ESTILOS PANTALLA MD**/
-        @media (min-width: 768px){
+        /**ESTILOS PANTALLA PEQUEÑA**/
+        @media (min-width: 1350px){
             body{
-                background-image: url("./images/bck768.jpg");
+                background-image: url("images/background_tablet-def.jpeg");
             }
         }
       /**ESTILOS PANTALLA GRANDE**/
-        @media (min-width: 992px){
+        @media (min-width: 1600px){
           body{
-              background-image: url("./images/bck992.jpg");
-          }
-        }
-      /**ESTILOS PANTALLA XGRANDE**/
-      @media (min-width: 1200px){
-          body{
-              background-image: url("./images/bck1200.jpg");
-          }
-        }
-      /**ESTILOS PANTALLA XXGRANDE**/
-      @media (min-width: 1400px){
-          body{
-              background-image: url("./images/bck1920.jpg");
+              background-image: url("images/backgroundv0.jpg");
           }
         }
     </style>
@@ -404,53 +393,50 @@
                       <div id="formAlertFormularioCompletarRegistroOrganizador" class="m-3 col-10">&nbsp;</div>
                     </div>
                     <div id="registrarUsuarioFormularioCompletarRegistroOrganizador" class="border border-light mb-3 mt-5 col-8 col-md-6 col-xl-5 p-2 rounded text-center" style="cursor: pointer">Completar Registro</div>
-                </div>
             </form>
 
             <!--FORMLARIO COMPLETAR REGISTRO USUARIO-->
             <form class="col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;" id="formularioCompletarRegistroUsuario">
-              <div class="row mt-2">
-                  <h1 class="col-12 text-left">Completa tu Registro</h1>
-              </div>
-              <div class="row mt-3 justify-content-center">
-                  <div class="mb-3 col-12">
-                      <label for="nombreFormularioCompletarRegistroUsuario" class="form-label">Nombre</label>
-                      <input type="text" class="form-control bg-transparent border border-light" id="nombreFormularioCompletarRegistroUsuario" title="Introduce nombre" name="nombre">
-                  </div>
-                  <div class="mb-3 col-12">
-                    <label for="nicknameFormularioCompletarRegistroUsuario" class="form-label">Nickname</label>
-                    <input type="text" class="form-control bg-transparent border border-light" id="nicknameFormularioCompletarRegistroUsuario" title="Introduce nickname" name="nickname">
-                  </div>
-                  <div class="mb-3 col-12">
-                    <label for="fechaNacimientoFormularioCompletarRegistroUsuario" class="form-label">Fecha de Nacimiento</label>
-                    <input type="date" class="form-control bg-transparent border border-light" id="fechaNacimientoFormularioCompletarRegistroUsuario" title="Introduce fecha de nacimiento" name="fechaNacimiento">
-                  </div>
-                  <div class="mb-3 col-12">
-                    <label for="fotoPerfilFormularioCompletarRegistroUsuario" class="form-label">Foto de Perfil. Requiere formato 1:1</label>
-                    <input type="file" class="form-control bg-transparent border border-light" id="fotoPerfilFormularioCompletarRegistroUsuario" title="Introduce foto de perfil" name="fotoPerfil">
-                  </div>
-                  <div class="row justify-content-center">
-                    <div id="formAlertFormularioCompletarRegistroUsuario" class="m-3 col-10">&nbsp;</div>
-                  </div>
-                  <div id="registrarUsuarioFormularioCompletarRegistroUsuario" class="border border-light mb-3 mt-5 col-8 col-md-6 col-xl-5 p-2 rounded text-center" style="cursor: pointer">Completar Registro</div>
-              </div>
+                <div class="row mt-2">
+                    <h1 class="col-12 text-left">Completa tu Registro</h1>
+                </div>
+                <div class="row mt-3 justify-content-center">
+                    <div class="mb-3 col-12">
+                        <label for="nombreFormularioCompletarRegistroUsuario" class="form-label">Nombre</label>
+                        <input type="text" class="form-control bg-transparent border border-light" id="nombreFormularioCompletarRegistroUsuario" title="Introduce nombre">
+                    </div>
+                    <div class="mb-3 col-12">
+                      <label for="nicknameFormularioCompletarRegistroUsuario" class="form-label">Nickname</label>
+                      <input type="text" class="form-control bg-transparent border border-light" id="nicknameFormularioCompletarRegistroUsuario" title="Introduce nickname">
+                    </div>
+                    <div class="mb-3 col-12">
+                      <label for="fechaNacimientoFormularioCompletarRegistroUsuario" class="form-label">Fecha de Nacimiento</label>
+                      <input type="date" class="form-control bg-transparent border border-light" id="fechaNacimientoFormularioCompletarRegistroUsuario" title="Introduce fecha de nacimiento">
+                    </div>
+                    <div class="mb-3 col-12">
+                      <label for="fotoPerfilFormularioCompletarRegistroUsuario" class="form-label">Foto de Perfil. Requiere formato 1:1</label>
+                      <input type="file" class="form-control bg-transparent border border-light" id="fotoPerfilFormularioCompletarRegistroUsuario" title="Introduce foto de perfil">
+                    </div>
+                    <div class="row justify-content-center">
+                      <div id="formAlertFormularioCompletarRegistroUsuario" class="m-3 col-10">&nbsp;</div>
+                    </div>
+                    <div id="registrarUsuarioFormularioCompletarRegistroUsuario" class="border border-light mb-3 mt-5 col-8 col-md-6 col-xl-5 p-2 rounded text-center" style="cursor: pointer">Completar Registro</div>
+                </div>
 
             </form>
-      </div>
-      <div id="mainPage">
-          <!--ESTE CONTENIDO CARGA DE FORMA DINÁMICA EL CATALOGO DE CARRERAS-->
-      </div>
-      <div id="cuentaUsuario">
+        </div>
+        <div id="mainPage">
+            <!--ESTE CONTENIDO CARGA DE FORMA DINÁMICA EL CATALOGO DE CARRERAS-->
+        </div>
+        <div id="cuentaUsuario">
 
-      </div>
-  </main>
+        </div>
+    </main>
 
     
 
 </body>
 <script>
-//al iniciar la aplicacion reinicio el localstorage para evitar problemas con usuarios que no han cerrado sesion
-localStorage.clear();
 //////////////////////////
 //NOTAS
 /////////////////////////
@@ -536,34 +522,34 @@ const cuentaUsuario = document.getElementById('cuentaUsuario');
 //FUNCION PARA RENDERIZAR EL CATALOGO DE CARRERAS
 //////////////////////////////////////////////////
 
-// function renderCatalogoCarreras(){
-//   const urlCatalogoCarreras = 'http://localhost:3000/backend/api_racebook/v4/catalogo_carreras/';
-//   fetch(urlCatalogoCarreras)
-//   .then(response => response.json())
-//   .then(data => {
-//     const mainPage = document.getElementById('mainPage');
-//     mainPage.innerHTML = '';
-//     data.forEach(carrera => {
-//       const card = document.createElement('div');
-//       card.classList.add('card', 'col-10', 'col-sm-8', 'col-md-6', 'col-lg-4', 'col-xxl-3', 'm-3', 'p-3', 'sombra');
-//       card.innerHTML = `
-//       <img src="${carrera.cartel}" class="card-img-top" alt="...">
-//       <div class="card-body">
-//         <h5 class="card-title">${carrera.nombre}</h5>
-//         <p class="card-text">${carrera.localidad}, ${carrera.provincia}</p>
-//         <p class="card-text">${carrera.fecha}</p>
-//         <a href="#" class="btn btn-primary">Ver más</a>
-//       </div>
-//       `;
-//       mainPage.appendChild(card);
-//     });
-//     //si es un usuario logueado con un token valido añado funcionalidades al catalogo
-//     // 1 EL BOTON DE LOGIN DEL NAVBAR AHORA ES UN ENLACE A LA PAGINA DE CUENTA -> SI ES ORGANIZADOR PUEDE ACCEDER A UNA PAGINA DE GESTION DE EVENTOS
-//     // 2 CADA EVENTO TIENE UN TRIGGER QUE RENDERIZA LOS DETALLES DEL EVENTO
-//     // 3 ENTRE LOS DETALLES DEL EVENTO SE ENCUENTRAN EL LISTADO DE CARRERAS (CON UN TRIGGER PARA ACCEDER A LOS DETALLES DE CADA CARRERA)
+function renderCatalogoCarreras(){
+  const urlCatalogoCarreras = 'http://localhost:3000/backend/api_racebook/v4/catalogo_carreras/';
+  fetch(urlCatalogoCarreras)
+  .then(response => response.json())
+  .then(data => {
+    const mainPage = document.getElementById('mainPage');
+    mainPage.innerHTML = '';
+    data.forEach(carrera => {
+      const card = document.createElement('div');
+      card.classList.add('card', 'col-10', 'col-sm-8', 'col-md-6', 'col-lg-4', 'col-xxl-3', 'm-3', 'p-3', 'sombra');
+      card.innerHTML = `
+      <img src="${carrera.cartel}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">${carrera.nombre}</h5>
+        <p class="card-text">${carrera.localidad}, ${carrera.provincia}</p>
+        <p class="card-text">${carrera.fecha}</p>
+        <a href="#" class="btn btn-primary">Ver más</a>
+      </div>
+      `;
+      mainPage.appendChild(card);
+    });
+    //si es un usuario logueado con un token valido añado funcionalidades al catalogo
+    // 1 EL BOTON DE LOGIN DEL NAVBAR AHORA ES UN ENLACE A LA PAGINA DE CUENTA -> SI ES ORGANIZADOR PUEDE ACCEDER A UNA PAGINA DE GESTION DE EVENTOS
+    // 2 CADA EVENTO TIENE UN TRIGGER QUE RENDERIZA LOS DETALLES DEL EVENTO
+    // 3 ENTRE LOS DETALLES DEL EVENTO SE ENCUENTRAN EL LISTADO DE CARRERAS (CON UN TRIGGER PARA ACCEDER A LOS DETALLES DE CADA CARRERA)
 
-//   });
-// }
+  });
+}
 
 
 
@@ -628,19 +614,15 @@ registrarUsuarioFormularioRegistro.addEventListener('click', (e) => {
         .then(data => {
             if(data){
             console.log(data);
+            console.log(data);
             localStorage.setItem('jwt', data);
-            
-            if(isAdminFormularioRegistro.checked){
-                console.log('1');
-                formularioRegistro.classList.toggle('hidden');
-                formularioCompletarRegistroOrganizador.classList.toggle('hidden');
-            }else{
-              console.log('2');
-                formularioRegistro.classList.toggle('hidden');
-                formularioCompletarRegistroUsuario.classList.toggle('hidden'); 
+            formularioRegistro.classList.toggle('hidden');
+                if(isAdminFormularioRegistro.checked){
+                    formularioCompletarRegistroOrganizador.classList.toggle('hidden');
+                }else{
+                    formularioCompletarRegistroUsuario.classList.toggle('hidden'); 
+                }
             }
-            console.log('3');
-          }
         })
 
     }
@@ -651,7 +633,7 @@ registrarUsuarioFormularioRegistro.addEventListener('click', (e) => {
 ///////////////////////////////////////
 
 //url api para completar el registro de usuario
-const urlFormularioCompletarRegistroUsuario = 'http://localhost:3000/apiv4/insert/usuario/usuario/';
+const urlFormularioCompletarRegistroUsuario = 'http://localhost:3000/backend/api_racebook/v4/registro_usuario/';
 
 //variables para los campos del formulario
 const formularioCompletarRegistroUsuario = document.getElementById('formularioCompletarRegistroUsuario');
@@ -697,7 +679,7 @@ registrarUsuarioFormularioCompletarRegistroUsuario.addEventListener('click', (e)
             }
           })
         }else{
-          formAlertFormularioRegistro.textContent = 'No se pudo completar el registro. Prueba con otro email';;
+          formAlertFormularioCompletarRegistroUsuario.textContent = 'No se ha podido completar el registro. Prueba con otro email';
           //oculto el formulario de completar registro y muestro otra vez el de registro
           formularioCompletarRegistroUsuario.classList.toggle('hidden');
           formularioRegistro.classList.toggle('hidden');
@@ -747,10 +729,10 @@ registrarUsuarioFormularioCompletarRegistroOrganizador.addEventListener('click',
     })
     .then(data => {
       if(data){
-        localStorage.setItem('jwt', data);
-        // console.log(data);
-        formularioCompletarRegistroOrganizador.classList.toggle('hidden');
-        formularioLogin.classList.toggle('hidden');
+        //localStorage.setItem('jwt', data);
+        console.log(data);
+        // formularioCompletarRegistroOrganizador.classList.toggle('hidden');
+        // formularioLogin.classList.toggle('hidden');
       }
     })
   }
@@ -761,7 +743,7 @@ registrarUsuarioFormularioCompletarRegistroOrganizador.addEventListener('click',
 //FORMULARIO LOGIN
 /////////////////////////
 //url api para el login
-const urlFormularioLogin = 'http://localhost:3000/apiv4/login/';
+const urlFormularioLogin = 'http://localhost:3000/backend/api_racebook/v4/login/';
 
 //variables para los campos del formulario
 const formularioLogin = document.getElementById('formularioLogin');
@@ -785,11 +767,15 @@ iniciarSesionFormularioLogin.addEventListener('click', (e) => {
   if(emailFormularioLogin.value == '' || passwordFormularioLogin.value == ''){
     formAlertFormularioLogin.textContent = 'Rellena todos los campos';
   }else{
-    formData = new FormData(formularioLogin);
     fetch(urlFormularioLogin, {
       method: 'POST',
-      body: formData,
-      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: emailFormularioLogin.value,
+        password: passwordFormularioLogin.value
+      })
     })
     .then(response => {
       if(response.status == 201){
@@ -800,25 +786,9 @@ iniciarSesionFormularioLogin.addEventListener('click', (e) => {
     })
     .then(data => {
       if(data){
-        localStorage.setItem('jwt', data);
-        //decodifico el token 
-        let token = data.split('.')[1];
-        console.log(token);
-        token = atob(token);       
-        console.log(token);
-        // //le quito las comillas al token
-        // token = token.replace(/['"]+/g, '');
-        console.log(token);
-        if(token.completado){
-          formularioLogin.classList.toggle('hidden');
-          renderMainPage();
-        }else if(token.isAdmin){
-          formularioLogin.classList.toggle('hidden');
-          formularioCompletarRegistroOrganizador.classList.toggle('hidden');
-        }else{
-          formularioLogin.classList.toggle('hidden');
-          formularioCompletarRegistroUsuario.classList.toggle('hidden');
-        }
+        localStorage.setItem('jwt', data.jwt);
+        formularioLogin.classList.toggle('hidden');
+        renderMainPage();
       }
     })
   }

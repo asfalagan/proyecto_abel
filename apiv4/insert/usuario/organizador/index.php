@@ -33,10 +33,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     if($_FILES['fotoPerfil']['error'] == UPLOAD_ERR_OK){// UPLOAD_ERR_OK da 0; no hay errores
         $imagen = $_FILES['fotoPerfil'];
         $rutaDestino = '../../img/';
-        #si la ruta de destino no existe -> la creo
-        if(!is_dir($rutaDestino)){
-            mkdir($rutaDestino, 0777, true);//ojo con los permisos que das aqui
-        }
         #muevo el archivo a la carpeta de destino
         $nombreImagen = basename($imagen['name']);
         #de esta forma nos aseguramos que cada imagen subida tiene url unica
@@ -59,7 +55,19 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $stmt -> bind_param("issssss", $usuarioId, $nombre, $nickname, $fechaNacimiento, $imagen, $telefono, $entidadOrganizadora);
         $stmt -> execute();
         $stmt -> close();
-        $con -> close();   
+        $con -> close();
+        //agrego a este usuarioId a la tabla de completados
+        $con = new Conexion();
+        $sql = "INSERT INTO completados (usuario_id) VALUES (?)";
+        if($stmt = $con -> prepare($sql)){
+            $stmt -> bind_param("i", $usuarioId);
+            $stmt -> execute();
+            $stmt -> close();
+            $con -> close();
+        }else{
+            header('HTTP/1.1 400 Bad Request');
+            exit();
+        }   
         header('HTTP/1.1 201 OK');
         //construyo un JWT nuevo con los datos del usuario
         $pld = [

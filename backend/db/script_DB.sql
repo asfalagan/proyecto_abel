@@ -159,8 +159,12 @@ CREATE FUNCTION comprobar_registro(p_id INT)
 RETURNS INT
 BEGIN
      DECLARE v_estado BOOLEAN;
-	 SET v_estado = (SELECT * FROM completados WHERE id_usuario = p_id);
-     RETURN v_estado;
+	 SET v_estado = (SELECT id FROM completados WHERE id_usuario = p_id);
+     IF v_estado IS NOT NULL THEN
+		RETURN v_estado;
+	ELSE
+		RETURN false;
+	END IF;
 END;
 $$
 DELIMITER ;
