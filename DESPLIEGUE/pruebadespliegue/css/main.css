@@ -1,0 +1,52 @@
+nav{
+    height: 8vh;
+
+}
+#opaca-nav{
+    opacity: 0.40;
+    z-index: 50;
+    width: 100%;
+    height: 8vh;
+    background-color:black;
+    position:fixed;
+    top:5vh;
+}
+#barra-busqueda{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+    width: 70vw;
+    height: 50%;
+    background-color: #dedede;
+    margin-top: 1.5vh;
+    margin-left: 15vw;
+}
+form{
+    width: 60%;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+#filtrar{
+    margin-left: 1.5em;
+}
+#texto-busqueda{
+    width: 60%;
+}
+#barra-busqueda * {
+    color: black;
+}
+
+/**fichas***/
+.ficha-evento{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1em;
+    background:#c7d1e1;
+    opacity: 0.85;
+}
+.ficha-evento *{
+    color:black;
+}

@@ -1,0 +1,311 @@
+html,body{
+    height: 100%;
+
+}
+html{
+    font-size: 16px;
+}
+*{
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #D9D9D9;
+    text-decoration: none;
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+}
+
+ul{
+    list-style: none;
+}
+#opaca{
+    top:5%;
+    opacity: 0.40;
+    z-index: -100;
+    width: 100vw;
+    height: 95vh;
+    position: fixed;
+    background-color: black;
+}
+header{
+    z-index: 100;
+}
+
+/**ESTILOS MOVIL*luego quitas este media*/
+@media (min-width: 0px){
+    body{
+        background-color: black;
+        background-image: url("../images/background_movil_def.jpeg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 100%;
+        width: 100vw;
+
+    }
+    /*HEADERBAR - STYLES */
+    header{
+        height: 5%;
+        width: 100vw;
+    }
+    #headerbar{
+        background-color: black;
+        color: #D9D9D9;
+        height: 5%;
+        width: 100%;
+
+        display: flex;
+        justify-content:space-between;
+        align-items: center;
+        gap: 1em;
+
+        position: fixed;
+        top: 0;
+        font-weight: 600;
+        padding: 0 1.5em;
+    }
+    #headerbarlinks{
+        display: none;   
+    }
+    .header-span{
+        font-weight: 600;
+    }
+    .enlace-header{
+        letter-spacing: 0.5em;
+    }
+    #menu-hamburguesa{
+        cursor: pointer;
+        font-size: 1.8em;
+        z-index: 100;
+    }
+    #enlaces-menu-desplegable{
+        width: 90vw;
+        height: 50%;
+        position: fixed;
+        top:6vh;
+        right: 5vw;
+        background-color: #D9D9D9;
+        
+        opacity: 0.95;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: flex-start;
+        padding-left: 1em;
+        border-radius: 1em;
+    }
+    .enlace-menu-hambuerguesa{
+        font-weight: 600;
+        letter-spacing: 0.3em;
+        color:black;
+        
+    }
+
+    /*FOOTER - STYLES */
+    footer{
+        display: none;
+    }
+    /*MAIN - STYLES */
+    main{
+        height: 95%;
+        width: 100vw;
+    }
+
+
+    /**ESTO TIENE QUE IR AL FINAL*/
+    .hidden{
+        display: none !important;
+    }
+}
+/**ESTILOS TABLET**/
+@media (min-width: 768px){
+    body{
+        background-color: black;
+        background-image: url("../images/background_tablet-def.jpeg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 100%;
+        width: 100vw;
+
+    }
+    /*HEADERBAR - STYLES */
+    header{
+        height: 5%;
+        width: 100vw;
+        
+    }
+    #headerbar{
+        background-color: black;
+        color: #D9D9D9;
+        height: 5%;
+        width: 100%;
+
+        display: flex;
+        justify-content:space-between;
+        align-items: center;
+        gap: 1em;
+
+        position: fixed;
+        top: 0;
+        font-weight: 600;
+        padding: 0 1.5em;
+    }
+    #headerbarlinks{
+        display: none;   
+    }
+    .header-span{
+        font-weight: 600;
+    }
+    .enlace-header{
+        letter-spacing: 0.5em;
+    }
+    #menu-hamburguesa{
+        cursor: pointer;
+        font-size: 1.8em;
+        
+    }
+    #enlaces-menu-desplegable{
+        width: 40vw;
+        height: 60%;
+        position: fixed;
+        top:6vh;
+        right: 5vw;
+        background-color: #D9D9D9;
+        
+        opacity: 0.95;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: flex-start;
+        padding-left: 1em;
+        border-radius: 1em;
+        
+    }
+    .enlace-menu-hambuerguesa{
+        font-weight: 600;
+        letter-spacing: 0.3em;
+        color:black;
+        font-size: 1.2em;
+        
+    }
+
+    /*FOOTER - STYLES */
+    footer{
+        display: none;
+    }
+    /*MAIN - STYLES */
+    main{
+        height: 95vh;
+        width: 100vw;
+    }
+
+
+    /**ESTO TIENE QUE IR AL FINAL*/
+    .hidden{
+        display: none !important;
+    }
+}
+
+/**ESTILOS PANTALLA PEQUEÑA**/
+@media (min-width: 1350px){
+    body{
+        background-color: black;
+        background-image: url("../images/background_tablet-def.jpeg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 100%;
+        width: 100vw;
+
+    }
+    /*HEADERBAR - STYLES */
+    header{
+        height: 5%;
+        width: 100vw;
+    }
+    #headerbar{
+        background-color: black;
+        color: #D9D9D9;
+        height: 5%;
+        width: 100vw;
+
+        display: flex;
+        justify-content:space-between;
+        align-items: center;
+        gap: 1em;
+
+        position: fixed;
+        top: 0;
+        font-weight: 600;
+        padding: 0 1.5em;
+    }
+    #headerbarlinks{
+        
+        display: flex; 
+        flex-direction: row; 
+        justify-content:flex-end; 
+        align-items: center;
+        gap: 5em;
+        width: 80%;
+        
+    }
+    .header-span{
+        font-weight: 600;
+    }
+    .enlace-header{
+        letter-spacing: 0.5em;
+    }
+
+    #menu-hamburguesa{
+        display: none;  
+    }
+    #enlaces-menu-desplegable{
+        display: none;  
+    }
+    .enlace-menu-hambuerguesa{
+        display: none;  
+    }
+
+    /*FOOTER - STYLES */
+    footer{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        height: 5vh;
+        width: 100vw;
+        background-color: black;
+        color: #D9D9D9;
+        position: fixed;
+        bottom: 0;
+        letter-spacing: 0.2em;
+    }
+    /*MAIN - STYLES */
+    main{
+        height: 95%;
+        width: 100vw;
+    }
+
+
+    /**ESTO TIENE QUE IR AL FINAL*/
+    .hidden{
+        display: none !important;
+    }
+}
+
+/**ESTILOS PANTALLA GRANDE**/
+@media (min-width: 1900px){
+
+/**ESTO TIENE QUE IR AL FINAL*/
+body{
+    background-color: black;
+    background-image: url("../images/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    width: 100vw;
+
+}
+    .hidden{
+        display: none !important;
+    }
+}
