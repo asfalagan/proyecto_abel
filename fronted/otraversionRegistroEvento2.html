@@ -6,6 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/a5191f3c7b.js" crossorigin="anonymous"></script>
+    <script src="./js/jwt.js"></script>
     <title>Document</title>
     <style>
       .active > .page-link{
@@ -103,30 +104,30 @@
         
         <div class="row justify-content-center mt-4 mb-3">
             
-            <form class="col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark"  style=" opacity: 0.9;" action="" method="">
+            <form class="col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark"  style=" opacity: 0.9;" id="formulario">
                 <div class="row mt-2">
                     <h1 class="col-12 text-left">Registro de Eventos</h1>
                 </div>
                 <div class="row mt-3">
                     <div class="mb-3 col-12">
                         <label for="nombre" class="form-label">Nombre del Evento</label>
-                        <input type="text" class="form-control bg-transparent border border-light" id="nombre">
+                        <input type="text" class="form-control bg-transparent border border-light" id="nombre" name="nombre" required>
                     </div>
                 </div>
                 <div class="row justify-content-between">
                     <div class="mb-3 col-12 col-md-5">
                         <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
-                        <input type="date" class="form-control bg-transparent border border-light" id="fechaInicio">
+                        <input type="date" class="form-control bg-transparent border border-light" id="fechaInicio" name="fechaInicio" required>
                     </div>
                     <div class="mb-3 col-12 col-md-5">
                         <label for="fechaFin" class="form-label">Fecha de Finalización</label>
-                        <input type="date" class="form-control bg-transparent border border-light" id="fechaFin">
+                        <input type="date" class="form-control bg-transparent border border-light" id="fechaFin" name="fechaFin" required>
                     </div>
                 </div>
                 <div class="row justify-content-between">
                     <div class="mb-3 col-12 col-md-5">
                         <label for="localidad" class="form-label">Localidad</label>
-                        <input type="text" class="form-control bg-transparent border border-light" id="localidad">
+                        <input type="text" class="form-control bg-transparent border border-light" id="localidad" name="localidad" required>
                     </div>
                     <div class="mb-3 col-12 col-md-5">
                         <label for="provincia" class="form-label">Provincia</label>
@@ -190,24 +191,43 @@
                 <div class="row">
                     <div class="mb-3 col-12">
                         <label for="webEvento" class="form-label">Web del Evento</label>
-                        <input type="text" class="form-control bg-transparent border border-light" id="webEvento">
+                        <input type="text" class="form-control bg-transparent border border-light" id="webEvento" name="web" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-12">
                         <label for="reglamento" class="form-label">Reglamento del Evento (PDF)</label>
-                        <input type="file" class="form-control bg-transparent border border-light" id="reglamento">
+                        <input type="file" class="form-control bg-transparent border border-light" id="reglamento" name="reglamento" required>
                     </div>
+                    <!-- <div class="mb-3 col-4">
+                      <label for="imagen" class="form-label">Cargar</label>
+                      <span id="cargarCartel"  class="col-12 btn btn-light"><strong style="color: #2b3035 !important;">Cargar</strong></span>
+                    </div> -->
                 </div>
                 <div class="row">
-                  <div class="mb-3 col-12">
+                  <div class="mb-3 col-8">
                       <label for="cartel" class="form-label">Agregar cartel del Evento. Tamaño 9:16</label>
-                      <input type="file" class="form-control bg-transparent border border-light" id="cartel">
+                      <input type="file" class="form-control bg-transparent border border-light" id="cartel" name="cartel" required>
                   </div>
-                </div>                 
+                  <div class="mb-3 col-4">
+                    <label for="imagen" class="form-label">Cargar</label>
+                    <span id="cargarCartel"  class="col-12 btn btn-light"><strong style="color: #2b3035 !important;">Cargar</strong></span>
+                </div>
+              </div>
+                <!-- <div class="row">
+                    <div class="mb-3 col-8">
+                        <label for="cartel" class="form-label">Galería de Imágenes (16:9)</label>
+                        <input type="file" class="form-control bg-transparent border border-light" id="imagen">
+                    </div>
+                    <div class="mb-3 col-4">
+                        <label for="imagen" class="form-label">Cargar</label>
+                        <span id="cargarImagen"  class="col-12 btn btn-light"><strong style="color: #2b3035 !important;">Cargar</strong></span>
+                    </div>
+                </div>                   -->
                 <div class="row justify-content-center">
                     <div id="formAlert" class="m-4">Pulsa Continuar para registrar carreras</div>
-                    <span  id="registrarEvento" class="col-3 btn btn-warning" style="color: #2b3035 !important;"><strong>Continuar</strong></span>
+                    <!-- <input type="submit" value="Continuar" class="col-4 btn btn-warning" id="registrarEvento" style="color: #2b3035 !important;" name="continuar"> -->
+                    <span   class="col-4 btn btn-warning" id="registrarEvento" style="color: #2b3035 !important;" name="continuar">Continuar</span>
                 </div>
             </form>
         </div>
@@ -219,6 +239,9 @@
 <script>
   //https://www.npmjs.com/package/exif-js Libreria para controlar el tamaño de foto
   const url = 'http://localhost:3000/backend/api_racebook/eventos/new/';
+  const urlArchivos = 'http://localhost:3000/backend/api_racebook/eventos/new_archivos/';
+  const form = document.querySelector('form');
+  const imagen = document.getElementById('imagen');
   const formAlert = document.getElementById('formAlert');
   const nombre = document.getElementById('nombre');
   const fechaInicio = document.getElementById('fechaInicio');
@@ -231,88 +254,37 @@
   const reglamento = document.getElementById('reglamento');
   const body = document.querySelector('body');
   let contadorImagenes = 0;
-  let nombreUltimaImagen = '';
 
-  let formData = new FormData();
-
-  registrarEvento.addEventListener('click', handleSignUp);
   
-  body.addEventListener('keydown', (event) => {
-    if(event.key == 'Enter'){
-      handleSignUp();
-    }
-  })
+  let eventoId;
 
-  reglamento.addEventListener('change', (event) => {
-    if(reglamento.files[0] == undefined){
-      formAlert.innerHTML = 'Parece que no has cargado el reglamento';
-    }else{
-      //compruebo que el archivo sea un pdf
-      let extension = reglamento.files[0].name.split('.').pop();
-      if(extension != 'pdf'){
-        formAlert.innerHTML = 'El archivo debe ser un PDF';
-        reglamento.value = '';
-      }
-    }
-  })
-  
-  
-  cartel.addEventListener('change', (event) => {
-    if(cartel.files[0] == undefined){
-      formAlert.innerHTML = 'Parece que no has cargado el cartel';
-    }else{
-      //compruebo que el archivo sea una imagen
-      let extension = cartel.files[0].name.split('.').pop();
-      if(extension != 'jpg' && extension != 'jpeg' && extension != 'png'){
-        formAlert.innerHTML = 'El archivo debe ser una imagen jpg, jpeg o png';
-        cartel.value = '';
-      }
-    }
-  })
-
-  function handleSignUp(event){
-    event.preventDefault();
-    if(nombre.value == '' || fechaInicio.value == '' || fechaFin.value == '' || localidad.value == '' || provincia.value == '' || webEvento.value == '' || cartel.files[0] == undefined || reglamento.files[0] == undefined){
+  registrarEvento.addEventListener('click', (e) => {
+    e.preventDefault();
+    if(nombre.value == '' || fechaInicio.value == '' || fechaFin.value == '' || localidad.value == '' || provincia.value == '' || webEvento.value == '' || cartel.value == '' || reglamento.value == ''){
       formAlert.innerHTML = 'Rellena todos los campos';
     }else{
-      formData.append('nombre', nombre.value);
-      formData.append('fechaInicio', fechaInicio.value);
-      formData.append('fechaFin', fechaFin.value);
-      formData.append('localidad', localidad.value);
-      formData.append('provincia', provincia.value);
-      formData.append('webEvento', webEvento.value);
-      formData.append('cartel', cartel.files[0]);
-      formData.append('reglamento', reglamento.files[0]);
+      let formData = new FormData(form);
 
-      console.log('Se viene form data: ');
-      console.log(formData);
-      //evito que la pagina se actualice de forma automatica
-      
-      fetch(url, {
+      fetch(urlArchivos, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Authorization': `Bearer ${getLocalJWT()}`
         },
         method: 'POST',
         body: formData,
       })
       .then(response => {
         if(response.status == 201){
-          formAlert.textContent = 'Evento registrado correctamente';
-          console.log(response);
-          return response.json();
+          formAlert.textContent = 'Estamos registrando el evento, por favor, espera...';
+          window.location.href = './otraversionRegistroCarrera.html';
         }else{
           formAlert.textContent = 'Ha habido un error al registrar el evento';
         }   
       })
       .then(data => {
-        console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
-          console.log(data);
-          let eventoId = data.eventoId;
-          localStorage.setItem('eventoId', eventoId);
-          window.location.href = 'www.google.com';
+        console.log('He llegado hasta aquí');
       })
     }
-  }
+  });
 
 </script>
 </html>

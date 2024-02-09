@@ -29,6 +29,7 @@ CREATE TABLE usuario_organizador(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE evento(
 	id INT PRIMARY KEY AUTO_INCREMENT,
+    id_organizador INT,
     nombre VARCHAR(64),
     localidad VARCHAR(64),
     provincia VARCHAR(64),
@@ -36,7 +37,8 @@ CREATE TABLE evento(
     fecha_fin DATE,
     web VARCHAR(128),
     url_reglamento VARCHAR(128),
-    url_cartel VARCHAR(128)
+    url_cartel VARCHAR(128),
+    FOREIGN KEY (id_organizador) REFERENCES usuario_organizador (id_usuario)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE carrera (
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -163,12 +165,12 @@ END;
 $$
 DELIMITER ;
 DELIMITER $$
-CREATE FUNCTION insertar_evento(p_nombre VARCHAR(64), p_localidad VARCHAR(64), p_provincia VARCHAR(64), p_fecha_inicio DATE, p_fecha_fin DATE, p_web VARCHAR(128), p_url_reglamento VARCHAR(128), p_url_cartel  VARCHAR(128))
+CREATE FUNCTION insertar_evento(p_nombre VARCHAR(64), p_localidad VARCHAR(64), p_provincia VARCHAR(64), p_fecha_inicio DATE, p_fecha_fin DATE, p_web VARCHAR(128), p_id_organizador INT)
 RETURNS INT
 BEGIN
 	 DECLARE v_id INT;
-		INSERT INTO evento (nombre, localidad, provincia, fecha_inicio, fecha_fin, web, url_reglamento, url_cartel) 
-			VALUES (p_nombre, p_localidad, p_provincia, p_fecha_inicio, p_fecha_fin, p_web, p_url_reglamento, p_url_cartel);
+		INSERT INTO evento (nombre, localidad, provincia, fecha_inicio, fecha_fin, web, id_organizador) 
+			VALUES (p_nombre, p_localidad, p_provincia, p_fecha_inicio, p_fecha_fin, p_web, p_id_organizador);
 		
         SET v_id = LAST_INSERT_ID();
     RETURN v_id;

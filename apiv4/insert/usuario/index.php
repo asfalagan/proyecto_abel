@@ -1,8 +1,15 @@
 <?php
-require_once '../clases/conexion.php';
+//Esta llamada registra un usuario en la base de datos -> Luego es necesaria otra llamada para completar el registro
+
+require_once '../../clases/conexion.php';
 require_once '../../../vendor/autoload.php';
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
+
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: X-API-KEY, Authorization, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, eventoid");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+header("Allow: GET, POST, OPTIONS, PUT, DELETE");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -30,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conTest->close();
     
     if ($emailTest == $email) {
-        enviarRespuesta(402, "Email ya registrado");
+        enviarRespuesta(202, "Email ya registrado");
     
     } else {
         $con = new Conexion();
@@ -89,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 } else {
-    enviarRespuesta(400, "Bad Request COD 1");
+    enviarRespuesta(400, "Bad Request");
 }
 function enviarRespuesta($codigo, $mensaje)
 {
@@ -97,4 +104,5 @@ function enviarRespuesta($codigo, $mensaje)
     header('Content-Type: application/json');
     echo json_encode(array('mensaje' => $mensaje));
 }
+
 ?>
