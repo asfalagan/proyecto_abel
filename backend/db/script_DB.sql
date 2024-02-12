@@ -46,10 +46,11 @@ CREATE TABLE carrera (
     nombre VARCHAR(50),
     modalidad ENUM('maratón', 'trail', 'ultra'),
     sexo ENUM('Hombres', 'Mujeres', 'Mixto'),
-    fecha DATE,
+    fecha_comienzo DATE,
+    hora_comienzo TIME,
     fecha_nacim_min DATE,
     fecha_nacim_max DATE,
-    recorrido JSON,
+    recorrido TEXT,
     FOREIGN KEY (id_evento) REFERENCES evento(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE clasificacion (
@@ -159,7 +160,7 @@ CREATE FUNCTION comprobar_registro(p_id INT)
 RETURNS INT
 BEGIN
      DECLARE v_estado BOOLEAN;
-	 SET v_estado = (SELECT id FROM completados WHERE id_usuario = p_id);
+	 SET v_estado = (SELECT id_usuario FROM completados WHERE id_usuario = p_id);
      IF v_estado IS NOT NULL THEN
 		RETURN v_estado;
 	ELSE

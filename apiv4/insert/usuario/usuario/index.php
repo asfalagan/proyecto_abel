@@ -32,7 +32,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     //gestion de la imagen
     if($_FILES['fotoPerfil']['error'] == UPLOAD_ERR_OK){// UPLOAD_ERR_OK da 0; no hay errores
         $imagen = $_FILES['fotoPerfil'];
-        $rutaDestino = '../../img/';
+        $rutaDestino = '../../../img/';
         #muevo el archivo a la carpeta de destino
         $nombreImagen = basename($imagen['name']);
         #de esta forma nos aseguramos que cada imagen subida tiene url unica

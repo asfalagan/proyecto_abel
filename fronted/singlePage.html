@@ -8,8 +8,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/a5191f3c7b.js" crossorigin="anonymous"></script>
     <script src="./js/jwt.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.min.js" integrity="sha512-tGbo6fmjjGoMjPcSMmwn2kdL791LM73K/8dUjCdO91fBBF26AXG7/DKFcVHfOieY78XT2hl0rJkbM0GUVaPcjw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://kit.fontawesome.com/a5191f3c7b.js" crossorigin="anonymous"></script>
+    
     <title>Document</title>
     <style>
+      *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
       .active > .page-link{
         background-color: #f8f9fa !important;
         color: #2b3035 !important;
@@ -37,7 +48,7 @@
             background-repeat: no-repeat;
             background-size: cover;
             height: 100%;
-            width: 100vw;
+            max-width: 100vw;
             background-attachment: fixed;
         }
         .contenidoCentrado{
@@ -57,6 +68,44 @@
         .sombra{
             box-shadow: 0 1px 3px 0 rgba(248, 249, 250,0.2), 0 1px 3px -1px rgba(248, 249, 250,0.2);
         }
+        .cartaEvento, .cartaCarrera{
+          max-width: 540px; 
+          opacity: 0.9;
+        }
+        
+        .loader {
+          width: calc(100px - 14px);
+          height: 50px;
+          position: relative;
+          animation: flippx 1s infinite linear;
+        }
+        .loader:before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          margin: auto;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: #FF3D00;
+          transform-origin: -14px 50%;
+          animation: spin 0.5s infinite linear;
+        }
+        @keyframes flippx {
+          0%, 49% {
+            transform: scaleX(1);
+          }
+          50%, 100% {
+            transform: scaleX(-1);
+          }
+        }
+        @keyframes spin {
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+            
+
         /**ESTILOS PANTALLA SMALL**/
         @media (min-width: 576px){
           body{
@@ -98,7 +147,7 @@
 <body  data-bs-theme="dark">
     <div id="capaOpaca"></div>
   
-    <nav class="navbar navbar-expand-lg  bg-dark">
+    <nav class="container-fluid navbar navbar-expand-lg  bg-dark">
         <div class="container-fluid ms-3  me-5">
           <a class="navbar-brand" href="#">
             <i class="fa-solid fa-person-running"></i>
@@ -110,22 +159,79 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Catálogo de Carreras</a>
+                <a class="nav-link active" aria-current="page" id="enlaceCatalogoEventos">Eventos</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#" id="enlaceCuenta">Cuenta de Usuario</a>
+                <a class="nav-link" id="enlaceCuenta">Cuenta de Usuario</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="enlaceRegistrarEvento">Registrar Evento</a>
               </li>
             </ul>
-        
-            
+          <form class="d-flex me-5" role="search" id="formularioBusqueda">
+            <button class="btn btn-outline-success" type="submit"><i id="icono-lupa" class="fa-solid fa-magnifying-glass"></i></button>
+            <input class="form-control me-2" type="search" placeholder="Término de Búsqueda" aria-label="Search">
+            <div class="nav-item dropdown m-2 me-3">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Filtros
+              </a>
+              <ul class="dropdown-menu">
+                <li><span id="fechaAsc"class="dropdown-item" span>Fecha cercana</span></li>
+                <li><span id="fechaDesc"class="dropdown-item" span>Fecha lejana</span></li>
+                <li><span id="relevanciaAsc"class="dropdown-item" span>Más Relevantes</span></li>
+                <li><span id="relevanciaDesc"class="dropdown-item" span>Menos Relevantes</span></li>
+              </ul>
+            </div>
+          </form>    
+        </div>
+      </div>   
+    </nav>
+
+    <div class="container-fluid" id="cabecerasH1">
+        <div class="row justify-content-center mt-5 mb-5">
+          <h1 class="col-12 fs-5 text-center order-2 fw-light">Calendario de carreras</h1>
+          <h2 class="col-12 fs-1 text-center order-1 fw-light">Descubre tu siguiente reto</h2>
+        </div> 
+    </div>
+    <div class="container-fluid">
+      <div class="row justify-content-center mt-5 fw-light">
+        <div class="col-10" aria-label="breadcrumb" id="breadcrumbsContainer">
+          <ol class="breadcrumb align-self-center ">
+            <li class="breadcrumb-item active  pointer" aria-current="page">Racebook</li>
+            <li class="breadcrumb-item active  pointer" aria-current="page">Home</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <!-- Este modal avisa al usuario de que para acceder a todo el contenido de la pagina debe hacer login -->
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary hidden" data-bs-toggle="modal" data-bs-target="#exampleModal" id="modalTrigger"></button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Contenido Restringido</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Algunas funcionalidades de la página requieren que estés logueado. ¿Quieres crear una cuenta?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" id="modalLoginButton">Registrarme en Racebook</button>
           </div>
         </div>
-    </nav>
+      </div>
+    </div>
+
+    
     <main class="container-fluid ">
         
-        <div class="row justify-content-center mt-4 mb-3"> 
+        <div class="row justify-content-center mt-4 mb-3" id="elPadre"> 
             <!--FORMULARIO DE REGISTRO DE EVENTOS-->
-            <form class="col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;" id="formularioRegistroEventos">
+            <form class="componente col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;" id="formularioRegistroEventos">
                 <div class="row mt-2">
                     <h1 class="col-12 text-left">Registro de Eventos</h1>
                 </div>
@@ -249,7 +355,7 @@
             </form>
 
             <!--FORMULARIO DE REGISTRO DE CARRERAS-->
-            <form class="col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;" id="formularioRegistroCarreras">
+            <form class="componente col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;" id="formularioRegistroCarreras">
                 <div class="row justify-content-center mt-3">
                     <h1 class="col-10 text-left">Registro de Carrera</h1>
                     <p class="col-9 text-left mt-3">Completa este formulario para asociar una nueva Carrera a este evento. Pulsa <strong>Continuar</strong> para registrar más carreras en el mismo evento. Pulsa <strong>Finalizar</strong> cuando hayas terminado</p>
@@ -259,10 +365,19 @@
                     <div class="mb-3 col-10">
                         
                         <label for="nombreFormularioNuevaCarrera" class="form-label">Nombre de Carrera</label>
-                        <input type="text" class="form-control bg-transparent pointer border border-light" id="nombreFormularioNuevaCarrera" name="nombre" title="Introduce nombre de la carrera">
+                        <input type="text" class="form-control bg-transparent pointer border border-light" id="nombreFormularioNuevaCarrera" name="nombre" title="Introduce nombre de la carrera" required>
                         
                     </div>
-                    
+                </div>
+
+                <div class="row justify-content-evenly">
+                  <p class="col-10 ">Fecha y hora de la salida</p>
+                  <div class="mb-3 col-10 col-md-4">
+                    <input type="date" name="fechaComienzoCarrera" id="fechaComienzoCarreraFormularioNuevaCarrera" class="form-control bg-transparent pointer border border-light" title="Introduce fecha de la carrera" required>
+                  </div>
+                  <div class="mb-3 col-10 col-md-4">
+                    <input type="time" name="horaComienzoCarrera" id="horaComienzoCarreraFormularioNuevaCarrera" class="form-control bg-transparent pointer border border-light text-center" title="Introduce hora de la carrera" required>
+                  </div>
                 </div>
                 <div class="row justify-content-center mt-3">
                     <p class="col-10 ">Rango de edad de los participantes: </p>
@@ -271,11 +386,11 @@
                     
                     <div class="mb-3 col-10 col-md-4">
                         <label for="fechaMinFormularioNuevaCarrera" class="form-label">Nacidos después de... </label>
-                        <input type="date" class="form-control bg-transparent pointer border border-light" id="fechaMinFormularioNuevaCarrera" name="fechaMin" title="Introduce fecha de nacimiento">
+                        <input type="date" class="form-control bg-transparent pointer border border-light" id="fechaMinFormularioNuevaCarrera" name="fechaNacimMin" title="Introduce fecha de nacimiento">
                     </div>
                     <div class="mb-3 col-10 col-md-4">
                         <label for="fechaMaxFormularioNuevaCarrera" class="form-label">Nacidos antes de... </label>
-                        <input type="date" class="form-control bg-transparent pointer border border-light" id="fechaMaxFormularioNuevaCarrera" name="fechaMax" title="Introduce fecha de nacimiento">
+                        <input type="date" class="form-control bg-transparent pointer border border-light" id="fechaMaxFormularioNuevaCarrera" name="fechaNacimMax" title="Introduce fecha de nacimiento">
                     </div>
                 </div>
                 <div class="row justify-content-evenly">
@@ -283,18 +398,18 @@
                         <label for="modalidadFormularioNuevaCarrera" class="form-label">Modalidad: </label>
                         <select class="form-select  border-light" id="modalidadFormularioNuevaCarrera" title="Introduce modalidad de la carrera" name="modalidad">
                             <option selected>Modalidad</option>
-                            <option value="maraton">Maratón</option>
-                            <option value="trail">Trail</option>
-                            <option value="ultra">Ultra</option>
+                            <option value="Maratón">Maratón</option>
+                            <option value="Trail">Trail</option>
+                            <option value="Ultra">Ultra</option>
                         </select>
                     </div>
                     <div class="mb-3 col-10 col-md-4">
                         <label for="categoriaFormularioNuevaCarrera" class="form-label">Categoría: </label>
-                        <select class="form-select border-light" id="categoriaFormularioNuevaCarrera" title="Introduce categoría de la carrera" name="categoria">
+                        <select class="form-select border-light" id="categoriaFormularioNuevaCarrera" title="Introduce categoría de la carrera" name="sexo">
                             <option selected>Categoría</option>
-                            <option value="hombres">Hombres</option>
-                            <option value="mujeres">Mujeres</option>
-                            <option value="mixto">Mixto</option>
+                            <option value="Hombres">Hombres</option>
+                            <option value="Mujeres">Mujeres</option>
+                            <option value="Mixto">Mixto</option>
                         </select>
                     </div>
                 </div>
@@ -315,7 +430,7 @@
             </form>
 
             <!--FORMULARIO DE LOGIN-->
-            <form class="col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;" id="formularioLogin">
+            <form class="componente col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;" id="formularioLogin">
                 <div class="row mt-2">
                     <h1 class="col-12 text-left">Inicio de Sesión</h1>
                 </div>
@@ -338,7 +453,7 @@
             </form>
 
             <!--FORMULARIO DE REGISTRO-->
-            <form class="col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;" id="formularioRegistro">
+            <form class="componente col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;" id="formularioRegistro">
                 <div class="row mt-2">
                     <h1 class="col-12 text-left">Registro de Usuario</h1>
                 </div>
@@ -372,7 +487,7 @@
             </form>
 
             <!--FORMULARIO COMPLETAR REGISTRO DE ORGANIZADOR-->
-            <form class="col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;" id="formularioCompletarRegistroOrganizador">
+            <form class="componente col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;" id="formularioCompletarRegistroOrganizador">
                 <div class="row mt-2">
                     <h1 class="col-12 text-left">Completa tu Registro</h1>
                 </div>
@@ -401,6 +516,7 @@
                       <label for="telefonoFormularioCompletarRegistroOrganizador" class="form-label">Teléfono</label>
                       <input type="text" class="form-control bg-transparent border border-light" id="telefonoFormularioCompletarRegistroOrganizador" title="Introduce teléfono" name="telefono">
                     </div>
+                    
                     <div class="row justify-content-center">
                       <div id="formAlertFormularioCompletarRegistroOrganizador" class="m-3 col-10">&nbsp;</div>
                     </div>
@@ -409,7 +525,7 @@
             </form>
 
             <!--FORMLARIO COMPLETAR REGISTRO USUARIO-->
-            <form class="col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;" id="formularioCompletarRegistroUsuario">
+            <form class="componente col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;" id="formularioCompletarRegistroUsuario">
               <div class="row mt-2">
                   <h1 class="col-12 text-left">Completa tu Registro</h1>
               </div>
@@ -437,13 +553,86 @@
               </div>
 
             </form>
-      </div>
-      <div id="mainPage">
-          <!--ESTE CONTENIDO CARGA DE FORMA DINÁMICA EL CATALOGO DE CARRERAS-->
-      </div>
-      <div id="cuentaUsuario">
+            <!--VISUALIZAR LA CUENTA DEL USUARIO -->
+            <div id="cuentaUsuario" class="componente hidden">
+              <div>soy la parte de cuenta de ususairo</div>
+            </div>
+            <!-- FORMULARIO PARA EDITAR LA CUENTA DEL USUARIO -->
+            <div id="editarCuentaUsuario" class="componente hidden">
+              <div>soy la parte de editar cuenta de ususairo</div>
+            </div>
+            <!--LA CUENTA DEL ORGANIZADOR -->
+            <div id="cuentaOrganizador" class="componente hidden">
+              <div>soy la parte de cuenta de organizador</div>
+            </div>
+            <!-- FORMULARIO PARA EDITAR LA CUENTA DEL ORGANIZADOR -->
+            <div id="editarCuentaOrganizador" class="componente hidden">
+              <div>soy la parte de editar cuenta de organizador</div>
+            </div>
+            <!--VISUALIZAR EL CATALOGO DE EVENTOS -->
+            <div id="catalogoEventos" class="componente hidden row justify-content-evenly">
+                
+            </div>
+            <!-- VISUALIZAR LOS EVENTOS EN UN MAPA-->
+            <div id="mapaEventos" class="componente hidden">
+              <div>visualizar eventos en un mapa</div>
+            </div>
+            <!--DETALLE DE UN EVENTO -->
+            <div id="detalleEvento"  class="componente hidden row justify-content-center mt-5">
+              <div class="col-10 justify-content-center mt-4" id="loadingDataSpiner">
+                <div class="row justify-content-center mt-5">
+                  <div class="spinner-border m-5 col-12" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <h3 class="col-12 text-center">Estamos cargando este evento</h3>
+                </div>
+              </div>
+            </div>
+            <!--DETALLE DE UNA CARRERA -->
+            <div id="detalleEvento"  class="componente hidden row justify-content-center mt-5">
+              <div class="col-10 justify-content-center mt-4" id="loadingDataSpiner">
+                <div class="row justify-content-center mt-5">
+                  <div class="spinner-border m-5 col-12" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <h3 class="col-12 text-center">Estamos cargando esta carrera</h3>
+                </div>
+              </div>
+            </div>
+            <div id="detalleCarrera" class="componente hidden row justify-content-center mt-5">
+              <div class="col-10 col-lg-6 col-xl-7 mt-5 order-2" style="height: 70vh;" id="map">
 
+              </div>
+              <div class="col-10 col-lg-4 col-xl-3 mt-5 ms-3 border-end border-light order-lg-3">
+                <div class="row justify-content-center focus " id="datosDetalleCarrera">
+                  <h1 class="col-12 mb-3 mb-lg-5  align-text-middle" id="nombreCarreraContenido"></h1>
+                  <div class="col-12 fs-4 mt-3   align-text-middle fw-light"><i class="bi bi-tags-fill me-2"></i>Modadilidad</div>
+                  <div class="col-12 fs-2 mt-1   align-text-middle fw-light ms-3" id="carreraModalidadContenido">Trail - Hombres</div>
+                  <div class="col-12 fs-4 mt-3   align-text-middle fw-light"><i class="bi bi-123 me-2"></i>Edad. Nacidos entre...</div>
+                  <div class="col-12 fs-2 mt-1   align-text-middle fw-light ms-3" id="carreraEdadContenido"></div>
+                  <div class="col-12 fs-4 mt-3   align-text-middle fw-light"><i class="bi bi-stopwatch me-2"></i>Salida</div>
+                  <div class="col-12 fs-2 mt-1   align-text-middle fw-light ms-3" id="carreraSalidaContenido"></div>
+                  <div class="col-12 fs-4 mt-3   align-text-middle fw-light"><i class="bi bi-graph-up-arrow me-2"></i></i>Desnivel</div>
+                  <div class="col-12 fs-2 mt-1   align-text-middle fw-light ms-3" id="carreraDesnivelContenido"></div>
+                </div>
+              </div>
+
+            </div>
+            <!-- FORMULARIO PARA EDITAR UN EVENTO -->
+            <div id="editarEvento" class="componente hidden">
+              <div>formulario para editar un evento</div>
+            </div>
+            <!-- FORMULARIO PARA EDITAR UNA CARRERA -->
+            <div id="editarCarrera" class="componente hidden">
+              <div>formulario para editar una carrera</div>
+            </div>
+            <!--LOS EVENTOS DE UN ORGANIZADOR -->
+            <div id="eventosOrganizador" class="componente hidden">
+              <div>los eventos de un organizador</div>
+            </div>
       </div>
+      
+
   </main>
 
     
@@ -463,108 +652,411 @@
 //NOTAS API
 ////
 // 1 - COMRPOBAR EL HEADER AUTH JWT EN CADA PETICION -> SI LA PETICION TIENE QUE VER CON MANEJO DE EVENTOS ENVIA TAMBIEN EL ID DEL EVENTO Y/O CARRERA
-
+//
 ////
 //Variables
 ////
 let jwt;
 let formData;
 let token;
+let gpx;
+let track;
+
+let tokenCatalogoEventos;
+let catalogoCarrerasEvento;
+
+const catalogoEventos = document.getElementById('catalogoEventos');
+const enlaceCatalogoEventos = document.getElementById('enlaceCatalogoEventos');
+const modalTrigger = document.getElementById('modalTrigger');
+const cabecerasH1 = document.getElementById('cabecerasH1');
+const detalleEvento = document.getElementById('detalleEvento');
+const loadingDataSpiner = document.getElementById('loadingDataSpiner');
+const detalleCarrera = document.getElementById('detalleCarrera');
+//////////////////////////
+//FUNCIONES
+/////////////////////////
+//implemento que reciba el elemento como parametro para saber quien es el elemento que tiene que No tener la classe hidden
+function closeAll(){
+  elementos = document.getElementsByClassName('componente');
+  //convierto el objeto a array
+  Array.from(elementos).forEach(elemento => {
+    elemento.classList.add('hidden');
+  });
+  //al elemento que se la tenga que quitar se al quito
+  
+};
+//al cargar la aplicacion compruebo si tengo un catalogo de eventos en el LocalStorage y si no lo tengo pido uno a la api
+window.onload = () => {
+  closeAll();
+  //compruebo si tengo un token en el localStorage
+  tokenCatalogoEventos = localStorage.getItem('tokenCatalogoEventos');
+  if(tokenCatalogoEventos){
+    //convierto el string a Array
+    tokenCatalogoEventos = JSON.parse(tokenCatalogoEventos);
+    // lo renderizo
+    renderCatalogoEventos(tokenCatalogoEventos);
+  }else{
+    //si no tengo un catalogo de eventos en el localStorage pido uno a la api
+    fetch('http://localhost:3000/apiv4/get/eventos/')
+    .then(response => response.json())
+    .then(data => {
+      console.log(typeof data);
+      data = Object.values(data);
+      renderCatalogoEventos(data);//renderizo el catalogo de eventos
+      localStorage.setItem('tokenCatalogoEventos', JSON.stringify(data));//guardo el catalogo de eventos en el localStorage en formato string
+    });
+  }
+}
+
+///////////////////////////
+//RENDER MAIN PAGE
+//////////////////////////
+const modalLoginButton = document.getElementById('modalLoginButton');
+//window.onload = renderMainPage();
+// function renderMainPage(){
+//   const modalTrigger = document.getElementById('modalTrigger');
+//   //tengo un usuario anonimo o logueado?
+//   jwt = localStorage.getItem('jwt');
+//   token = data.split('.')[1];
+//   token = atob(token);       
+//   token = JSON.parse(token);
+//   if(token.exp > Date.now()){
+//     //tengo un token valido renderizo el catalogo de carreras
+//     renderCatalogoCarreras(token);
+//     //cambio el Boton cuenta de usuario del nav por el nickname del usuario con acceso a su pagina de cuenta
+//     enlaceCuenta.textContent = token.nickname;
+//     enlaceCuenta.classList.toggle('hidden');
+//   }else{
+//     //si no tengo un token valido renderizo el formulario de login
+//     //acciono el boton modalTrigger para invirar al usuario a crear una cuenta
+//     modalTrigger.click();
+//   }
+// }
+
 //////////////////////////
 //FUNCIONALIDAD NAVBAR
 /////////////////////////
-const enlaceCuenta = document.getElementById('enlaceCuenta');
+const enlaceCuentaNavbar = document.getElementById('enlaceCuenta');
+const enlaceRegistrarEventoNavbar = document.getElementById('enlaceRegistrarEvento');
 
-
-enlaceCuenta.addEventListener('click', (e) => {
+enlaceCuentaNavbar.addEventListener('click', (e) => {
     e.preventDefault();
-    // //obtengo el token del localstorage
-    // jwt = localStorage.getItem('jwt');
-    // //compruebo que esta seteado
-    // if(jwt){
-    //   if(!JWT_isValid(jwt)){
-    //     fetch('http://localhost:3000/backend/api_racebook/v4/usuario/', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Authorization': `Bearer ${jwt}`
-    //     }
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-        
-    //     cuentaUsuario.innerHTML = '';
-    //     cuentaUsuario.classList.toggle('hidden');
-    //     cuentaUsuario.innerHTML = `
-    //     <div class="row justify-content-center">
-    //         <div class="col-12 col-md-6 col-lg-4 col-xxl-3 redondeada bg-dark p-3 sombra">
-    //         <h1 class="text-center">Cuenta de Usuario</h1>
-    //         <p>Nombre: ${data.nombre}</p>
-    //         <p>Email: ${data.email}</p>
-    //         <p>Fecha de Nacimiento: ${data.fechaNacimiento}</p>
-    //         <p>Nickname: ${data.nickname}</p>
-    //         <p>Entidad: ${data.entidad}</p>
-    //         <p>Telefono: ${data.telefono}</p>
-    //         <p>Web: ${data.web}</p>
-    //         <p>Localidad: ${data.localidad}</p>
-    //         <p>Provincia: ${data.provincia}</p>
-    //         <p>Es Administrador: ${data.isAdmin}</p>
-    //         <p>Es Organizador: ${data.isOrganizador}</p>
-    //         <p>Es Usuario: ${data.isUser}</p>
-    //         <p>Es Activo: ${data.isActive}</p>
-    //         </div>
-    //         </div>
-    //         `;
-    //     });
-    //   }else{
-    //       formularioLogin.classList.toggle('hidden');
-    //       formAlertFormularioLogin.textContent = 'Tu sesión ha caducado. Por favor, inicia sesión de nuevo';
-    //   }
-    // }
-    formularioLogin.classList.toggle('hidden');
-    
+    //cierro todos los formularios
+    closeAll();
+    //despliego el formulario de cuenta de usuario
+    formularioLogin.classList.remove('hidden');
 });
-
+enlaceRegistrarEventoNavbar.addEventListener('click', (e) => {
+  e.preventDefault();
+  //cierro todos los formularios
+  closeAll(e);
+  //despliego el formulario de registro de eventos
+  formularioRegistroEventos.classList.remove('hidden');
+})
+enlaceCatalogoEventos.addEventListener('click', (e) => {
+  e.preventDefault();
+  //cierro todos los formularios
+  closeAll();
+  //despliego el catalogo de eventos
+  catalogoEventos.classList.remove('hidden');
+})
 //////////////////////////
 //REG EXP
 /////////////////////////
 const regPasswd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?#&])([A-Za-z\d$@$!%*?&#]|[^ ]){8,16}$/;
 const regEmail = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+const regTel = /^\+(?:[0-9] ?){6,14}[0-9]$/;
 //////////////////////////
 //MAIN PAGE
 /////////////////////////
 const cuentaUsuario = document.getElementById('cuentaUsuario');
 //////////////////////////////////////////////////
-//FUNCION PARA RENDERIZAR EL CATALOGO DE CARRERAS
+//FUNCION PARA RENDERIZAR EL CATALOGO DE EVENTOS
 //////////////////////////////////////////////////
 
-// function renderCatalogoCarreras(){
-//   const urlCatalogoCarreras = 'http://localhost:3000/backend/api_racebook/v4/catalogo_carreras/';
-//   fetch(urlCatalogoCarreras)
-//   .then(response => response.json())
-//   .then(data => {
-//     const mainPage = document.getElementById('mainPage');
-//     mainPage.innerHTML = '';
-//     data.forEach(carrera => {
-//       const card = document.createElement('div');
-//       card.classList.add('card', 'col-10', 'col-sm-8', 'col-md-6', 'col-lg-4', 'col-xxl-3', 'm-3', 'p-3', 'sombra');
-//       card.innerHTML = `
-//       <img src="${carrera.cartel}" class="card-img-top" alt="...">
-//       <div class="card-body">
-//         <h5 class="card-title">${carrera.nombre}</h5>
-//         <p class="card-text">${carrera.localidad}, ${carrera.provincia}</p>
-//         <p class="card-text">${carrera.fecha}</p>
-//         <a href="#" class="btn btn-primary">Ver más</a>
-//       </div>
-//       `;
-//       mainPage.appendChild(card);
-//     });
-//     //si es un usuario logueado con un token valido añado funcionalidades al catalogo
-//     // 1 EL BOTON DE LOGIN DEL NAVBAR AHORA ES UN ENLACE A LA PAGINA DE CUENTA -> SI ES ORGANIZADOR PUEDE ACCEDER A UNA PAGINA DE GESTION DE EVENTOS
-//     // 2 CADA EVENTO TIENE UN TRIGGER QUE RENDERIZA LOS DETALLES DEL EVENTO
-//     // 3 ENTRE LOS DETALLES DEL EVENTO SE ENCUENTRAN EL LISTADO DE CARRERAS (CON UN TRIGGER PARA ACCEDER A LOS DETALLES DE CADA CARRERA)
+function renderCatalogoEventos(tokenCatalogoEventos){
+  closeAll();
+  console.log('estoy en render');
+  console.log(typeof tokenCatalogoEventos);
+  console.log(tokenCatalogoEventos);
+  tokenCatalogoEventos.forEach((evento, index) => {
+    let eventoDiv = document.createElement('div');
+    eventoDiv.classList.add('cartaEvento');
+    eventoDiv.classList.add('card');
+    eventoDiv.classList.add('mb-5');
+    eventoDiv.classList.add('col-11');
+    eventoDiv.classList.add('col-md-5');
+    eventoDiv.classList.add('gy-5');
+    eventoDiv.dataset.idEvento = evento.id;
+    eventoDiv.dataset.idOrganizador = evento.id_organizador;
+    eventoDiv.dataset.indexCatalogo = index;
+    let urlCartel = evento.url_cartel.replace('../../', '../apiv4/');
 
-//   });
-// }
+    eventoDiv.innerHTML = `
+      <div class="row">
+        <div class="col-md-4">
+          <img src="${urlCartel}" class="img-fluid  mx-auto rounded" alt="Cartel del evento">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">${evento.nombre}</h5>
+            <p class="card-text">${evento.fecha_inicio} | ${evento.fecha_fin}</p>
+            <p class="card-text"><small class="text-body-secondary">${evento.localidad}, ${evento.provincia}</small></p>
+          </div>
+        </div>
+      </div>
+    `;
+    eventoDiv.addEventListener('click', (e) => {
+      e.preventDefault();
+      //compruebo si es un usuario logueado o no
+      jwt = localStorage.getItem('jwt');
+      if(jwt){
+        //si es un usuario logueado renderizo el detalle del evento
+        renderDetalleEvento(e);
+      }else{
+        //si no es un usuario logueado le pido que se loguee
+        modalTrigger.click();
+      }
+    });
+    catalogoEventos.appendChild(eventoDiv);
+  });
+  catalogoEventos.classList.remove('hidden');
+  
+}
+////////////////////////
+//DETALLE DE EVENTO
+///////////////////////
+
+function renderDetalleEvento (e){
+  cabecerasH1.classList.toggle('hidden');
+  let eventoSeleccionado = e.currentTarget;
+  console.log(eventoSeleccionado);
+  let idEvento = eventoSeleccionado.dataset.idEvento;
+  let idOrganizador = eventoSeleccionado.dataset.idOrganizador;
+  let indexCatalogo = eventoSeleccionado.dataset.indexCatalogo;
+  tokenCatalogoEventos = JSON.parse(localStorage.getItem('tokenCatalogoEventos'));
+  let dataEvento = tokenCatalogoEventos[indexCatalogo];
+  closeAll();
+  detalleEvento.classList.remove('hidden');
+  fetch(`http://localhost:3000/apiv4/get/carreras/?idEvento=${idEvento}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+      'Content-Type': 'application/json;utf-8'
+    },
+    mode: 'cors',
+  })
+  .then(response => {
+    if(response.status == 201){
+      return response.json();
+    }else{
+      modalTrigger.click();
+    }
+  })
+  .then(data => {
+    console.log(data);
+    catalogoCarrerasEvento = Object.values(data);
+    localStorage.setItem('catalogoCarrerasEvento', JSON.stringify(catalogoCarrerasEvento));
+  })
+  .then(() => {
+      
+      tokenCatalogoEventos= localStorage.getItem('tokenCatalogoEventos');
+      tokenCatalogoEventos = JSON.parse(tokenCatalogoEventos);
+      let datosEvento = tokenCatalogoEventos[indexCatalogo];
+      let urlCartel = datosEvento.url_cartel.replace('../../', '../apiv4/');
+      let urlReglamento = datosEvento.url_reglamento.replace('../../', '../apiv4/');
+      let usuarioOrganizadorEvento = datosEvento.id_organizador;
+      //recojo el nombre del reglamento
+      let nombreReglamento = urlReglamento.split('/');
+      nombreReglamento = nombreReglamento[nombreReglamento.length - 1];
+      //obtengo el jwt
+      jwt = localStorage.getItem('jwt');
+      //obtengo el token
+      token = jwt.split('.')[1];
+      token = atob(token);
+      token = JSON.parse(token);
+      let telefonoOrganizador = token.userData.telefono;
+      detalleEvento.innerHTML = `
+          
+          <div class="row justify-content-center border-bottom border-light">
+              <!-- Informacion del Evento -->
+              <h1 class="col-12 text-md-center mb-5" id="nombreEvento">${datosEvento.nombre}</h1>
+              <div class="col-md-6 col-xl-4 mb-5 mt-5">
+                <div class="row justify-content-center">
+                  <div class="col-12 fs-4   align-text-middle fw-light mt-5" style="cursor: pointer"><i class="bi bi-heart me-2"></i>Añadir a favoritos</div>
+      
+                  <div class="col-12 fs-4 mt-4   align-text-middle fw-light"><i class="bi bi-geo-alt-fill me-2"></i>Ubicación</div>
+                  <div class="col-12 fs-2 mt-2   align-text-middle fw-light ms-3" id="ubicacion">${datosEvento.localidad},${datosEvento.provincia}</div>
+              
+                  <div class="col-12 fs-4 mt-4   align-text-middle fw-light"><i class="bi bi-calendar-date me-2"></i>Fecha</div>
+                  <div class="col-12 fs-2 mt-2   align-text-middle fw-light ms-3" id="fecha">${datosEvento.fecha_inicio} | ${datosEvento.fecha_fin}</div>
+              
+                  <a class="col-12 fs-4 mt-4 align-text-middle fw-light" href="https://${datosEvento.web}" id="web" style="text-decoration: none;"><i class="bi bi-pc-display-horizontal me-2"></i>${datosEvento.web}</a>
+
+                  <div onClick="DownloadFromUrl('http://localhost:3000/${datosEvento.url_reglamento}', '${nombreReglamento}')" 
+                  style="cursor: pointer;" class="col-12 fs-4 mt-4 align-text-middle fw-light"><i class="bi bi-download pe-2"></i>Descargar Reglamento</div>
+                  
+                  <a class=" col-6 col-md-8 text-center fs-2 mt-5  p-3 fw-light  border border-light rounded " href="tel:${telefonoOrganizador}" style="text-decoration: none;"><i class="bi bi-telephone me-2"></i></i></i>Contactar</a>  
+
+                </div>
+              </div>
+              
+              <div class="col-md-6 col-xl-4 mb-5 mt-5">
+                <div class="row justify-content-center">                   
+                  <div class="col-10">
+                      <img class="w-100 img-fluid rounded img-thumbnail" src="${urlCartel}"></img>
+                  </div>                    
+                </div>
+              </div>
+              
+          </div>
+          <hr class="hr hr-blurry" />
+      `;
+    catalogoCarrerasEvento = JSON.parse(localStorage.getItem('catalogoCarrerasEvento'));
+    if(catalogoCarrerasEvento.length > 0){
+      let divContendorListaCarreras = document.createElement('div');
+      divContendorListaCarreras.classList.add('col-10');
+      let listaCarreras = document.createElement('div');
+      detalleEvento.appendChild(divContendorListaCarreras);
+      listaCarreras.classList.add('row');
+      listaCarreras.classList.add('justify-content-evenly');
+      listaCarreras.innerHTML = `
+        <h2 class="col-12 mt-5 mb-5">Listado de carreras: </h2>
+      `;
+      
+      catalogoCarrerasEvento.forEach((elemento, index) => {
+        console.log(elemento);
+        let divCarrera = document.createElement('div');
+        divCarrera.classList.add('card');
+        divCarrera.classList.add('col-11');
+        divCarrera.classList.add('col-md-5');
+        divCarrera.classList.add('mb-5');
+        divCarrera.classList.add('cartaCarrera');
+        divCarrera.dataset.idCarrera = elemento.id;
+        divCarrera.dataset.indexCarrera = index;
+        divCarrera.dataset.idEvento = elemento.id_evento;
+        divCarrera.innerHTML = `
+          <div class="row g-0">
+            <div class="col">
+              <div class="card-body">
+                <h5 class="card-title">${elemento.nombre}</h5>
+                <p class="card-text">Fecha y Hora de la salida <br> ${elemento.fecha_comienzo} | ${elemento.hora_comienzo}</p>
+                <p class="card-text"><small class="text-body-secondary">Nacidos entre ${elemento.fecha_nacim_min} y ${elemento.fecha_nacim_max}</small></p>
+                <p class="card-text"><small class="text-body-secondary">${elemento.modalidad} ${elemento.sexo}</small></p>
+              </div>
+            </div>
+          </div>
+        `;
+        divCarrera.addEventListener('click', (e) => {
+          e.preventDefault();
+          renderDetalleCarrera(e);
+        });
+        listaCarreras.appendChild(divCarrera);
+      })
+      divContendorListaCarreras.appendChild(listaCarreras);
+    }
+  })
+}
+
+
+///////////////////////
+//DETALLE DE CARRERA
+///////////////////////
+
+
+function renderDetalleCarrera(e){
+  // console.log(e.currentTarget);
+  closeAll();
+  let divMap = document.getElementById('map');
+  let carreraSeleccionada = e.currentTarget;
+  let idCarrera = carreraSeleccionada.dataset.idCarrera;
+  let indexCarrera = carreraSeleccionada.dataset.indexCarrera;
+  let idEvento = carreraSeleccionada.dataset.idEvento;
+  let catalogoCarrerasEvento = JSON.parse(localStorage.getItem('catalogoCarrerasEvento'));
+  carreraSeleccionada = catalogoCarrerasEvento[indexCarrera];
+  let a = carreraSeleccionada;
+  
+  if(a){
+    let b = JSON.parse(a.recorrido);
+    console.log(typeof b);
+    // console.log(b);
+    let arrayCoordenadas = JSON.parse(b);
+    //elimino el tercer elemento de cada subarray
+    let desnivel = - arrayCoordenadas[0][2] + arrayCoordenadas[arrayCoordenadas.length - 1][2];
+    let arrayCoordenadasSinAltura = arrayCoordenadas.map((elemento) => {
+      return [elemento[0], elemento[1]];
+    });
+    detalleCarrera.classList.remove('hidden');
+
+    let mymap = L.map('map').setView(arrayCoordenadasSinAltura[0], 10);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, '
+    }).addTo(mymap);
+    L.polyline(arrayCoordenadasSinAltura, { color: '#2b3035', weight: 2 }).addTo(mymap);
+
+    let edadMax = carreraSeleccionada.fecha_nacim_max.split('-');
+    let edadMin = carreraSeleccionada.fecha_nacim_min.split('-');
+    edadMax = `${edadMax[2]} de ${mes(+edadMax[1])} de ${edadMax[0]}`;
+    edadMin = `${edadMin[2]} de ${mes(+edadMax[1])} de ${edadMin[0]}`;
+
+    document.getElementById('nombreCarreraContenido').textContent = carreraSeleccionada.nombre;
+    document.getElementById('carreraModalidadContenido').textContent = `${carreraSeleccionada.modalidad} - ${carreraSeleccionada.sexo}`;
+    document.getElementById('carreraEdadContenido').innerHTML = `${edadMax} <br> ${edadMin}`;
+    document.getElementById('carreraSalidaContenido').textContent = `${carreraSeleccionada.fecha_comienzo} | ${carreraSeleccionada.hora_comienzo}`;
+    document.getElementById('carreraDesnivelContenido').textContent = `${desnivel} metros`;
+
+    //situar la scrollbar al principio de la pagina
+    window.scrollTo(0, 0);
+  }
+  
+}
+//funcion que recibe un numero y escribe el mes correspondiente
+function mes(mes){
+  switch(mes){
+    case 1:
+      return 'Enero';
+      break;
+    case 2:
+      return 'Febrero';
+      break;
+    case 3:
+      return 'Marzo';
+      break;
+    case 4:
+      return 'Abril';
+      break;
+    case 5:
+      return 'Mayo';
+      break;
+    case 6:
+      return 'Junio';
+      break;
+    case 7:
+      return 'Julio';
+      break;
+    case 8:
+      return 'Agosto';
+      break;
+    case 9:
+      return 'Septiembre';
+      break;
+    case 10:
+      return 'Octubre';
+      break;
+    case 11:
+      return 'Noviembre';
+      break;
+    case 12:
+      return 'Diciembre';
+      break;
+  }
+}
+
+
+
+
+
 
 
 
@@ -574,81 +1066,80 @@ const cuentaUsuario = document.getElementById('cuentaUsuario');
 //FORMULARIO REGISTRO
 /////////////////////////
 //url api para el registro
-const urlFormularioRegistro = 'http://localhost:3000/apiv4/insert/usuario/';
+  const urlFormularioRegistro = 'http://localhost:3000/apiv4/insert/usuario/';
 
-//variables para los campos del formulario
-const formularioRegistro = document.getElementById('formularioRegistro');
-const emailFormularioRegistro = document.getElementById('emailFormularioRegistro');
-const passwordFormularioRegistro = document.getElementById('passwordFormularioRegistro');
-const password2FormularioRegistro = document.getElementById('password2FormularioRegistro');
-const isAdminFormularioRegistro = document.getElementById('isAdminFormularioRegistro');
+  //variables para los campos del formulario
+  const formularioRegistro = document.getElementById('formularioRegistro');
+  const emailFormularioRegistro = document.getElementById('emailFormularioRegistro');
+  const passwordFormularioRegistro = document.getElementById('passwordFormularioRegistro');
+  const password2FormularioRegistro = document.getElementById('password2FormularioRegistro');
+  const isAdminFormularioRegistro = document.getElementById('isAdminFormularioRegistro');
 
-const formAlertFormularioRegistro = document.getElementById('formAlertFormularioRegistro');
+  const formAlertFormularioRegistro = document.getElementById('formAlertFormularioRegistro');
 
-const registrarUsuarioFormularioRegistro = document.getElementById('registrarUsuarioFormularioRegistro');
-const renderFormularioLoginFormularioRegistro = document.getElementById('renderFormularioLoginFormularioRegistro');
+  const registrarUsuarioFormularioRegistro = document.getElementById('registrarUsuarioFormularioRegistro');
+  const renderFormularioLoginFormularioRegistro = document.getElementById('renderFormularioLoginFormularioRegistro');
 
-renderFormularioLoginFormularioRegistro.addEventListener('click', (e) => {
-  e.preventDefault();
-  formularioRegistro.classList.toggle('hidden');
-  formularioLogin.classList.toggle('hidden');
-});
-
-registrarUsuarioFormularioRegistro.addEventListener('click', (e) => {
+  renderFormularioLoginFormularioRegistro.addEventListener('click', (e) => {
     e.preventDefault();
-    if(emailFormularioRegistro.value == '' || passwordFormularioRegistro.value == '' || password2FormularioRegistro.value == ''){
-      formAlertFormularioRegistro.textContent = 'Rellena todos los campos';
-    }else if(passwordFormularioRegistro.value != password2FormularioRegistro.value){
-      formAlertFormularioRegistro.textContent = 'Las contraseñas no coinciden';
-    }else if(!regEmail.test(emailFormularioRegistro.value)){
-        formAlertFormularioRegistro.textContent = 'El email no es válido';
-    }else if(!regPasswd.test(passwordFormularioRegistro.value)){
-        formAlertFormularioRegistro.innerHTML = 'La contraseña es demasiado débil. <br> Debe contener al menos 8 caracteres, una mayúscula, una minúscula, un número y un caracter especial';
-    }else{
-        fetch(urlFormularioRegistro, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json;utf-8'
-          },
-          body: JSON.stringify({
-            email: emailFormularioRegistro.value,
-            password: passwordFormularioRegistro.value,
-            isAdmin: isAdminFormularioRegistro.checked
-          }),
-          mode: 'cors',
-        })
-        .then(response => {
-          if(response.status == 201){
-            return response.json();
-          }else if(response.status == 202){
-            formAlertFormularioRegistro.textContent = 'Este email ya está registrado';
-          }else{
-            formAlertFormularioRegistro.textContent = 'Ahora mismo no podemos registrar tu cuenta. Inténtalo más tarde';
-          }
-        })
-        .then(data => {
-            if(data){
-            localStorage.setItem('jwt', data);
-            //decodifico el token 
-            token = data.split('.')[1];
-            console.log(token);
-            token = atob(token);       
-            console.log(token);
-            console.log(typeof token);
-            token = JSON.parse(token);
-            console.log(typeof token);
-            
-            if(isAdminFormularioRegistro.checked){
-                formularioRegistro.classList.toggle('hidden');
-                formularioCompletarRegistroOrganizador.classList.toggle('hidden');
+    formularioRegistro.classList.toggle('hidden');
+    formularioLogin.classList.toggle('hidden');
+  });
+
+  registrarUsuarioFormularioRegistro.addEventListener('click', (e) => {
+      e.preventDefault();
+      if(emailFormularioRegistro.value == '' || passwordFormularioRegistro.value == '' || password2FormularioRegistro.value == ''){
+        formAlertFormularioRegistro.textContent = 'Rellena todos los campos';
+      }else if(passwordFormularioRegistro.value != password2FormularioRegistro.value){
+        formAlertFormularioRegistro.textContent = 'Las contraseñas no coinciden';
+      }else if(!regEmail.test(emailFormularioRegistro.value)){
+          formAlertFormularioRegistro.textContent = 'El email no es válido';
+      }else if(!regPasswd.test(passwordFormularioRegistro.value)){
+          formAlertFormularioRegistro.innerHTML = 'La contraseña es demasiado débil. <br> Debe contener al menos 8 caracteres, una mayúscula, una minúscula, un número y un caracter especial';
+      }else{
+          fetch(urlFormularioRegistro, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;utf-8'
+            },
+            body: JSON.stringify({
+              email: emailFormularioRegistro.value,
+              password: passwordFormularioRegistro.value,
+              isAdmin: isAdminFormularioRegistro.checked
+            }),
+            mode: 'cors',
+          })
+          .then(response => {
+            if(response.status == 201){
+              return response.json();
+            }else if(response.status == 202){
+              formAlertFormularioRegistro.textContent = 'Este email ya está registrado';
             }else{
-                formularioRegistro.classList.toggle('hidden');
-                formularioCompletarRegistroUsuario.classList.toggle('hidden'); 
+              formAlertFormularioRegistro.textContent = 'Ahora mismo no podemos registrar tu cuenta. Inténtalo más tarde';
             }
-            //vacio el formulario 
-            formularioRegistro.reset();
-          }
-        })
+          })
+          .then(data => {
+              if(data){
+              localStorage.setItem('jwt', data);
+              //decodifico el token 
+              token = data.split('.')[1];
+              console.log(token);
+              token = atob(token);       
+              console.log(token);
+              console.log(typeof token);
+              token = JSON.parse(token);
+              console.log(typeof token);
+              
+              if(isAdminFormularioRegistro.checked){
+                  formularioRegistro.classList.toggle('hidden');
+                  formularioCompletarRegistroOrganizador.classList.toggle('hidden');
+              }else{
+                  formularioRegistro.classList.toggle('hidden');
+                  formularioCompletarRegistroUsuario.classList.toggle('hidden'); 
+              }
+              
+            }
+          })
 
     }
 });
@@ -708,8 +1199,7 @@ registrarUsuarioFormularioCompletarRegistroUsuario.addEventListener('click', (e)
               //espero 6 segundos
               setTimeout(() => {
                   formularioCompletarRegistroUsuario.classList.toggle('hidden');
-                  //vacio el formulario 
-                  formularioCompletarRegistroUsuario.reset();
+                  
                   formularioRegistro.classList.toggle('hidden');
                 }, 6000);
             }
@@ -718,8 +1208,7 @@ registrarUsuarioFormularioCompletarRegistroUsuario.addEventListener('click', (e)
             if(data){
               localStorage.setItem('jwt', data);
               formularioCompletarRegistroUsuario.classList.toggle('hidden');
-              //vacio el formulario 
-              formularioCompletarRegistroUsuario.reset();
+              
               formularioLogin.classList.toggle('hidden');
             }
           })
@@ -730,8 +1219,7 @@ registrarUsuarioFormularioCompletarRegistroUsuario.addEventListener('click', (e)
           formularioRegistro.classList.toggle('hidden');
           //elimino el token del localstorage
           localStorage.clear();
-          //vacio el formulario 
-          formularioCompletarRegistroUsuario.reset();
+          
       }
     }
   } 
@@ -791,8 +1279,7 @@ registrarUsuarioFormularioCompletarRegistroOrganizador.addEventListener('click',
                 //espero 6 segundos
                 setTimeout(() => {
                   formularioCompletarRegistroOrganizador.classList.toggle('hidden');
-                  //vacio el formulario
-                  formularioCompletarRegistroOrganizador.reset();
+                  
                   formularioRegistro.classList.toggle('hidden');
                 }, 6000);
               }
@@ -802,8 +1289,6 @@ registrarUsuarioFormularioCompletarRegistroOrganizador.addEventListener('click',
                 localStorage.setItem('jwt', data);
                 // console.log(data);
                 formularioCompletarRegistroOrganizador.classList.toggle('hidden');
-                //vacio el formulario
-                formularioCompletarRegistroOrganizador.reset();
                 formularioLogin.classList.toggle('hidden');
               }
             })
@@ -814,8 +1299,7 @@ registrarUsuarioFormularioCompletarRegistroOrganizador.addEventListener('click',
             formularioRegistro.classList.toggle('hidden');
             //elimino el token del localstorage
             localStorage.clear();
-            //vacio el formulario
-            formularioCompletarRegistroOrganizador.reset();
+            
         }
       }
   }
@@ -869,22 +1353,24 @@ iniciarSesionFormularioLogin.addEventListener('click', (e) => {
       }
     })
     .then(data => {
-      console.log('por aqui si paso');
       if(data){
         console.log(data);
         localStorage.setItem('jwt', data);
         //decodifico el token 
-        let token = data.split('.')[1];
+        token = data.split('.')[1];
         // console.log(token);
         token = atob(token);       
         // console.log(token);
-        // console.log(token);
-        // console.log(typeof token);//es un string
+        console.log(token);
+        console.log('Es string?');
+        console.log(typeof token);//es un string
         token = JSON.parse(token);
+        console.log('Es objeto?');
+        console.log(typeof token);//es un objeto
         if(token.userData.completado){
           window.alert('completado');
           formularioLogin.classList.toggle('hidden');
-          
+          formularioRegistroEventos.classList.toggle('hidden');
           // renderMainPage();
         }else if(token.isAdmin){
           formularioLogin.classList.toggle('hidden');
@@ -906,20 +1392,20 @@ iniciarSesionFormularioLogin.addEventListener('click', (e) => {
 //////////////////////////
 
   //https://www.npmjs.com/package/exif-js Libreria para controlar el tamaño de foto
-const urlFormularioNuevoEvento = 'http://localhost:3000/backend/api_racebook/eventos/new/';
-const urlArchivosFormularioNuevoEvento = 'http://localhost:3000/backend/api_racebook/eventos/new_archivos/';
-const formFormularioNuevoEvento = document.getElementById('formularioRegistroEventos');
-const imagenFormularioNuevoEvento = document.getElementById('imagenFormularioNuevoEvento');
+const urlFormularioNuevoEvento = 'http://localhost:3000/apiv4/insert/evento/';
+
+const formularioRegistroEventos = document.getElementById('formularioRegistroEventos');
+
 const formAlertFormularioNuevoEvento = document.getElementById('formAlertFormularioNuevoEvento');
-const nombreFormularioNuevoEvento = document.getElementById('nombreFormularioNuevoEvento'); 
-const fechaInicioFormularioNuevoEvento = document.getElementById('fechaInicioFormularioNuevoEvento');
-const fechaFinFormularioNuevoEvento = document.getElementById('fechaFinFormularioNuevoEvento'); 
-const localidadFormularioNuevoEvento = document.getElementById('localidadFormularioNuevoEvento'); 
-const provinciaFormularioNuevoEvento = document.getElementById('provinciaFormularioNuevoEvento');    
-const webEventoFormularioNuevoEvento = document.getElementById('webEventoFormularioNuevoEvento'); 
-const cartelFormularioNuevoEvento = document.getElementById('cartelFormularioNuevoEvento');
-const registrarEventoFormularioNuevoEvento = document.getElementById('registrarEventoFormularioNuevoEvento');
-const reglamentoFormularioNuevoEvento = document.getElementById('reglamentoFormularioNuevoEvento');
+const nombreFormularioNuevoEvento = document.getElementById('nombreFormularioNuevoEvento'); //nombre del evento
+const fechaInicioFormularioNuevoEvento = document.getElementById('fechaInicioFormularioNuevoEvento');//fecha de inicio del evento
+const fechaFinFormularioNuevoEvento = document.getElementById('fechaFinFormularioNuevoEvento'); //fecha de fin del evento
+const localidadFormularioNuevoEvento = document.getElementById('localidadFormularioNuevoEvento'); //localidad del evento
+const provinciaFormularioNuevoEvento = document.getElementById('provinciaFormularioNuevoEvento');  //provincia del evento  
+const webEventoFormularioNuevoEvento = document.getElementById('webEventoFormularioNuevoEvento'); //web del evento
+const cartelFormularioNuevoEvento = document.getElementById('cartelFormularioNuevoEvento');//cartel del evento
+const registrarEventoFormularioNuevoEvento = document.getElementById('registrarEventoFormularioNuevoEvento');//boton para registrar el evento
+const reglamentoFormularioNuevoEvento = document.getElementById('reglamentoFormularioNuevoEvento');//reglamento del evento
 
 let contadorImagenesFormularioNuevoEvento = 0;
 
@@ -927,16 +1413,19 @@ let eventoId;
 registrarEventoFormularioNuevoEvento.addEventListener('click', (e) => {
     e.preventDefault();
     if(nombreFormularioNuevoEvento.value == '' || fechaInicioFormularioNuevoEvento.value == '' || fechaFinFormularioNuevoEvento.value == '' || localidadFormularioNuevoEvento.value == '' || provinciaFormularioNuevoEvento.value == '' || webEventoFormularioNuevoEvento.value == '' || reglamentoFormularioNuevoEvento.value == '' || cartelFormularioNuevoEvento.value == ''){
-      formAlert.innerHTML = 'Rellena todos los campos';
+      formAlertFormularioNuevoEvento.innerHTML = 'Rellena todos los campos';
     }else{
-      let formDataFormularioNuevoEvento = new FormData(formFormularioNuevoEvento);
-
-      fetch(urlArchivos, {
-        headers: {
-          'Authorization': `Bearer ${getLocalJWT()}`
-        },
-        method: 'POST',
-        body: formDataFormularioNuevoEvento,
+      formData = new FormData(formularioRegistroEventos);
+      //obtengo el token del localstorage
+      jwt = localStorage.getItem('jwt');
+      //compruebo que esta seteado
+      if(jwt){
+        fetch(urlFormularioNuevoEvento, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+          },
+          body: formData,
       })
       .then(response => {
         if(response.status == 201){
@@ -946,35 +1435,228 @@ registrarEventoFormularioNuevoEvento.addEventListener('click', (e) => {
         }   
       })
       .then(data => {
-            //guardo una variable con el id del evento
-            localStorage.setItem('eventoId', data.eventoId);
-            formFormularioNuevoEvento.classList.toggle('hidden');
-            formFormularioNuevaCarrera.classList.toggle('hidden');
+        if(data){
+        console.log(data);
+        localStorage.setItem('jwt', data); 
+        token = data.split('.')[1];
+        token = atob(token);       
+        token = JSON.parse(token);
+        if(token.eventData.eventoId){//PROBLEMA AQUI CON LA ESTRUCTURA DE DATOS DEL TOKEN
+          formularioRegistroEventos.classList.toggle('hidden');
+          formularioRegistroCarreras.classList.toggle('hidden');
+        }else if(token.userData.isAdmin){
+          formularioLogin.classList.toggle('hidden');
+          formularioCompletarRegistroOrganizador.classList.toggle('hidden');
+        }else{
+          formularioLogin.classList.toggle('hidden');
+          formularioCompletarRegistroUsuario.classList.toggle('hidden');
+        }
+      }
       })
 
+    }else{
+      console.log('no hay token');
     }
+    
+  }
   });
 
 //////////////////////////
 //FORMULARIO NUEVA CARRERA
 //////////////////////////
+const formularioRegistroCarreras = document.getElementById('formularioRegistroCarreras');
+//url para la llamada de la api a: 'insertar carrera en evento'
+const urlFormularioNuevaCarrera = 'http://localhost:3000/apiv4/insert/carrera/'; 
 
-  //url para la llamada de la api a: 'insertar carrera en evento'
-    const urlFormularioNuevaCarrera = 'http://localhost:3000/backend/api_racebook/v4/insert/carrera/'; 
+//guardo las variables correspondientes a las variables del formulario de registro de carreras 
+const nombreFormularioNuevaCarrera = document.getElementById('nombreFormularioNuevaCarrera');
+const fechaComienzoFormularioNuevaCarrera = document.getElementById('fechaComienzoCarreraFormularioNuevaCarrera');
+const horaComienzoFormularioNuevaCarrera = document.getElementById('horaComienzoCarreraFormularioNuevaCarrera');
+const fechaMinFormularioNuevaCarrera = document.getElementById('fechaMinFormularioNuevaCarrera');
+const fechaMaxFormularioNuevaCarrera = document.getElementById('fechaMaxFormularioNuevaCarrera');
+const modalidadFormularioNuevaCarrera = document.getElementById('modalidadFormularioNuevaCarrera');
+const categoriaFormularioNuevaCarrera = document.getElementById('categoriaFormularioNuevaCarrera');
+const recorridoFormularioNuevaCarrera = document.getElementById('recorridoFormularioNuevaCarrera');
+const registrarCarreraFormularioNuevaCarrera = document.getElementById('registrarCarreraFormularioNuevaCarrera');
+const registrarOtraCarreraFormularioNuevaCarrera = document.getElementById('registrarOtraCarreraFormularioNuevaCarrera');
+const formAlertFormularioNuevaCarrera = document.getElementById('formAlertFormularioNuevaCarrera');
+const formFormularioNuevaCarrera = document.getElementById('formularioRegistroCarreras');
 
-  //guardo las variables correspondientes a las variables del formulario de registro de carreras 
-    const nombreFormularioNuevaCarrera = document.getElementById('nombreFormularioNuevaCarrera');
-    const fechaMinFormularioNuevaCarrera = document.getElementById('fechaMinFormularioNuevaCarrera');
-    const fechaMaxFormularioNuevaCarrera = document.getElementById('fechaMaxFormularioNuevaCarrera');
-    const modalidadFormularioNuevaCarrera = document.getElementById('modalidadFormularioNuevaCarrera');
-    const categoriaFormularioNuevaCarrera = document.getElementById('categoriaFormularioNuevaCarrera');
-    const recorridoFormularioNuevaCarrera = document.getElementById('recorridoFormularioNuevaCarrera');
-    const registrarCarreraFormularioNuevaCarrera = document.getElementById('registrarCarreraFormularioNuevaCarrera');
-    const registrarOtraCarreraFormularioNuevaCarrera = document.getElementById('registrarOtraCarreraFormularioNuevaCarrera');
-    const formAlertFormularioNuevaCarrera = document.getElementById('formAlertFormularioNuevaCarrera');
-    const formFormularioNuevaCarrera = document.getElementById('formularioRegistroCarreras');
-    
+//obtengo el recorrido a partir del .gpx y lo guardo en el localstorage
+recorridoFormularioNuevaCarrera.addEventListener('change', (e) => {
+    const gpxFile = recorridoFormularioNuevaCarrera.files[0];
 
+    if (gpxFile) {
+      const gpxFileName = gpxFile.name;
+      const gpxFileExtension = gpxFileName.split('.').pop();
+
+      if (gpxFileExtension === 'gpx') {
+          const reader = new FileReader();
+
+          reader.readAsText(gpxFile);
+          reader.onload = (e) => {
+              const gpxContent = e.target.result;
+              const parser = new DOMParser();
+              const gpxXML = parser.parseFromString(gpxContent, 'application/xml');
+              const geoJSON = toGeoJSON.gpx(gpxXML);
+              const geoFeatures = geoJSON.features[0];
+              const geoCoordinates = geoFeatures.geometry.coordinates;
+              const cantidadPuntosTotal = geoCoordinates.length;
+              const intervaloProvisionalPuntos = cantidadPuntosTotal / 200;
+              const intervaloPuntos = Math.max(1, Math.round(intervaloProvisionalPuntos));
+              let coordenadasTrayecto = [];
+              for (let i = 0; i < cantidadPuntosTotal; i += intervaloPuntos) {
+                  const punto = geoCoordinates[i];
+                  const coordinate = [
+                      punto[1],
+                      punto[0],
+                      punto[2],
+                  ];
+                  coordenadasTrayecto.push(coordinate);
+              }
+                console.log('Tengo tantas coordenadas ');
+                console.log(coordenadasTrayecto.length);
+
+                track = JSON.stringify(coordenadasTrayecto);
+                localStorage.setItem('track', track);
+          };
+      } else {
+        formAlertFormularioNuevaCarrera.textContent = 'El archivo debe ser un .gpx';
+    }
+    }
+});
+
+registrarOtraCarreraFormularioNuevaCarrera.addEventListener('click', (e) => {
+  e.preventDefault();
+  if(nombreFormularioNuevaCarrera.value == '' || fechaComienzoFormularioNuevaCarrera.value == '' || horaComienzoFormularioNuevaCarrera.value == '' || fechaMinFormularioNuevaCarrera.value == '' || fechaMaxFormularioNuevaCarrera.value == '' || modalidadFormularioNuevaCarrera.value == '' || categoriaFormularioNuevaCarrera.value == '' || recorridoFormularioNuevaCarrera.value == ''){
+    formAlertFormularioNuevaCarrera.textContent = 'Rellena todos los campos';
+  }else{
+    formData = new FormData(formFormularioNuevaCarrera);
+    track = localStorage.getItem('track');
+    // console.log(formData);
+    // console.log(track);
+    console.log('track es...');
+    console.log(typeof track);
+    console.log(track);
+    fetch(urlFormularioNuevaCarrera, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+      },
+      body: formData,
+    })
+    .then(response => {
+      if(response.status == 201){
+        //limpio el formulario para que el usuario pueda registrar otra carrera
+        formFormularioNuevaCarrera.reset();
+        return response.json();
+      }else{
+        formAlertFormularioNuevaCarrera.textContent = 'En este momento no podemos registrar tu carrera. Inténtalo más tarde';
+      }
+    })
+    .then(data => {
+      if(data){
+        localStorage.setItem('jwt', data);
+        token = data.split('.')[1];
+        token = atob(token);
+        token = JSON.parse(token);
+        if(token.raceData.carreraId){
+          //realizo una llamada a la api para registrar el track
+          fetch('http://localhost:3000/apiv4/insert/track/', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+              'Content-Type': 'application/json;utf-8',
+            },
+            body: track,
+            mode: 'cors',
+          })
+          .then(response => {
+            if(response.status == 201){
+              return response.json();
+            }else{
+              formAlertFormularioNuevaCarrera.textContent = 'En este momento no podemos registrar tu Track. Inténtalo más tarde';
+            }
+          })
+          .then(data => {
+            if(data){
+              localStorage.setItem('jwt', data);
+            }
+          })
+        }else{
+          formAlertFormularioNuevaCarrera.textContent = 'me falta el id de la carrera ... tarde';
+        }
+      
+     }
+    })
+  }
+});
+registrarCarreraFormularioNuevaCarrera.addEventListener('click', (e) => {
+  e.preventDefault();
+  if(nombreFormularioNuevaCarrera.value == '' || fechaComienzoFormularioNuevaCarrera.value == '' || horaComienzoFormularioNuevaCarrera.value == '' || fechaMinFormularioNuevaCarrera.value == '' || fechaMaxFormularioNuevaCarrera.value == '' || modalidadFormularioNuevaCarrera.value == '' || categoriaFormularioNuevaCarrera.value == '' || recorridoFormularioNuevaCarrera.value == ''){
+    formAlertFormularioNuevaCarrera.textContent = 'Rellena todos los campos';
+  }else{
+    formAlertFormularioNuevaCarrera.textContent = 'Estamos registrando la carrera';
+    formData = new FormData(formFormularioNuevaCarrera);
+    track = localStorage.getItem('track');
+    fetch(urlFormularioNuevaCarrera, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+      },
+      body: formData,
+    })
+    .then(response => {
+      if(response.status == 201){
+        //limpio el formulario para que el usuario pueda registrar otra carrera
+        formFormularioNuevaCarrera.reset();
+        return response.json();
+      }else{
+        formAlertFormularioNuevaCarrera.textContent = 'En este momento no podemos registrar tu carrera. Inténtalo más tarde';
+      }
+    })
+    .then(data => {
+      if(data){
+        localStorage.setItem('jwt', data);
+        token = data.split('.')[1];
+        token = atob(token);
+        token = JSON.parse(token);
+        if(token.raceData.carreraId){
+          //realizo una llamada a la api para registrar el track
+          fetch('http://localhost:3000/apiv4/insert/track/', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+              'Content-Type': 'application/json;utf-8',
+            },
+            body: track,
+            mode: 'cors',
+          })
+          .then(response => {
+            if(response.status == 201){
+              return response.json();
+            }else{
+              formAlertFormularioNuevaCarrera.textContent = 'En este momento no podemos registrar tu carrera. Inténtalo más tarde';
+            }
+          })
+          .then(data => {
+            if(data){
+              localStorage.setItem('jwt', data);
+              formFormularioNuevaCarrera.classList.toggle('hidden');
+              eventosOrganizador.classList.toggle('hidden');
+            }
+          })
+        }
+     }
+    })
+  }
+});
+/////////////////
+//EVENTOS ORGANIZADOR
+/////////////////
+//MUESTRO LOS EVENTOS DE UN ORGANIZADOR
+const urlEventosOrganizador = 'http://localhost:3000/apiv4/get/eventos/organizador/';
+const eventosOrganizador = document.getElementById('eventosOrganizador');
 
 </script>
 

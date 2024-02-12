@@ -32,7 +32,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     //gestion de la imagen
     if($_FILES['fotoPerfil']['error'] == UPLOAD_ERR_OK){// UPLOAD_ERR_OK da 0; no hay errores
         $imagen = $_FILES['fotoPerfil'];
-        $rutaDestino = '../../img/';
+        $rutaDestino = '../../../img/';
         #muevo el archivo a la carpeta de destino
         $nombreImagen = basename($imagen['name']);
         #de esta forma nos aseguramos que cada imagen subida tiene url unica
@@ -55,28 +55,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $stmt -> bind_param("issssss", $usuarioId, $nombre, $nickname, $fechaNacimiento, $imagen, $telefono, $entidadOrganizadora);
         $stmt -> execute();
         $stmt -> close();
-        $con -> close();
-        //agrego a este usuarioId a la tabla de completados
-        $con = new Conexion();
-        $sql = "INSERT INTO completados (usuario_id) VALUES (?)";
-        if($stmt = $con -> prepare($sql)){
-            $stmt -> bind_param("i", $usuarioId);
-            $stmt -> execute();
-            $stmt -> close();
-            $con -> close();
-        }else{
-            header('HTTP/1.1 400 Bad Request');
-            exit();
-        }   
+        $con -> close();  
         header('HTTP/1.1 201 OK');
         //construyo un JWT nuevo con los datos del usuario
         $pld = [
             'exp' => time() * 1000 + 3600,
-            'userData' => [
-                'userId' => $userId,
-                'isAdmin' => $isAdmin,
-                'nombre' => $nombre,
-            ]
+            'userData' => $decoded->userData
         ];
         $token = JWT::encode($pld, $jwtkey, 'HS256');
         echo json_encode($token);

@@ -1,5 +1,6 @@
 use racebook;
 select * from usuario;
+SELECT * FROM EVENTO;
 select * from usuario_organizador;
 SELECT * FROM completados;
 SELECT insertar_evento('a','a','a','a','a','a',1);

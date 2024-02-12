@@ -16,6 +16,8 @@
         private $user = 'abeldes';
         private $pass = '1234';
 
+        
+
         public function __construct(){
             try {
                 parent::__construct($this->host, $this->user, $this->pass, $this->db);
