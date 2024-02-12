@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+    <h1>Scroll infinito</h1>
+    <div id="contenedor">volver</div>
+    <div id="volver" style="position: fixed; bottom: 0; background-color: aqua; padding: 1em;">volver</div>
+</body>
+<script>
+    let volver = document.getElementById("volver");
+    volver.addEventListener("click", function() {
+        window.scrollTo(0, 0);
+    });
+    window.onload = function() {
+        renderPage();
+    };
+    let contenedor = document.getElementById("contenedor");
+    function renderPage() {
+        meteDivs();
+    }
+    function meteDivs() {
+        for (let i = 0; i < 50; i++) {
+            const div = document.createElement("div");
+            div.textContent = i;
+            contenedor.append(div);
+        }
+    }   
+    window.addEventListener("scroll", function() {
+        if (hasLlegadoAlFinal()) {
+            meteDivs();
+        }
+    });
+    function hasLlegadoAlFinal() {
+        const alturaVentana = window.innerHeight;
+        const alturaDocumento = document.documentElement.scrollHeight;
+        const scrollVertical = window.scrollY;
+
+        return alturaVentana + scrollVertical >= alturaDocumento;
+    }
+</script>
+</html>
