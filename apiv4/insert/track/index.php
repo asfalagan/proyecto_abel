@@ -54,7 +54,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $userData = $decoded->userData;
             $eventData = $decoded->eventData;
             $raceData = $decoded->raceData;
-            $expTime = time() * 1000 + 3600;
+            $expTime = time() * 1000 + 3600000;
             $payload = [
                 "exp" => $expTime,
                 "userData" => $userData,

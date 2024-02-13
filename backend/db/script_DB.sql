@@ -25,7 +25,7 @@ CREATE TABLE usuario_organizador(
     id_usuario INT PRIMARY KEY,
     telefono VARCHAR(15),
     entidad_organizadora VARCHAR(64),
-    FOREIGN KEY (id_usuario) REFERENCES usuario(id)
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE evento(
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -38,7 +38,7 @@ CREATE TABLE evento(
     web VARCHAR(128),
     url_reglamento VARCHAR(128),
     url_cartel VARCHAR(128),
-    FOREIGN KEY (id_organizador) REFERENCES usuario_organizador (id_usuario)
+    FOREIGN KEY (id_organizador) REFERENCES usuario_organizador (id_usuario) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE carrera (
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -51,7 +51,7 @@ CREATE TABLE carrera (
     fecha_nacim_min DATE,
     fecha_nacim_max DATE,
     recorrido TEXT,
-    FOREIGN KEY (id_evento) REFERENCES evento(id)
+    FOREIGN KEY (id_evento) REFERENCES evento(id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE clasificacion (
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -60,22 +60,22 @@ CREATE TABLE clasificacion (
     segundo_puesto VARCHAR(64),
     tercer_puesto VARCHAR(64),
     edicion DATE,
-    FOREIGN KEY (id_carrera) REFERENCES carrera(id)
+    FOREIGN KEY (id_carrera) REFERENCES carrera(id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE usuario_inscribe_carrera(
 	id_usuario INT,
     id_carrera INT,
     fecha_inscripcion DATETIME DEFAULT CURRENT_TIMESTAMP,
     talla_camiseta VARCHAR(3),
-    FOREIGN KEY (id_carrera) REFERENCES carrera(id),
-    FOREIGN KEY (id_usuario) REFERENCES usuario(id),
+    FOREIGN KEY (id_carrera) REFERENCES carrera(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE CASCADE,
     PRIMARY KEY (id_usuario, id_carrera)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE usuario_carrera_favorita(
 	id_usuario INT,
     id_carrera INT,
-    FOREIGN KEY (id_carrera) REFERENCES carrera(id),
-    FOREIGN KEY (id_usuario) REFERENCES usuario(id)
+    FOREIGN KEY (id_carrera) REFERENCES carrera(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE completados(

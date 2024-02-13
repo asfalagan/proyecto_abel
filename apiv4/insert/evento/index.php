@@ -90,7 +90,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     
     //creo un nuevo JWT que incluye los datos del usuario y los datos del evento
     $mtime = time() * 1000;
-    $exp = $mtime + 3600;
+    $exp = $mtime + 3600000;
     $userData = $decoded->userData;
     $payload = [
         'exp' => $exp,

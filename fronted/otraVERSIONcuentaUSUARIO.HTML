@@ -185,16 +185,38 @@
         </div>   
       </nav>
 
-    <div class="container-fluid">
-        <div class="row justify-content-center mt-5">
-            <div class="col-10 col-md-5 col-lg-3">
-                <img src="./images/sintetico.jpg" class="img-thumbnail img-fluid" style="border-radius: 50%;" alt="Foto perfil">
-            </div>
-            <div class="col-10 col-md-5 col-lg-6">
-
-            </div>
-        </div>
-    </div>
     
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+      <!--VISUALIZAR EL CATALOGO DE EVENTOS -->
+      <div id="catalogoEventos" class="componente  row justify-content-evenly">
+        <div class="row mt-2">
+          <h1 class="col-12 text-left">Rellena los datos que quieras modificar</h1>
+        </div>
+        <div class="row mt-3 justify-content-center">
+            <div class="mb-3 col-12">
+                <label for="nombreFormularioCompletarRegistroUsuario" class="form-label">Nombre</label>
+                <input type="text" class="form-control bg-transparent border border-light" id="nombreFormularioCompletarRegistroUsuario" title="Introduce nombre" name="nombre">
+            </div>
+            <div class="mb-3 col-12">
+              <label for="nicknameFormularioCompletarRegistroUsuario" class="form-label">Nickname</label>
+              <input type="text" class="form-control bg-transparent border border-light" id="nicknameFormularioCompletarRegistroUsuario" title="Introduce nickname" name="nickname">
+            </div>
+            <div class="mb-3 col-12">
+              <label for="fechaNacimientoFormularioCompletarRegistroUsuario" class="form-label">Fecha de Nacimiento</label>
+              <input type="date" class="form-control bg-transparent border border-light" id="fechaNacimientoFormularioCompletarRegistroUsuario" title="Introduce fecha de nacimiento" name="fechaNacimiento">
+            </div>
+            <div class="mb-3 col-12">
+              <label for="fotoPerfilFormularioCompletarRegistroUsuario" class="form-label">Foto de Perfil. Requiere formato 1:1</label>
+              <input type="file" class="form-control bg-transparent border border-light" id="fotoPerfilFormularioCompletarRegistroUsuario" title="Introduce foto de perfil" name="fotoPerfil">
+            </div>
+            <div class="row justify-content-center">
+              <div id="formAlertFormularioCompletarRegistroUsuario" class="m-3 col-10">&nbsp;</div>
+            </div>
+            <div id="registrarUsuarioFormularioCompletarRegistroUsuario" class="border border-light mb-3 mt-5 col-8 col-md-6 col-xl-5 p-2 rounded text-center" style="cursor: pointer">Modificar</div>
+        </div>
+      </div>
+        
+            
+        
 </body>
 </html>

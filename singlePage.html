@@ -7,15 +7,31 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/a5191f3c7b.js" crossorigin="anonymous"></script>
-    <script src="./js/jwt.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.min.js" integrity="sha512-tGbo6fmjjGoMjPcSMmwn2kdL791LM73K/8dUjCdO91fBBF26AXG7/DKFcVHfOieY78XT2hl0rJkbM0GUVaPcjw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://kit.fontawesome.com/a5191f3c7b.js" crossorigin="anonymous"></script>
+
     
     <title>Document</title>
     <style>
+      @keyframes zoomInOut {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+      }
+     }
+      .tituloCabecera{
+        letter-spacing: 0.5em;
+        animation: zoomInOut 10s infinite;
+        
+      }
       *{
         margin: 0;
         padding: 0;
@@ -104,7 +120,9 @@
             transform: rotate(360deg);
           }
         }
-            
+          body{
+            overflow: initial;
+          }
 
         /**ESTILOS PANTALLA SMALL**/
         @media (min-width: 576px){
@@ -149,7 +167,7 @@
   
     <nav class="container-fluid navbar navbar-expand-lg  bg-dark">
         <div class="container-fluid ms-3  me-5">
-          <a class="navbar-brand" href="#">
+          <a class="navbar-brand" id="logoRacebook">
             <i class="fa-solid fa-person-running"></i>
             <span>RaceBook</span>
           </a>
@@ -159,27 +177,30 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" id="enlaceCatalogoEventos">Eventos</a>
+                <a class="nav-link active pointer" aria-current="page" id="enlaceCatalogoEventos"><i class="bi bi-calendar-date me-2"></i>Eventos</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" id="enlaceCuenta">Cuenta de Usuario</a>
+                <a class="nav-link pointer" id="enlaceCuenta"><i class="bi bi-person-fill me-2"></i>Cuenta de Usuario</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" id="enlaceRegistrarEvento">Registrar Evento</a>
+                <a class="nav-link pointer hidden" id="enlaceRegistrarEvento"><i class="bi bi-folder-plus me-2"></i>Registrar Evento</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link hidden pointer" id="enlaceCerrarSesion"><i class="bi bi-box-arrow-left me-2"></i>Cerrar Sesión</a>
               </li>
             </ul>
           <form class="d-flex me-5" role="search" id="formularioBusqueda">
             <button class="btn btn-outline-success" type="submit"><i id="icono-lupa" class="fa-solid fa-magnifying-glass"></i></button>
-            <input class="form-control me-2" type="search" placeholder="Término de Búsqueda" aria-label="Search">
+            <input class="form-control me-2  pointer" type="search" placeholder="Término de Búsqueda" aria-label="Search">
             <div class="nav-item dropdown m-2 me-3">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="nav-link dropdown-toggle  pointer" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Filtros
               </a>
               <ul class="dropdown-menu">
-                <li><span id="fechaAsc"class="dropdown-item" span>Fecha cercana</span></li>
-                <li><span id="fechaDesc"class="dropdown-item" span>Fecha lejana</span></li>
-                <li><span id="relevanciaAsc"class="dropdown-item" span>Más Relevantes</span></li>
-                <li><span id="relevanciaDesc"class="dropdown-item" span>Menos Relevantes</span></li>
+                <li><span id="fechaAsc"class="dropdown-item  pointer" span>Fecha cercana</span></li>
+                <li><span id="fechaDesc"class="dropdown-item  pointer" span>Fecha lejana</span></li>
+                <li><span id="relevanciaAsc"class="dropdown-item  pointer" span>Más Relevantes</span></li>
+                <li><span id="relevanciaDesc"class="dropdown-item  pointer" span>Menos Relevantes</span></li>
               </ul>
             </div>
           </form>    
@@ -187,46 +208,49 @@
       </div>   
     </nav>
 
-    <div class="container-fluid" id="cabecerasH1">
-        <div class="row justify-content-center mt-5 mb-5">
-          <h1 class="col-12 fs-5 text-center order-2 fw-light">Calendario de carreras</h1>
-          <h2 class="col-12 fs-1 text-center order-1 fw-light">Descubre tu siguiente reto</h2>
-        </div> 
+    <div class="container-fluid componente" id="cabecerasH1" style="max-width: 100vw !important; overflow: hidden;">
+      <div class="row justify-content-center mt-5 mb-5">
+        <h1 class="tituloCabecera col-12 fs-5 text-center order-2 fw-light">Calendario de carreras</h1>
+        <h2 class="tituloCabecera fs-1 text-center order-1 fw-light">Descubre tu siguiente reto</h2>
+      </div> 
     </div>
-    <div class="container-fluid">
+
+    <div class="container-fluid " id="breadcrumbs">
       <div class="row justify-content-center mt-5 fw-light">
         <div class="col-10" aria-label="breadcrumb">
+          <div class="col-10 fs-6 mb-2 pointer" id="limpiarBreadcrumbs"></div>
           <ol class="breadcrumb align-self-center " id="breadcrumbsContainer">
-            <li class="breadcrumb-item active  pointer" aria-current="page">Racebook</li>
-            <li class="breadcrumb-item active  pointer" aria-current="page">Home</li>
+            <li class="breadcrumb-item active pointer" aria-current="page" id="tituloBreadcrumbs"><i class="bi bi-toggle-off fs-3 me-2" id="toggleMostrarBreadcrumbs"></i></li>
+            <!-- <li class="breadcrumb-item active hidden  breadcrumbPrescindible " aria-current="page">Eventos</li> -->
           </ol>
         </div>
       </div>
     </div>
+    
+    
     <!-- Este modal avisa al usuario de que para acceder a todo el contenido de la pagina debe hacer login -->
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary hidden" data-bs-toggle="modal" data-bs-target="#exampleModal" id="modalTrigger"></button>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Contenido Restringido</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            Algunas funcionalidades de la página requieren que estés logueado. ¿Quieres crear una cuenta?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary" id="modalLoginButton">Registrarme en Racebook</button>
-          </div>
+  <button type="button" class="btn btn-primary hidden" data-bs-toggle="modal" data-bs-target="#modalAvisoRegistro" id="modalTrigger"></button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="modalAvisoRegistro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"><i class="bi bi-emoji-frown-fill me-2"></i>Contenido Restringido</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Algunas funcionalidades de la página requieren que estés logueado. ¿Quieres crear una cuenta?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalAvisoRegistro">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="modalLoginButton"><i class="bi bi-emoji-smile-fill me-2"></i>Crear Cuenta</button>
         </div>
       </div>
     </div>
+  </div>
 
-    
     <main class="container-fluid ">
         
         <div class="row justify-content-center mt-4 mb-3" id="elPadre"> 
@@ -450,6 +474,11 @@
                     <div id="iniciarSesionFormularioLogin" class="border border-light mb-3 mt-5 col-8 col-md-6 col-xl-5 p-2 rounded text-center" style="cursor: pointer">Iniciar Sesión</div>
                     <span id="renderFormularioRegistroFormularioLogin" class="mb-3 mt-5 col-10 text-center underline pointer" style="color: #f8f9fa; text-decoration: underline; text-underline-offset: 0.3em;">¿Todavía no tienes una cuenta?<br>Registrate aquí</span>
                 </div>
+                <script>
+                  let ocultarBreadCrumbsLogin = () => {
+                    document.getElementById("breadcrumbs").style.display = "none";
+                  }
+                </script>
             </form>
 
             <!--FORMULARIO DE REGISTRO-->
@@ -555,16 +584,67 @@
             </form>
             <!--VISUALIZAR LA CUENTA DEL USUARIO -->
             <div id="cuentaUsuario" class="componente hidden">
-              <div>soy la parte de cuenta de ususairo</div>
+              
             </div>
-            <!-- FORMULARIO PARA EDITAR LA CUENTA DEL USUARIO -->
-            <div id="editarCuentaUsuario" class="componente hidden">
-              <div>soy la parte de editar cuenta de ususairo</div>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary hidden" data-bs-toggle="modal" data-bs-target="#modalControlCuentaUsuario" id="modalGestionCuentaTrigger"></button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modalControlCuentaUsuario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Opciones de cuenta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    ¿Que deseas hacer?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cerrarModalGestionCuenta">Cerrar</button>
+                    <button type="button" class="btn btn-danger" id="modalEliminarCuentaButton">Eliminar Cuenta</button>
+                    <button type="button" class="btn btn-primary" id="modalEditarCuentaButton">Editar Cuenta</button>
+                  </div>
+                </div>
+              </div>
             </div>
-            <!--LA CUENTA DEL ORGANIZADOR -->
-            <div id="cuentaOrganizador" class="componente hidden">
-              <div>soy la parte de cuenta de organizador</div>
-            </div>
+            <!-- EDITAR LA CUENTA DEL USUARIO -->
+            <form id="modificarCuentaUsuario" class="componente col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;">
+              <div class="row mt-2">
+                <h1 class="col-12 text-left">Rellena los datos que quieras modificar</h1>
+              </div>
+              <div class="row mt-3 justify-content-center">
+                  <div class="mb-3 col-12">
+                      <label for="nombreFormularioModificarCuenta" class="form-label">Nombre</label>
+                      <input type="text" class="form-control bg-transparent border border-light" id="nombreFormularioModificarCuenta" title="Introduce nombre" name="nombre">
+                  </div>
+                  <div class="mb-3 col-12">
+                    <label for="nicknameFormularioModificarCuenta" class="form-label">Nickname</label>
+                    <input type="text" class="form-control bg-transparent border border-light" id="nicknameFormularioModificarCuenta" title="Introduce nickname" name="nickname">
+                  </div>
+                  <div class="mb-3 col-12">
+                    <label for="fechaNacimientoFormularioModificarCuenta" class="form-label">Fecha de Nacimiento</label>
+                    <input type="date" class="form-control bg-transparent border border-light" id="fechaNacimientoFormularioModificarCuenta" title="Introduce fecha de nacimiento" name="fechaNacimiento">
+                  </div>
+                  <div class="mb-3 col-12">
+                    <label for="fotoPerfilFormularioModificarCuenta" class="form-label">Foto de Perfil. Requiere formato 1:1</label>
+                    <input type="file" class="form-control bg-transparent border border-light" id="fotoPerfilFormularioModificarCuenta" title="Introduce foto de perfil" name="fotoPerfil">
+                  </div>
+                  <div class="mb-3 col-12">
+                    <label for="nombreEntidadFormularioModificarCuenta" class="form-label">Nombre de la Entidad</label>
+                    <input type="text" class="form-control bg-transparent border border-light" id="nombreEntidadFormularioModificarCuenta" title="Introduce nombre de la entidad" name="entidadOrganizadora">
+                  </div>
+                  <div class="mb-3 col-12">
+                    <label for="telefonoFormularioModificarCuenta" class="form-label">Teléfono</label>
+                    <input type="text" class="form-control bg-transparent border border-light" id="telefonoFormularioModificarCuenta" title="Introduce teléfono" name="telefono">
+                  </div>
+                  <div class="row justify-content-center">
+                    <div id="formAlertFormularioModificarCuenta" class="m-3 col-10">&nbsp;</div>
+                  </div>
+                  <div id="modificarUsuarioFormularioModificarCuenta" class="border border-light mb-3 mt-5 col-8 col-md-6 col-xl-5 p-2 rounded text-center" style="cursor: pointer;">Modificar</div>
+              </div>
+              
+            </form>
             <!-- FORMULARIO PARA EDITAR LA CUENTA DEL ORGANIZADOR -->
             <div id="editarCuentaOrganizador" class="componente hidden">
               <div>soy la parte de editar cuenta de organizador</div>
@@ -639,7 +719,19 @@
 
 </body>
 <script>
+//cada cinco minutos compruebo si el token va a caducar y pido otro
+setInterval(() => {
+  let jwt = localStorage.getItem('jwt');
+  if(jwt){
+    jwt = jwt.split('.')[1];
+    jwt = atob(jwt);
+    jwt = JSON.parse(jwt);
 
+    if(jwt.exp - Math.floor(Date.now() / 1000) < 280){
+      renovarJWT();
+    }
+  }
+}, 300000);
 //////////////////////////
 //NOTAS
 /////////////////////////
@@ -672,12 +764,122 @@ const cabecerasH1 = document.getElementById('cabecerasH1');
 const detalleEvento = document.getElementById('detalleEvento');
 const loadingDataSpiner = document.getElementById('loadingDataSpiner');
 const detalleCarrera = document.getElementById('detalleCarrera');
-//////////////////////////
+const enlaceCuentaNavbar = document.getElementById('enlaceCuenta');
+const enlaceRegistrarEventoNavbar = document.getElementById('enlaceRegistrarEvento');
+const modalLoginButton = document.getElementById('modalLoginButton');
+const enlaceCerrarSesion = document.getElementById('enlaceCerrarSesion');
+
+
+const eventosOrganizador = document.getElementById('eventosOrganizador');
+const formularioRegistroCarreras = document.getElementById('formularioRegistroCarreras');
+const nombreFormularioNuevaCarrera = document.getElementById('nombreFormularioNuevaCarrera');
+const fechaComienzoFormularioNuevaCarrera = document.getElementById('fechaComienzoCarreraFormularioNuevaCarrera');
+const horaComienzoFormularioNuevaCarrera = document.getElementById('horaComienzoCarreraFormularioNuevaCarrera');
+const fechaMinFormularioNuevaCarrera = document.getElementById('fechaMinFormularioNuevaCarrera');
+const fechaMaxFormularioNuevaCarrera = document.getElementById('fechaMaxFormularioNuevaCarrera');
+const modalidadFormularioNuevaCarrera = document.getElementById('modalidadFormularioNuevaCarrera');
+const categoriaFormularioNuevaCarrera = document.getElementById('categoriaFormularioNuevaCarrera');
+const recorridoFormularioNuevaCarrera = document.getElementById('recorridoFormularioNuevaCarrera');
+const registrarCarreraFormularioNuevaCarrera = document.getElementById('registrarCarreraFormularioNuevaCarrera');
+const registrarOtraCarreraFormularioNuevaCarrera = document.getElementById('registrarOtraCarreraFormularioNuevaCarrera');
+const formAlertFormularioNuevaCarrera = document.getElementById('formAlertFormularioNuevaCarrera');
+const formFormularioNuevaCarrera = document.getElementById('formularioRegistroCarreras');
+
+
+
+const formularioRegistroEventos = document.getElementById('formularioRegistroEventos');
+
+const formAlertFormularioNuevoEvento = document.getElementById('formAlertFormularioNuevoEvento');
+const nombreFormularioNuevoEvento = document.getElementById('nombreFormularioNuevoEvento'); //nombre del evento
+const fechaInicioFormularioNuevoEvento = document.getElementById('fechaInicioFormularioNuevoEvento');//fecha de inicio del evento
+const fechaFinFormularioNuevoEvento = document.getElementById('fechaFinFormularioNuevoEvento'); //fecha de fin del evento
+const localidadFormularioNuevoEvento = document.getElementById('localidadFormularioNuevoEvento'); //localidad del evento
+const provinciaFormularioNuevoEvento = document.getElementById('provinciaFormularioNuevoEvento');  //provincia del evento  
+const webEventoFormularioNuevoEvento = document.getElementById('webEventoFormularioNuevoEvento'); //web del evento
+const cartelFormularioNuevoEvento = document.getElementById('cartelFormularioNuevoEvento');//cartel del evento
+const registrarEventoFormularioNuevoEvento = document.getElementById('registrarEventoFormularioNuevoEvento');//boton para registrar el evento
+const reglamentoFormularioNuevoEvento = document.getElementById('reglamentoFormularioNuevoEvento');//reglamento del evento
+
+//url 
+const urlFormularioLogin = 'http://localhost:3000/apiv4/login/';
+const urlFormularioNuevaCarrera = 'http://localhost:3000/apiv4/insert/carrera/';
+const urlFormularioNuevoEvento = 'http://localhost:3000/apiv4/insert/evento/';
+const urlFormularioCompletarRegistroOrganizador = 'http://localhost:3000/apiv4/insert/usuario/organizador/';
+const urlFormularioCompletarRegistroUsuario = 'http://localhost:3000/apiv4/insert/usuario/usuario/';
+const urlEventosOrganizador = 'http://localhost:3000/apiv4/get/eventos/organizador/';
+const urlFormularioRegistro = 'http://localhost:3000/apiv4/insert/usuario/';
+const urlGetEventos = 'http://localhost:3000/apiv4/get/eventos/';
+const urlRenovarJWT = 'http://localhost:3000/apiv4/renovarJWT';
+const urlDeleteUsuario = 'http://localhost:3000/apiv4/delete/usuario/';
+const urlModificarUsuario = 'http://localhost:3000/apiv4/update/usuario/';
+//variables para los campos del formulario
+const formularioLogin = document.getElementById('formularioLogin');
+const emailFormularioLogin = document.getElementById('emailFormularioLogin');
+const passwordFormularioLogin = document.getElementById('passwordFormularioLogin');
+const formAlertFormularioLogin = document.getElementById('formAlertFormularioLogin');
+const iniciarSesionFormularioLogin = document.getElementById('iniciarSesionFormularioLogin');
+const renderFormularioRegistroFormularioLogin = document.getElementById('renderFormularioRegistroFormularioLogin');
+//variables para los campos del formulario
+const formularioCompletarRegistroOrganizador = document.getElementById('formularioCompletarRegistroOrganizador');
+const nombreFormularioCompletarRegistroOrganizador = document.getElementById('nombreFormularioCompletarRegistroOrganizador');
+const nicknameFormularioCompletarRegistroOrganizador = document.getElementById('nicknameFormularioCompletarRegistroOrganizador');
+const fechaNacimientoFormularioCompletarRegistroOrganizador = document.getElementById('fechaNacimientoFormularioCompletarRegistroOrganizador');
+const fotoPerfilFormularioCompletarRegistroOrganizador = document.getElementById('fotoPerfilFormularioCompletarRegistroOrganizador');
+const nombreEntidadFormularioCompletarRegistroOrganizador = document.getElementById('nombreEntidadFormularioCompletarRegistroOrganizador');
+const telefonoFormularioCompletarRegistroOrganizador = document.getElementById('telefonoFormularioCompletarRegistroOrganizador');
+const formAlertFormularioCompletarRegistroOrganizador = document.getElementById('formAlertFormularioCompletarRegistroOrganizador');
+const registrarUsuarioFormularioCompletarRegistroOrganizador = document.getElementById('registrarUsuarioFormularioCompletarRegistroOrganizador');
+//variables para los campos del formulario
+const formularioCompletarRegistroUsuario = document.getElementById('formularioCompletarRegistroUsuario');
+const nombreFormularioCompletarRegistroUsuario = document.getElementById('nombreFormularioCompletarRegistroUsuario');
+const nicknameFormularioCompletarRegistroUsuario = document.getElementById('nicknameFormularioCompletarRegistroUsuario');
+const fechaNacimientoFormularioCompletarRegistroUsuario = document.getElementById('fechaNacimientoFormularioCompletarRegistroUsuario');
+const fotoPerfilFormularioCompletarRegistroUsuario = document.getElementById('fotoPerfilFormularioCompletarRegistroUsuario');
+const formAlertFormularioCompletarRegistroUsuario = document.getElementById('formAlertFormularioCompletarRegistroUsuario');
+const registrarUsuarioFormularioCompletarRegistroUsuario = document.getElementById('registrarUsuarioFormularioCompletarRegistroUsuario');
+
+//variables para los campos del formulario
+const formularioRegistro = document.getElementById('formularioRegistro');
+const emailFormularioRegistro = document.getElementById('emailFormularioRegistro');
+const passwordFormularioRegistro = document.getElementById('passwordFormularioRegistro');
+const password2FormularioRegistro = document.getElementById('password2FormularioRegistro');
+const isAdminFormularioRegistro = document.getElementById('isAdminFormularioRegistro');
+const formAlertFormularioRegistro = document.getElementById('formAlertFormularioRegistro');
+const registrarUsuarioFormularioRegistro = document.getElementById('registrarUsuarioFormularioRegistro');
+const renderFormularioLoginFormularioRegistro = document.getElementById('renderFormularioLoginFormularioRegistro');
+const cuentaUsuario = document.getElementById('cuentaUsuario');
+const modalEliminarCuentaButton = document.getElementById('modalEliminarCuentaButton');
+const modalEditarCuentaButton = document.getElementById('modalEditarCuentaButton');
+const regPasswd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?#&])([A-Za-z\d$@$!%*?&#]|[^ ]){8,16}$/;
+const regEmail = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+const regTel = /^\+(?:[0-9] ?){6,14}[0-9]$/;
+//editar cuenta usuario
+const modificarCuentaUsuario = document.getElementById('modificarCuentaUsuario');
+const formularioModificarCuentaUsuario = document.getElementById('modificarCuentaUsuario');
+const nombreFormularioModificarCuenta = document.getElementById('nombreFormularioModificarCuenta');
+const nicknameFormularioModificarCuenta = document.getElementById('nicknameFormularioModificarCuenta');
+const fechaNacimientoFormularioModificarCuenta = document.getElementById('fechaNacimientoFormularioModificarCuenta');
+const fotoPerfilFormularioModificarCuenta = document.getElementById('fotoPerfilFormularioModificarCuenta');
+const nombreEntidadFormularioModificarCuenta = document.getElementById('nombreEntidadFormularioModificarCuenta');
+const telefonoFormularioModificarCuenta = document.getElementById('telefonoFormularioModificarCuenta');
+const formAlertFormularioModificarCuenta = document.getElementById('formAlertFormularioModificarCuenta');
+const modificarUsuarioFormularioModificarCuenta = document.getElementById('modificarUsuarioFormularioModificarCuenta');
+
+
+const cerrarModalGestionCuenta = document.getElementById('cerrarModalGestionCuenta');
+
+const breadcrumbsContainer = document.getElementById('breadcrumbsContainer');
+const toggleMostrarBreadcrumbs = document.getElementById('toggleMostrarBreadcrumbs');
+  //////////////////////////
 //FUNCIONES
 /////////////////////////
 //implemento que reciba el elemento como parametro para saber quien es el elemento que tiene que No tener la classe hidden
 function closeAll(){
   elementos = document.getElementsByClassName('componente');
+  let scrollUpButtonEliminar = document.getElementById('scrollUpButton');
+  if(scrollUpButtonEliminar != null){
+    scrollUpButtonEliminar.remove();
+  }
   //convierto el objeto a array
   Array.from(elementos).forEach(elemento => {
     elemento.classList.add('hidden');
@@ -686,65 +888,129 @@ function closeAll(){
   
 };
 //al cargar la aplicacion compruebo si tengo un catalogo de eventos en el LocalStorage y si no lo tengo pido uno a la api
-window.onload = () => {
-  closeAll();
-  //compruebo si tengo un token en el localStorage
-  tokenCatalogoEventos = localStorage.getItem('tokenCatalogoEventos');
-  if(tokenCatalogoEventos){
-    //convierto el string a Array
-    tokenCatalogoEventos = JSON.parse(tokenCatalogoEventos);
-    // lo renderizo
-    renderCatalogoEventos(tokenCatalogoEventos);
-  }else{
-    //si no tengo un catalogo de eventos en el localStorage pido uno a la api
-    fetch('http://localhost:3000/apiv4/get/eventos/')
-    .then(response => response.json())
-    .then(data => {
-      console.log(typeof data);
-      data = Object.values(data);
-      renderCatalogoEventos(data);//renderizo el catalogo de eventos
-      localStorage.setItem('tokenCatalogoEventos', JSON.stringify(data));//guardo el catalogo de eventos en el localStorage en formato string
-    });
-  }
-}
+
 
 ///////////////////////////
 //RENDER MAIN PAGE
 //////////////////////////
-const modalLoginButton = document.getElementById('modalLoginButton');
-//window.onload = renderMainPage();
-// function renderMainPage(){
-//   const modalTrigger = document.getElementById('modalTrigger');
-//   //tengo un usuario anonimo o logueado?
-//   jwt = localStorage.getItem('jwt');
-//   token = data.split('.')[1];
-//   token = atob(token);       
-//   token = JSON.parse(token);
-//   if(token.exp > Date.now()){
-//     //tengo un token valido renderizo el catalogo de carreras
-//     renderCatalogoCarreras(token);
-//     //cambio el Boton cuenta de usuario del nav por el nickname del usuario con acceso a su pagina de cuenta
-//     enlaceCuenta.textContent = token.nickname;
-//     enlaceCuenta.classList.toggle('hidden');
-//   }else{
-//     //si no tengo un token valido renderizo el formulario de login
-//     //acciono el boton modalTrigger para invirar al usuario a crear una cuenta
-//     modalTrigger.click();
-//   }
-// }
+window.onload = () => {
+  closeAll();
+  renderMainPage();
+}
 
+
+function renderMainPage(){
+  //tengo un usuario anonimo o logueado?
+  jwt = localStorage.getItem('jwt');
+  if(jwt){
+    jwt = jwt.split('.')[1];
+    jwt = atob(jwt);
+    jwt = JSON.parse(jwt);
+
+    enlaceCuenta.innerHTML = `
+      <i class="bi bi-person-fill me-2"></i>${jwt.userData.userNickname}
+    `;
+    enlaceCerrarSesion.classList.toggle('hidden');
+    if(jwt.userData.isAdmin){
+      enlaceRegistrarEventoNavbar.classList.remove('hidden');
+    }
+    
+  }else{
+    enlaceCuenta.innerHTML = `
+      <i class="bi bi-person-fill me-2"></i>Cuenta de Usuario
+    `;
+  }
+
+  
+
+  tokenCatalogoEventos = localStorage.getItem('tokenCatalogoEventos');
+  if(tokenCatalogoEventos != null){
+    //convierto el string a Array
+    tokenCatalogoEventos = JSON.parse(tokenCatalogoEventos);
+    closeAll();
+    cabecerasH1.classList.toggle('hidden');
+    renderCatalogoEventos(tokenCatalogoEventos);
+  }else{
+    //si no tengo un catalogo de eventos en el localStorage pido uno a la api
+    fetch(urlGetEventos, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      tokenCatalogoEventos = data;
+      closeAll();
+      cabecerasH1.classList.toggle('hidden');
+      renderCatalogoEventos(tokenCatalogoEventos);
+      localStorage.setItem('tokenCatalogoEventos', JSON.stringify(data));//guardo el catalogo de eventos en el localStorage en formato string
+    });
+  }
+  
+  
+
+}
+function renovarJWT(){
+  fetch(urlRenovarJWT, {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + localStorage.getItem('jwt'),
+      'Content-Type': 'application/json'
+    },
+  })
+  .then(response => {if(response.ok){
+      return response.json()
+    }else{
+      return false;
+    }})
+  .then(data => {
+    if(data){
+      localStorage.setItem('jwt', data);
+    }
+    else{
+      return false;
+    }
+  });
+}
+enlaceCerrarSesion.addEventListener('click', (e) => {
+  e.preventDefault();
+  localStorage.clear();
+  renderMainPage();
+});
+const closeModalAvisoRegistro = document.getElementById('closeModalAvisoRegistro');
+modalLoginButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  closeAll();
+  closeModalAvisoRegistro.click();
+  formularioLogin.classList.remove('hidden');
+});
 //////////////////////////
 //FUNCIONALIDAD NAVBAR
 /////////////////////////
-const enlaceCuentaNavbar = document.getElementById('enlaceCuenta');
-const enlaceRegistrarEventoNavbar = document.getElementById('enlaceRegistrarEvento');
+
 
 enlaceCuentaNavbar.addEventListener('click', (e) => {
     e.preventDefault();
     //cierro todos los formularios
     closeAll();
-    //despliego el formulario de cuenta de usuario
-    formularioLogin.classList.remove('hidden');
+    
+    //OBTENGO EL JWT PARA COMPROBAR SI EL USUARIO ESTA LOGUEADO
+    jwt = localStorage.getItem('jwt');
+    if(jwt){
+      jwt = jwt.split('.')[1];
+      jwt = atob(jwt);
+      jwt = JSON.parse(jwt);
+    }
+    //si el usuario esta logueado renderizo su cuenta
+    if(jwt){
+      closeAll();
+      renderCuentaUsuario(jwt);
+    }else{
+      closeAll();
+      //Despliego el formulario de login
+      formularioLogin.classList.remove('hidden');
+    }
 });
 enlaceRegistrarEventoNavbar.addEventListener('click', (e) => {
   e.preventDefault();
@@ -755,10 +1021,15 @@ enlaceRegistrarEventoNavbar.addEventListener('click', (e) => {
 })
 enlaceCatalogoEventos.addEventListener('click', (e) => {
   e.preventDefault();
-  //cierro todos los formularios
-  closeAll();
-  //despliego el catalogo de eventos
-  catalogoEventos.classList.remove('hidden');
+  if(catalogoEventos.classList.contains('hidden')){
+    closeAll();
+    cabecerasH1.classList.toggle('hidden');
+    renderCatalogoEventos(tokenCatalogoEventos);
+  }else{
+    //situo la pantalla en el catalogo de eventos
+    window.scrollTo(0, catalogoEventos.offsetTop);
+  }
+  
 })
 
 //breadcrumbs
@@ -772,69 +1043,266 @@ enlaceCatalogoEventos.addEventListener('click', (e) => {
 //CUENTA DE USUARIO 
 /////////////////////////
 
-
-//////////////////////////
-//REG EXP
-/////////////////////////
-const regPasswd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?#&])([A-Za-z\d$@$!%*?&#]|[^ ]){8,16}$/;
-const regEmail = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
-const regTel = /^\+(?:[0-9] ?){6,14}[0-9]$/;
-//////////////////////////
-//MAIN PAGE
-/////////////////////////
-const cuentaUsuario = document.getElementById('cuentaUsuario');
-//////////////////////////////////////////////////
-//FUNCION PARA RENDERIZAR EL CATALOGO DE EVENTOS
-//////////////////////////////////////////////////
-
-function renderCatalogoEventos(tokenCatalogoEventos){
+function renderCuentaUsuario(jwt){
   closeAll();
-  console.log('estoy en render');
-  console.log(typeof tokenCatalogoEventos);
-  console.log(tokenCatalogoEventos);
-  tokenCatalogoEventos.forEach((evento, index) => {
-    let eventoDiv = document.createElement('div');
-    eventoDiv.classList.add('cartaEvento');
-    eventoDiv.classList.add('card');
-    eventoDiv.classList.add('mb-5');
-    eventoDiv.classList.add('col-11');
-    eventoDiv.classList.add('col-md-5');
-    eventoDiv.classList.add('gy-5');
-    eventoDiv.dataset.idEvento = evento.id;
-    eventoDiv.dataset.idOrganizador = evento.id_organizador;
-    eventoDiv.dataset.indexCatalogo = index;
-    let urlCartel = evento.url_cartel.replace('../../', '../apiv4/');
+  console.log(jwt);
 
-    eventoDiv.innerHTML = `
-      <div class="row">
-        <div class="col-md-4">
-          <img src="${urlCartel}" class="img-fluid  mx-auto rounded" alt="Cartel del evento">
-        </div>
-        <div class="col-md-8">
-          <div class="card-body">
-            <h5 class="card-title">${evento.nombre}</h5>
-            <p class="card-text">${evento.fecha_inicio} | ${evento.fecha_fin}</p>
-            <p class="card-text"><small class="text-body-secondary">${evento.localidad}, ${evento.provincia}</small></p>
+  let edadUsuarioCuentaUsuario = jwt.userData.userFechaNacimiento.split('-');
+  edadUsuarioCuentaUsuario = `${edadUsuarioCuentaUsuario[2]} de ${mes(+edadUsuarioCuentaUsuario[1])} de ${edadUsuarioCuentaUsuario[0]}`;  
+  let enlaceImagenPerfil = jwt.userData.userImagen.replace('../../../', '../apiv4/');
+
+  if(jwt.userData.isAdmin){
+    cuentaUsuario.innerHTML = `
+      <div class="container-fluid">
+        <div class="row justify-content-center border-bottom border-light pb-5">
+          <div class="col-10 col-md-5 col-lg-5 col-xl-4 col-xxl-3 mt-5">
+              <img src="${enlaceImagenPerfil}" id="cuentaUsuarioImagen "class="img-thumbnail img-fluid mt-4" style="border-radius: 50%;" alt="Foto perfil">
+          </div>
+          <div class="col-10 col-md-5 col-lg-5 col-xl-4 col-xxl-3 mt-5 ">
+              <div class="fs-2 mt-4 text-center border-bottom border-light" id="cuentaUsuarioNombreUsuario">${jwt.userData.userNickname}</div>
+              <div class="fs-3 mt-4 fw-light ms-1 text-center" id="cuentaUsuarioEmail">${jwt.userData.userEmail}</div>
+              <div class="fs-3 mt-4 fw-light ms-1 text-center" id="cuentaUsuarioFechaNacimiento">${edadUsuarioCuentaUsuario}</div>
+              <div class="fs-3 mt-4 fw-light ms-1 text-center" id="cuentaUsuarioTelefono">${jwt.userData.telefono}</div>
+              <div class="fs-3 mt-4 fw-light ms-1 text-center" id="cuentaUsuarioEntidad">${jwt.userData.entidadOrganizadora}</div>
+              <div class="fs-3 mt-4 fw-light ms-1 text-center" style="cursor: pointer;" id="accesoEventosUsuario"></div>
+              <div class="fs-3 mt-4 fw-light ms-1 text-center mt-5 border border-light pt-2 pb-2" id="gestionarCuentaUsuario" style="cursor: pointer;">Gestionar Cuenta</div>
+              
           </div>
         </div>
       </div>
-    `;
-    eventoDiv.addEventListener('click', (e) => {
-      e.preventDefault();
-      //compruebo si es un usuario logueado o no
-      jwt = localStorage.getItem('jwt');
-      if(jwt){
-        //si es un usuario logueado renderizo el detalle del evento
-        renderDetalleEvento(e);
+  
+    `; 
+  }else{
+    cuentaUsuario.innerHTML = `
+      <div class="container-fluid">
+        <div class="row justify-content-center border-bottom border-light pb-5">
+          <div class="col-10 col-md-5 col-lg-5 col-xl-4 col-xxl-3 mt-5">
+              <img src="${enlaceImagenPerfil}" id="cuentaUsuarioImagen "class="img-thumbnail img-fluid mt-4" style="border-radius: 50%;" alt="Foto perfil">
+          </div>
+          <div class="col-10 col-md-5 col-lg-5 col-xl-4 col-xxl-3 mt-5 ">
+              <div class="fs-2 mt-4 text-center border-bottom border-light" id="cuentaUsuarioNombreUsuario">${jwt.userData.userNickname}</div>
+              <div class="fs-3 mt-4 fw-light ms-1 text-center" id="cuentaUsuarioEmail">${jwt.userData.userEmail}</div>
+              <div class="fs-3 mt-4 fw-light ms-1 text-center" id="cuentaUsuarioFechaNacimiento">${edadUsuarioCuentaUsuario}</div>
+              <div class="fs-3 mt-4 fw-light ms-1 text-center mt-5 border border-light pt-2 pb-2" id="gestionarCuentaUsuario" style="cursor: pointer;">Gestionar Cuenta</div>
+              
+          </div>
+        </div>
+      </div>
+  
+    `; 
+  }
+  cuentaUsuario.classList.remove('hidden');
+  const gestionarCuentaUsuario = document.getElementById('gestionarCuentaUsuario');
+  const accesoEventosUsuario = document.getElementById('accesoEventosUsuario');
+  gestionarCuentaUsuario.addEventListener('click', (e) => {
+    e.preventDefault();
+    modalGestionCuentaTrigger.click();
+  });
+  
+  accesoEventosUsuario.addEventListener('click', (e) => {
+    e.preventDefault();
+    closeAll();
+    renderEventosOrganizador(jwt);
+  });
+}
+
+
+modalEliminarCuentaButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  closeAll();
+  eliminarCuentaUsuario();
+  cerrarModalGestionCuenta.click();
+});
+
+modalEditarCuentaButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  closeAll();
+  renderEditarCuentaUsuario();
+  cerrarModalGestionCuenta.click();
+});
+function eliminarCuentaUsuario(){
+  jwt = localStorage.getItem('jwt');
+  jwt = jwt.split('.')[1];
+  jwt = atob(jwt);
+  jwt = JSON.parse(jwt);
+  fetch(urlDeleteUsuario, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+      'Content-Type': 'application/json;utf-8'
+    },
+    mode: 'cors',
+  })
+  .then(response => {
+    closeAll();
+    localStorage.removeItem('jwt');
+    catalogoEventos.classList.remove('hidden');
+  })
+}
+
+function renderEditarCuentaUsuario(){
+  jwt = localStorage.getItem('jwt');
+  if(jwt){
+    jwt = jwt.split('.')[1];
+    jwt = atob(jwt);
+    jwt = JSON.parse(jwt);
+  }
+  modificarCuentaUsuario.classList.remove('hidden');
+  
+  nombreFormularioModificarCuenta.value = jwt.userData.userNombre;
+  nicknameFormularioModificarCuenta.value = jwt.userData.userNickname;
+  fechaNacimientoFormularioModificarCuenta.value = jwt.userData.userFechaNacimiento;
+  nombreEntidadFormularioModificarCuenta.value = jwt.userData.entidadOrganizadora;
+
+  if(jwt.userData.isAdmin){
+    telefonoFormularioModificarCuenta.value = jwt.userData.telefono;
+    nombreEntidadFormularioModificarCuenta.value = jwt.userData.entidadOrganizadora;
+  }else{
+    telefonoFormularioModificarCuenta.classList.add('hidden');
+    nombreEntidadFormularioModificarCuenta.classList.add('hidden');
+  }
+};
+modificarUsuarioFormularioModificarCuenta.addEventListener('click', (e) => {
+  e.preventDefault();
+  //controlo que el unico campo que pueda no tener valor sea el de la foto de perfil
+  if(nombreFormularioModificarCuenta.value == '' || nicknameFormularioModificarCuenta.value == '' || fechaNacimientoFormularioModificarCuenta.value == '' || nombreEntidadFormularioModificarCuenta.value == ''){
+    formAlertFormularioModificarCuenta.textContent = 'Tienes que rellenar todos los campos o dejarlos con los valores que ya tenian. Solo puedes dejar en blanco el campo de la foto de perfil';
+  }else{
+    formData = new FormData(formularioModificarCuentaUsuario);
+    fetch(urlModificarUsuario, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+      },
+      body: formData,
+      mode: 'cors',
+    })
+    .then(response => {
+      if(response.status == 201){
+        return response.json();
       }else{
-        //si no es un usuario logueado le pido que se loguee
-        modalTrigger.click();
+        return false;
+      }
+    })
+    .then(data => {
+      if(data){
+        localStorage.setItem('jwt', data);
+        data = data.split('.')[1];
+        data = atob(data);
+        data = JSON.parse(data);
+        renderCuentaUsuario(data);
+      }else{
+        formAlertFormularioModificarCuenta.textContent = 'No se ha podido modificar la cuenta';
       }
     });
-    catalogoEventos.appendChild(eventoDiv);
-  });
-  catalogoEventos.classList.remove('hidden');
+  }
+
   
+});
+//////////////////////////
+//REG EXP
+/////////////////////////
+
+//////////////////////////
+//MAIN PAGE
+/////////////////////////
+
+//////////////////////////////////////////////////
+//FUNCION PARA RENDERIZAR EL CATALOGO DE EVENTOS
+//////////////////////////////////////////////////
+let ultimoEventoRenderizado = 0;
+let cantidadPorPagina = 8;
+function renderCatalogoEventos(tokenCatalogoEventos){
+  let cantidadTotalEventos = tokenCatalogoEventos.length;
+  tokenCatalogoEventos
+    .filter((_,index) => {
+        return index >= ultimoEventoRenderizado && index < ultimoEventoRenderizado + cantidadPorPagina;
+    })
+    .forEach((evento, index) => {
+      let eventoDiv = document.createElement('div');
+      eventoDiv.classList.add('cartaEvento');
+      eventoDiv.classList.add('card');
+      eventoDiv.classList.add('mb-5');
+      eventoDiv.classList.add('col-11');
+      eventoDiv.classList.add('col-md-5');
+      eventoDiv.classList.add('gy-5');
+      eventoDiv.dataset.idEvento = evento.id;
+      eventoDiv.dataset.idOrganizador = evento.id_organizador;
+      eventoDiv.dataset.indexCatalogo = index;
+      let urlCartel = evento.url_cartel.replace('../../', '../apiv4/');
+
+      eventoDiv.innerHTML = `
+        <div class="row">
+          <div class="col-md-4">
+            <img src="${urlCartel}" class="img-fluid  mx-auto rounded" alt="Cartel del evento">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">${evento.nombre}</h5>
+              <p class="card-text">${evento.fecha_inicio} | ${evento.fecha_fin}</p>
+              <p class="card-text"><small class="text-body-secondary">${evento.localidad}, ${evento.provincia}</small></p>
+            </div>
+          </div>
+        </div>
+      `;
+      eventoDiv.addEventListener('click', (e) => {
+        e.preventDefault();
+        //compruebo si es un usuario logueado o no
+        jwt = localStorage.getItem('jwt');
+        if(jwt){
+          //si es un usuario logueado renderizo el detalle del evento
+          renderDetalleEvento(e);
+        }else{
+          //si no es un usuario logueado le pido que se loguee
+          modalTrigger.click();
+        }
+        addBreadcrumbEvento(evento.nombre, e);
+      });
+      catalogoEventos.appendChild(eventoDiv);
+    });
+  catalogoEventos.classList.remove('hidden');
+
+  
+  if(cantidadTotalEventos > ultimoEventoRenderizado + cantidadPorPagina){
+    ultimoEventoRenderizado += cantidadPorPagina;
+    window.addEventListener("scroll", scrollEventos);
+  }else{
+    ultimoEventoRenderizado = cantidadTotalEventos;
+    window.removeEventListener("scroll", scrollEventos);
+  }
+  if(ultimoEventoRenderizado > 10){
+    let scrollUpButton = document.getElementById('scrollUpButton');
+    if(scrollUpButton == null){
+      addScrollUpButton();
+    }
+  }
+
+}
+function scrollEventos(){
+  if (hasLlegadoAlFinal()) {
+            renderCatalogoEventos(tokenCatalogoEventos);
+        }
+}
+function hasLlegadoAlFinal() {
+        const alturaVentana = window.innerHeight;
+        const alturaDocumento = document.documentElement.scrollHeight;
+        const scrollVertical = window.scrollY;
+
+        return alturaVentana + scrollVertical >= alturaDocumento;
+}
+
+function addScrollUpButton(){
+  let scrollUpButton = document.createElement('div');
+  scrollUpButton.id = 'scrollUpButton';
+  scrollUpButton.innerHTML = `
+    <i class="bi bi-arrow-up-circle-fill fs-1" style="position: fixed; left:0; bottom:0;"></i>
+  `;
+  scrollUpButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo(0, 0);
+  });
+  document.body.appendChild(scrollUpButton);
+
 }
 ////////////////////////
 //DETALLE DE EVENTO
@@ -893,9 +1361,10 @@ function renderDetalleEvento (e){
           
           <div class="row justify-content-center border-bottom border-light">
               <!-- Informacion del Evento -->
-              <h1 class="col-12 text-md-center mb-5" id="nombreEvento">${datosEvento.nombre}</h1>
-              <div class="col-md-6 col-xl-4 mb-5 mt-5">
+              
+              <div class="col-md-6 col-xl-4 mb-5 mt-3">
                 <div class="row justify-content-center">
+                  <h1 class="col-12 text-md-center mb-3" id="nombreEvento">${datosEvento.nombre}</h1>
                   <div class="col-12 fs-4   align-text-middle fw-light mt-5" style="cursor: pointer"><i class="bi bi-heart me-2"></i>Añadir a favoritos</div>
       
                   <div class="col-12 fs-4 mt-4   align-text-middle fw-light"><i class="bi bi-geo-alt-fill me-2"></i>Ubicación</div>
@@ -903,13 +1372,10 @@ function renderDetalleEvento (e){
               
                   <div class="col-12 fs-4 mt-4   align-text-middle fw-light"><i class="bi bi-calendar-date me-2"></i>Fecha</div>
                   <div class="col-12 fs-2 mt-2   align-text-middle fw-light ms-3" id="fecha">${datosEvento.fecha_inicio} | ${datosEvento.fecha_fin}</div>
-              
-                  <a class="col-12 fs-4 mt-4 align-text-middle fw-light" href="https://${datosEvento.web}" id="web" style="text-decoration: none;"><i class="bi bi-pc-display-horizontal me-2"></i>${datosEvento.web}</a>
 
-                  <div onClick="DownloadFromUrl('http://localhost:3000/${datosEvento.url_reglamento}', '${nombreReglamento}')" 
-                  style="cursor: pointer;" class="col-12 fs-4 mt-4 align-text-middle fw-light"><i class="bi bi-download pe-2"></i>Descargar Reglamento</div>
+                  <a href="http://localhost:3000/apiv4${datosEvento.url_reglamento}" download="${nombreReglamento}" class="col-12 fs-4 mt-4 align-text-middle fw-light"><i class="bi bi-download pe-2"></i>Descargar Reglamento</a>
                   
-                  <a class=" col-6 col-md-8 text-center fs-2 mt-5  p-3 fw-light  border border-light rounded " href="tel:${telefonoOrganizador}" style="text-decoration: none;"><i class="bi bi-telephone me-2"></i></i></i>Contactar</a>  
+                  <a class=" pointer col-6 col-md-8 text-center fs-2 mt-5  p-3 fw-light  border border-light rounded " href="tel:${telefonoOrganizador}" style="text-decoration: none;"><i class="bi bi-telephone me-2"></i></i></i>Contactar</a>  
 
                 </div>
               </div>
@@ -963,6 +1429,10 @@ function renderDetalleEvento (e){
         divCarrera.addEventListener('click', (e) => {
           e.preventDefault();
           renderDetalleCarrera(e);
+        });
+        div.Carrera.addEventListener('click', (e) => {
+          e.preventDefault();
+          addBreadcrumbCarrera(elemento.nombre, elemento.id, e);
         });
         listaCarreras.appendChild(divCarrera);
       })
@@ -1068,30 +1538,9 @@ function mes(mes){
 
 
 
-
-
-
-
-
-
-
 //////////////////////////
 //FORMULARIO REGISTRO
 /////////////////////////
-//url api para el registro
-  const urlFormularioRegistro = 'http://localhost:3000/apiv4/insert/usuario/';
-
-  //variables para los campos del formulario
-  const formularioRegistro = document.getElementById('formularioRegistro');
-  const emailFormularioRegistro = document.getElementById('emailFormularioRegistro');
-  const passwordFormularioRegistro = document.getElementById('passwordFormularioRegistro');
-  const password2FormularioRegistro = document.getElementById('password2FormularioRegistro');
-  const isAdminFormularioRegistro = document.getElementById('isAdminFormularioRegistro');
-
-  const formAlertFormularioRegistro = document.getElementById('formAlertFormularioRegistro');
-
-  const registrarUsuarioFormularioRegistro = document.getElementById('registrarUsuarioFormularioRegistro');
-  const renderFormularioLoginFormularioRegistro = document.getElementById('renderFormularioLoginFormularioRegistro');
 
   renderFormularioLoginFormularioRegistro.addEventListener('click', (e) => {
     e.preventDefault();
@@ -1161,17 +1610,8 @@ function mes(mes){
 //FORMULARIO COMPLETAR REGISTRO USUARIO
 ///////////////////////////////////////
 
-//url api para completar el registro de usuario
-const urlFormularioCompletarRegistroUsuario = 'http://localhost:3000/apiv4/insert/usuario/usuario/';
 
-//variables para los campos del formulario
-const formularioCompletarRegistroUsuario = document.getElementById('formularioCompletarRegistroUsuario');
-const nombreFormularioCompletarRegistroUsuario = document.getElementById('nombreFormularioCompletarRegistroUsuario');
-const nicknameFormularioCompletarRegistroUsuario = document.getElementById('nicknameFormularioCompletarRegistroUsuario');
-const fechaNacimientoFormularioCompletarRegistroUsuario = document.getElementById('fechaNacimientoFormularioCompletarRegistroUsuario');
-const fotoPerfilFormularioCompletarRegistroUsuario = document.getElementById('fotoPerfilFormularioCompletarRegistroUsuario');
-const formAlertFormularioCompletarRegistroUsuario = document.getElementById('formAlertFormularioCompletarRegistroUsuario');
-const registrarUsuarioFormularioCompletarRegistroUsuario = document.getElementById('registrarUsuarioFormularioCompletarRegistroUsuario');
+
 
 registrarUsuarioFormularioCompletarRegistroUsuario.addEventListener('click', (e) => {
   e.preventDefault();
@@ -1242,18 +1682,6 @@ registrarUsuarioFormularioCompletarRegistroUsuario.addEventListener('click', (e)
 //FORMULARIO COMPLETAR REGISTRO ORGANIZADOR
 ///////////////////////////////////////////
 
-//url api para completar el registro de organizador
-const urlFormularioCompletarRegistroOrganizador = 'http://localhost:3000/apiv4/insert/usuario/organizador/';
-//variables para los campos del formulario
-const formularioCompletarRegistroOrganizador = document.getElementById('formularioCompletarRegistroOrganizador');
-const nombreFormularioCompletarRegistroOrganizador = document.getElementById('nombreFormularioCompletarRegistroOrganizador');
-const nicknameFormularioCompletarRegistroOrganizador = document.getElementById('nicknameFormularioCompletarRegistroOrganizador');
-const fechaNacimientoFormularioCompletarRegistroOrganizador = document.getElementById('fechaNacimientoFormularioCompletarRegistroOrganizador');
-const fotoPerfilFormularioCompletarRegistroOrganizador = document.getElementById('fotoPerfilFormularioCompletarRegistroOrganizador');
-const nombreEntidadFormularioCompletarRegistroOrganizador = document.getElementById('nombreEntidadFormularioCompletarRegistroOrganizador');
-const telefonoFormularioCompletarRegistroOrganizador = document.getElementById('telefonoFormularioCompletarRegistroOrganizador');
-const formAlertFormularioCompletarRegistroOrganizador = document.getElementById('formAlertFormularioCompletarRegistroOrganizador');
-const registrarUsuarioFormularioCompletarRegistroOrganizador = document.getElementById('registrarUsuarioFormularioCompletarRegistroOrganizador');
 
 registrarUsuarioFormularioCompletarRegistroOrganizador.addEventListener('click', (e) => {
   e.preventDefault();
@@ -1322,19 +1750,6 @@ registrarUsuarioFormularioCompletarRegistroOrganizador.addEventListener('click',
 //////////////////////////
 //FORMULARIO LOGIN
 /////////////////////////
-//url api para el login
-const urlFormularioLogin = 'http://localhost:3000/apiv4/login/';
-
-//variables para los campos del formulario
-const formularioLogin = document.getElementById('formularioLogin');
-
-const emailFormularioLogin = document.getElementById('emailFormularioLogin');
-const passwordFormularioLogin = document.getElementById('passwordFormularioLogin');
-
-const formAlertFormularioLogin = document.getElementById('formAlertFormularioLogin');
-
-const iniciarSesionFormularioLogin = document.getElementById('iniciarSesionFormularioLogin');
-const renderFormularioRegistroFormularioLogin = document.getElementById('renderFormularioRegistroFormularioLogin');
 
 renderFormularioRegistroFormularioLogin.addEventListener('click', (e) => {
   e.preventDefault();
@@ -1359,7 +1774,6 @@ iniciarSesionFormularioLogin.addEventListener('click', (e) => {
       console.log(response.status);
       console.log(response);
       if(response.status == 201){
-        console.log('se que es  un 201');
         return response.json();
       }else{
         formAlertFormularioLogin.textContent = 'Usuario o contraseña incorrectos';
@@ -1369,23 +1783,10 @@ iniciarSesionFormularioLogin.addEventListener('click', (e) => {
       if(data){
         console.log(data);
         localStorage.setItem('jwt', data);
-        //decodifico el token 
-        token = data.split('.')[1];
-        // console.log(token);
-        token = atob(token);       
-        // console.log(token);
-        console.log(token);
-        console.log('Es string?');
-        console.log(typeof token);//es un string
-        token = JSON.parse(token);
-        console.log('Es objeto?');
-        console.log(typeof token);//es un objeto
-        if(token.userData.completado){
-          window.alert('completado');
+        if(data.userData.completado){
           formularioLogin.classList.toggle('hidden');
-          formularioRegistroEventos.classList.toggle('hidden');
           // renderMainPage();
-        }else if(token.isAdmin){
+        }else if(data.isAdmin){
           formularioLogin.classList.toggle('hidden');
           formularioCompletarRegistroOrganizador.classList.toggle('hidden');
         }else{
@@ -1394,9 +1795,9 @@ iniciarSesionFormularioLogin.addEventListener('click', (e) => {
         }
       }
     })
-    .catch(error => {
-      formAlertFormularioLogin.textContent = 'Error al iniciar sesión';
-    });
+    // .catch(error => {
+    //   formAlertFormularioLogin.textContent = 'Error al iniciar sesión';
+    // });
   }
 });
 
@@ -1405,20 +1806,6 @@ iniciarSesionFormularioLogin.addEventListener('click', (e) => {
 //////////////////////////
 
   //https://www.npmjs.com/package/exif-js Libreria para controlar el tamaño de foto
-const urlFormularioNuevoEvento = 'http://localhost:3000/apiv4/insert/evento/';
-
-const formularioRegistroEventos = document.getElementById('formularioRegistroEventos');
-
-const formAlertFormularioNuevoEvento = document.getElementById('formAlertFormularioNuevoEvento');
-const nombreFormularioNuevoEvento = document.getElementById('nombreFormularioNuevoEvento'); //nombre del evento
-const fechaInicioFormularioNuevoEvento = document.getElementById('fechaInicioFormularioNuevoEvento');//fecha de inicio del evento
-const fechaFinFormularioNuevoEvento = document.getElementById('fechaFinFormularioNuevoEvento'); //fecha de fin del evento
-const localidadFormularioNuevoEvento = document.getElementById('localidadFormularioNuevoEvento'); //localidad del evento
-const provinciaFormularioNuevoEvento = document.getElementById('provinciaFormularioNuevoEvento');  //provincia del evento  
-const webEventoFormularioNuevoEvento = document.getElementById('webEventoFormularioNuevoEvento'); //web del evento
-const cartelFormularioNuevoEvento = document.getElementById('cartelFormularioNuevoEvento');//cartel del evento
-const registrarEventoFormularioNuevoEvento = document.getElementById('registrarEventoFormularioNuevoEvento');//boton para registrar el evento
-const reglamentoFormularioNuevoEvento = document.getElementById('reglamentoFormularioNuevoEvento');//reglamento del evento
 
 let contadorImagenesFormularioNuevoEvento = 0;
 
@@ -1477,23 +1864,6 @@ registrarEventoFormularioNuevoEvento.addEventListener('click', (e) => {
 //////////////////////////
 //FORMULARIO NUEVA CARRERA
 //////////////////////////
-const formularioRegistroCarreras = document.getElementById('formularioRegistroCarreras');
-//url para la llamada de la api a: 'insertar carrera en evento'
-const urlFormularioNuevaCarrera = 'http://localhost:3000/apiv4/insert/carrera/'; 
-
-//guardo las variables correspondientes a las variables del formulario de registro de carreras 
-const nombreFormularioNuevaCarrera = document.getElementById('nombreFormularioNuevaCarrera');
-const fechaComienzoFormularioNuevaCarrera = document.getElementById('fechaComienzoCarreraFormularioNuevaCarrera');
-const horaComienzoFormularioNuevaCarrera = document.getElementById('horaComienzoCarreraFormularioNuevaCarrera');
-const fechaMinFormularioNuevaCarrera = document.getElementById('fechaMinFormularioNuevaCarrera');
-const fechaMaxFormularioNuevaCarrera = document.getElementById('fechaMaxFormularioNuevaCarrera');
-const modalidadFormularioNuevaCarrera = document.getElementById('modalidadFormularioNuevaCarrera');
-const categoriaFormularioNuevaCarrera = document.getElementById('categoriaFormularioNuevaCarrera');
-const recorridoFormularioNuevaCarrera = document.getElementById('recorridoFormularioNuevaCarrera');
-const registrarCarreraFormularioNuevaCarrera = document.getElementById('registrarCarreraFormularioNuevaCarrera');
-const registrarOtraCarreraFormularioNuevaCarrera = document.getElementById('registrarOtraCarreraFormularioNuevaCarrera');
-const formAlertFormularioNuevaCarrera = document.getElementById('formAlertFormularioNuevaCarrera');
-const formFormularioNuevaCarrera = document.getElementById('formularioRegistroCarreras');
 
 //obtengo el recorrido a partir del .gpx y lo guardo en el localstorage
 recorridoFormularioNuevaCarrera.addEventListener('change', (e) => {
@@ -1664,13 +2034,110 @@ registrarCarreraFormularioNuevaCarrera.addEventListener('click', (e) => {
     })
   }
 });
-/////////////////
-//EVENTOS ORGANIZADOR
-/////////////////
-//MUESTRO LOS EVENTOS DE UN ORGANIZADOR
-const urlEventosOrganizador = 'http://localhost:3000/apiv4/get/eventos/organizador/';
-const eventosOrganizador = document.getElementById('eventosOrganizador');
 
+//////////////////////////
+//BREADCRUMBS V1
+/////////////////////////
+
+
+toggleMostrarBreadcrumbs.addEventListener('click', (e) => {
+  e.preventDefault();
+  if(toggleMostrarBreadcrumbs.classList.contains('bi-toggle-off')){
+    
+    toggleMostrarBreadcrumbs.classList.remove('bi-toggle-off');
+    toggleMostrarBreadcrumbs.classList.add('bi-toggle-on');
+    mostrarBreadcrumbs();
+  }else{
+    
+    toggleMostrarBreadcrumbs.classList.remove('bi-toggle-on');
+    toggleMostrarBreadcrumbs.classList.add('bi-toggle-off');
+    ocultarBreadcrumbs();
+  }
+});
+// function ocultarBreadcrumbs(){
+//   let breadcrumbs = document.getElementsByClassName('breadcrumbPrescindible');
+//   for(let elemento in breadcrumbs){
+//     elemento.classList.add('hidden');
+//   }
+//   breadcrumbs.forEach(elemento => {
+//     elemento.classList.add('hidden');
+//   });
+//   for(let i = 0; i < breadcrumbs.length; i++){
+//     breadcrumbs[i].classList.add('hidden');
+//   }
+//   No entiendo por que solo deja de la ultima manera -> preguntar a victor
+// }
+let primeraVezBreadcrumb = true;
+function ocultarBreadcrumbs(){
+  let breadcrumbs = document.getElementsByClassName('breadcrumbPrescindible');
+  for(let i = 0; i < breadcrumbs.length; i++){
+    breadcrumbs[i].classList.toggle('hidden');
+  }
+}
+function mostrarBreadcrumbs(){
+  let breadcrumbs = document.getElementsByClassName('breadcrumbPrescindible');
+  for(let i = 0; i < breadcrumbs.length; i++){
+    breadcrumbs[i].classList.toggle('hidden');
+  }
+  if(primeraVezBreadcrumb){
+    let breadcrumb = document.createElement('li');
+    breadcrumb.textContent = 'Limpiar mapa de navegación';
+    breadcrumb.id = 'limpiarMapaNavegacion';
+    breadcrumb.classList.add('breadcrumb-item');
+    breadcrumb.classList.add('active');
+    breadcrumb.classList.add('pointer');
+    breadcrumb.classList.add('hidden');
+    breadcrumb.classList.add('fs-3');
+    breadcrumb.classList.add('breadcrumbPrescindible');
+    breadcrumb.addEventListener('click', (e) => {
+      e.preventDefault();
+      limpiarMapaNavegacion();
+    });
+    breadcrumbsContainer.appendChild(breadcrumb);
+    primeraVezBreadcrumb = false;
+  }
+  
+}
+function limpiarMapaNavegacion(){
+  let breadcrumbs = document.getElementsByClassName('breadcrumbPrescindible');
+  for(let i = 0; i < breadcrumbs.length; i++){
+    breadcrumbs[i].outerHTML = '';
+  }
+}
+function addBreadcrumbCarrera(nombreCarrera, e){
+  let breadcrumb = document.createElement('li');
+  breadcrumb.textContent = nombreCarrera;
+  // breadcrumb.dataset.idCarrera = idCarrera;
+  breadcrumb.classList.add('breadcrumb-item');
+  breadcrumb.classList.add('active');
+  breadcrumb.classList.add('pointer');
+  breadcrumb.classList.add('breadcrumbPrescindible');
+  breadcrumb.classList.add('fs-3');
+  breadcrumbsContainer.appendChild(breadcrumb);
+
+  breadcrumb.addEventListener('click', (e) => {
+    e.preventDefault();
+    renderDetalleCarrera(e);
+  });
+}
+function addBreadcrumbEvento(nombreEvento, idCarrera, e){
+  jwt = localStorage.getItem('jwt');
+  if(jwt){
+    let breadcrumb = document.createElement('li');
+    breadcrumb.textContent = nombreEvento;
+    // breadcrumb.dataset.idCarrera = idCarrera;
+    breadcrumb.classList.add('breadcrumb-item');
+    breadcrumb.classList.add('active');
+    breadcrumb.classList.add('pointer');
+    breadcrumb.classList.add('fs-3');
+    breadcrumbsContainer.appendChild(breadcrumb);
+
+    breadcrumb.addEventListener('click', (e) => {
+    e.preventDefault();
+    renderDetalleEvento(e);
+  });
+  }
+}
 </script>
 
 </html>

@@ -59,7 +59,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         header('HTTP/1.1 201 OK');
         //construyo un JWT nuevo con los datos del usuario
         $pld = [
-            'exp' => time() * 1000 + 3600,
+            'exp' => time() * 1000 + 3600000,
             'userData' => $decoded->userData
         ];
         $token = JWT::encode($pld, $jwtkey, 'HS256');

@@ -83,7 +83,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $formPasswd = hash('sha256', $formPasswd.$salt);
             if($formPasswd === $passwd){
                 $mtime = time() * 1000;
-                $exp = $mtime + 3600;
+                $exp = $mtime + 3600000;
                 $data = [
                     'userId' => $userId,
                     'userNickname' => $nickname,

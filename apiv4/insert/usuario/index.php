@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt->close();
                     $con->close();
                     $mtime = time() * 1000;
-                    $exp = $mtime + 3600;
+                    $exp = $mtime + 3600000;
                     $data = [
                         'userId' => $idUsuario,
                         'isAdmin' => $isAdmin,
