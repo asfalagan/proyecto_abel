@@ -40,6 +40,20 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $idUsuario = $decoded->userData->userId;
     $idEvento = $decoded->eventData->eventoId;
     $idCarrera = $decoded->raceData->carreraId;
+
+    //me quedo con el primer subarray del json
+    $primeraCoordenada = json_decode($json_data);
+    //me quedo con la parte de la cadena hasta el primer ] incluido
+    $primeraCoordenada = substr($primeraCoordenada, 0, strpos($primeraCoordenada, "]") + 1);
+    //elimino los dos primeros caracteres que son ["
+    $primeraCoordenada = substr($primeraCoordenada, 2);
+    //elimino el ultimo caracter que es ]
+    $primeraCoordenada = substr($primeraCoordenada, 0, -1);
+
+    $ubicacion = $primeraCoordenada;
+
+
+
     $con = new Conexion();
     $prueba = "prueba";
     if(isset($json_data)){
@@ -51,6 +65,16 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $con -> close();
             
             //creo el jwt
+
+            $con = new Conexion();
+            $sql = "CALL set_ubicacion(?, ?)";
+            if($stmt = $con -> prepare($sql)){
+                $stmt -> bind_param("si", $ubicacion, $idEvento);
+                $stmt -> execute();
+                $stmt -> close();
+                $con -> close();
+            }
+
             $userData = $decoded->userData;
             $eventData = $decoded->eventData;
             $raceData = $decoded->raceData;

@@ -33,12 +33,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     if($_FILES['fotoPerfil']['error'] == UPLOAD_ERR_OK && isset($_FILES['fotoPerfil'])){// UPLOAD_ERR_OK da 0; no hay errores
         $imagen = $_FILES['fotoPerfil'];
-        $rutaDestino = 'apiv4/img/';
+        $rutaDestino = '../../img/';
         #muevo el archivo a la carpeta de destino
         $nombreImagen = basename($imagen['name']);
         #de esta forma nos aseguramos que cada imagen subida tiene url unica
         $nombreImagen = uniqid().date("Ymd").$nombreImagen;
         $rutaDestino .= $nombreImagen;
+        if(!is_dir($ruta_destino)){
+            mkdir($ruta_destino, 0755, true);//ojo con los permisos que das aqui
+        }
         move_uploaded_file($imagen["tmp_name"], $rutaDestino);
         
         $con = new Conexion();

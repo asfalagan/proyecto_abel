@@ -183,10 +183,10 @@
                 <a class="nav-link pointer" id="enlaceCuenta"><i class="bi bi-person-fill me-2"></i>Cuenta de Usuario</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link pointer hidden" id="enlaceRegistrarEvento"><i class="bi bi-folder-plus me-2"></i>Registrar Evento</a>
+                <a class="nav-link pointer hidden " id="enlaceRegistrarEvento"><i class="bi bi-folder-plus me-2"></i>Registrar Evento</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link hidden pointer" id="enlaceCerrarSesion"><i class="bi bi-box-arrow-left me-2"></i>Cerrar Sesión</a>
+                <a class="nav-link hidden pointer " id="enlaceCerrarSesion"><i class="bi bi-box-arrow-left me-2"></i>Cerrar Sesión</a>
               </li>
             </ul>
           <form class="d-flex me-5" role="search" id="formularioBusqueda">
@@ -699,16 +699,51 @@
 
             </div>
             <!-- FORMULARIO PARA EDITAR UN EVENTO -->
-            <div id="editarEvento" class="componente hidden">
-              <div>formulario para editar un evento</div>
-            </div>
+            
+            <form class="componente col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;" id="formularioEdicionEventos">
+                <div class="row mt-2">
+                    <h1 class="col-12 text-left">Edición de Eventos</h1>
+                </div>
+                <div class="row mt-3">
+                    <div class="mb-3 col-12">
+                        <label for="nombreFormularioEdicionEvento" class="form-label">Nombre del Evento</label>
+                        <input type="text" class="form-control bg-transparent pointer border border-light" id="nombreFormularioEdicionEvento" name="nombre"  title="Introduce nombre del Evento">
+                    </div>
+                </div>
+                <div class="row justify-content-between">
+                    <div class="mb-3 col-12 col-md-5">
+                        <label for="fechaInicioFormularioEdicionEvento" class="form-label">Fecha de Inicio</label>
+                        <input type="date" class="form-control bg-transparent pointer border border-light" id="fechaInicioFormularioEdicionEvento" name="fechaInicio"  title="Introduce fecha de inicio">
+                    </div>
+                    <div class="mb-3 col-12 col-md-5">
+                        <label for="fechaFinFormularioEdicionEvento" class="form-label">Fecha de Finalización</label>
+                        <input type="date" class="form-control bg-transparent pointer border border-light" id="fechaFinFormularioEdicionEvento" name="fechaFin"  title="Introduce fecha de finalización">
+                    </div>
+                </div>
+                               
+                <div class="row justify-content-center">
+                    <!-- <input type="submit" value="Continuar" class="col-4 btn btn-warning" id="registrarEvento" style="color: #2b3035 !important;" name="continuar"> -->
+                    <span   class="col-4 btn btn-warning" id="editarEventoFormularioEditarEvento" style="color: #2b3035 !important;" name="continuar"><strong style="color: #2b3035 !important;">Editar Evento</strong></span>
+                </div>
+            </form>
+            
             <!-- FORMULARIO PARA EDITAR UNA CARRERA -->
             <div id="editarCarrera" class="componente hidden">
               <div>formulario para editar una carrera</div>
             </div>
             <!--LOS EVENTOS DE UN ORGANIZADOR -->
             <div id="eventosOrganizador" class="componente hidden">
-              <div>los eventos de un organizador</div>
+              <div class="row justify-content-center">
+                <div class="col-10">
+                  <div class="row justify-copntent-center">
+                    <div class="col-12"  id="listadoEventosOrganizador">
+                      <h1 class="col-12 text-center mb-2">Mis Eventos</h1>
+                      <h2 class="col-12 text-center mb-5" id="alertEventosOrganizador"><i class="fa-solid fa-person-running"></i></h2>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
       </div>
       
@@ -756,7 +791,9 @@ let track;
 
 let tokenCatalogoEventos;
 let catalogoCarrerasEvento;
-
+let idCarrera;
+let indexCarrera;
+let idEvento;
 const catalogoEventos = document.getElementById('catalogoEventos');
 const enlaceCatalogoEventos = document.getElementById('enlaceCatalogoEventos');
 const modalTrigger = document.getElementById('modalTrigger');
@@ -770,7 +807,7 @@ const modalLoginButton = document.getElementById('modalLoginButton');
 const enlaceCerrarSesion = document.getElementById('enlaceCerrarSesion');
 
 
-const eventosOrganizador = document.getElementById('eventosOrganizador');
+
 const formularioRegistroCarreras = document.getElementById('formularioRegistroCarreras');
 const nombreFormularioNuevaCarrera = document.getElementById('nombreFormularioNuevaCarrera');
 const fechaComienzoFormularioNuevaCarrera = document.getElementById('fechaComienzoCarreraFormularioNuevaCarrera');
@@ -801,12 +838,14 @@ const registrarEventoFormularioNuevoEvento = document.getElementById('registrarE
 const reglamentoFormularioNuevoEvento = document.getElementById('reglamentoFormularioNuevoEvento');//reglamento del evento
 
 //url 
+const urlModificarEvento = 'http://localhost:3000/apiv4/update/evento/';
+const urlDeleteEvento = 'http://localhost:3000/apiv4/delete/evento/';
 const urlFormularioLogin = 'http://localhost:3000/apiv4/login/';
 const urlFormularioNuevaCarrera = 'http://localhost:3000/apiv4/insert/carrera/';
 const urlFormularioNuevoEvento = 'http://localhost:3000/apiv4/insert/evento/';
 const urlFormularioCompletarRegistroOrganizador = 'http://localhost:3000/apiv4/insert/usuario/organizador/';
 const urlFormularioCompletarRegistroUsuario = 'http://localhost:3000/apiv4/insert/usuario/usuario/';
-const urlEventosOrganizador = 'http://localhost:3000/apiv4/get/eventos/organizador/';
+const urlEventosOrganizador = 'http://localhost:3000/apiv4/get/eventosOrganizador/';
 const urlFormularioRegistro = 'http://localhost:3000/apiv4/insert/usuario/';
 const urlGetEventos = 'http://localhost:3000/apiv4/get/eventos/';
 const urlRenovarJWT = 'http://localhost:3000/apiv4/renovarJWT';
@@ -870,6 +909,18 @@ const cerrarModalGestionCuenta = document.getElementById('cerrarModalGestionCuen
 
 const breadcrumbsContainer = document.getElementById('breadcrumbsContainer');
 const toggleMostrarBreadcrumbs = document.getElementById('toggleMostrarBreadcrumbs');
+
+const eventosOrganizador = document.getElementById('eventosOrganizador');
+const contenedorListadoEventosOrganizador = document.getElementById('listadoEventosOrganizador');
+const alertEventosOrganizador = document.getElementById('alertEventosOrganizador');
+
+const formularioEdicionEventos = document.getElementById("formularioEdicionEventos");
+const nombreFormularioEdicionEvento = document.getElementById("nombreFormularioEdicionEvento");
+const fechaInicioFormularioEdicionEvento = document.getElementById("fechaInicioFormularioEdicionEvento");
+const fechaFinFormularioEdicionEvento = document.getElementById("fechaFinFormularioEdicionEvento");
+const editarEventoFormularioEditarEvento = document.getElementById("editarEventoFormularioEditarEvento");
+
+const modalGestionCuentaTrigger = document.getElementById('modalGestionCuentaTrigger');
   //////////////////////////
 //FUNCIONES
 /////////////////////////
@@ -884,6 +935,8 @@ function closeAll(){
   Array.from(elementos).forEach(elemento => {
     elemento.classList.add('hidden');
   });
+  ultimoEventoRenderizado = 0;
+  ultimoEventoRenderizadoOrganizador = 0;
   //al elemento que se la tenga que quitar se al quito
   
 };
@@ -900,9 +953,13 @@ window.onload = () => {
 
 
 function renderMainPage(){
+  limpiarMapaNavegacion();
   //tengo un usuario anonimo o logueado?
   jwt = localStorage.getItem('jwt');
+  localStorage.clear();
+  console.log(jwt);
   if(jwt){
+    localStorage.setItem('jwt', jwt);
     jwt = jwt.split('.')[1];
     jwt = atob(jwt);
     jwt = JSON.parse(jwt);
@@ -910,7 +967,7 @@ function renderMainPage(){
     enlaceCuenta.innerHTML = `
       <i class="bi bi-person-fill me-2"></i>${jwt.userData.userNickname}
     `;
-    enlaceCerrarSesion.classList.toggle('hidden');
+    enlaceCerrarSesion.classList.remove('hidden');
     if(jwt.userData.isAdmin){
       enlaceRegistrarEventoNavbar.classList.remove('hidden');
     }
@@ -923,14 +980,14 @@ function renderMainPage(){
 
   
 
-  tokenCatalogoEventos = localStorage.getItem('tokenCatalogoEventos');
-  if(tokenCatalogoEventos != null){
-    //convierto el string a Array
-    tokenCatalogoEventos = JSON.parse(tokenCatalogoEventos);
-    closeAll();
-    cabecerasH1.classList.toggle('hidden');
-    renderCatalogoEventos(tokenCatalogoEventos);
-  }else{
+  // tokenCatalogoEventos = localStorage.getItem('tokenCatalogoEventos');
+  // if(tokenCatalogoEventos != null && tokenCatalogoEventos.length > 0){
+  //   //convierto el string a Array
+  //   tokenCatalogoEventos = JSON.parse(tokenCatalogoEventos);
+  //   closeAll();
+  //   cabecerasH1.classList.toggle('hidden');
+  //   renderCatalogoEventos(tokenCatalogoEventos);
+  // }else{
     //si no tengo un catalogo de eventos en el localStorage pido uno a la api
     fetch(urlGetEventos, {
       method: 'GET',
@@ -940,15 +997,21 @@ function renderMainPage(){
     })
     .then(response => response.json())
     .then(data => {
-      tokenCatalogoEventos = data;
+      if(data){
+        tokenCatalogoEventos = data;
       closeAll();
-      cabecerasH1.classList.toggle('hidden');
+      cabecerasH1.classList.remove('hidden');
       renderCatalogoEventos(tokenCatalogoEventos);
-      localStorage.setItem('tokenCatalogoEventos', JSON.stringify(data));//guardo el catalogo de eventos en el localStorage en formato string
+      localStorage.setItem('tokenCatalogoEventos', JSON.stringify(data));
+      }else{
+        cabecerasH1.classList.toggle('hidden');
+        let alertaInicio = document.createElement('div');
+        alertaInicio.classList.add('alert', 'alert-danger', 'mt-5', 'text-center', 'componente');
+        alertaInicio.innerHTML = 'Estamos recibiendo demasiadas peticiones. Vuelve más tarde';
+        cabecerasH1.appendChild(alertaInicio);
+      }
     });
-  }
-  
-  
+  // }
 
 }
 function renovarJWT(){
@@ -973,10 +1036,19 @@ function renovarJWT(){
     }
   });
 }
-enlaceCerrarSesion.addEventListener('click', (e) => {
+enlaceCerrarSesion.addEventListener('click', async (e) => {
   e.preventDefault();
-  localStorage.clear();
-  renderMainPage();
+  try {
+    await localStorage.clear();
+    closeAll();
+    enlaceCerrarSesion.classList.add('hidden');
+    enlaceRegistrarEventoNavbar.classList.add('hidden');
+    renderMainPage();
+  } catch (error) {
+    console.error('Error al cerrar sesión:', error);
+    // Puedes manejar el error de manera apropiada, por ejemplo, mostrando un mensaje al usuario.
+  }
+  
 });
 const closeModalAvisoRegistro = document.getElementById('closeModalAvisoRegistro');
 modalLoginButton.addEventListener('click', (e) => {
@@ -1001,9 +1073,7 @@ enlaceCuentaNavbar.addEventListener('click', (e) => {
       jwt = jwt.split('.')[1];
       jwt = atob(jwt);
       jwt = JSON.parse(jwt);
-    }
-    //si el usuario esta logueado renderizo su cuenta
-    if(jwt){
+    
       closeAll();
       renderCuentaUsuario(jwt);
     }else{
@@ -1021,15 +1091,10 @@ enlaceRegistrarEventoNavbar.addEventListener('click', (e) => {
 })
 enlaceCatalogoEventos.addEventListener('click', (e) => {
   e.preventDefault();
-  if(catalogoEventos.classList.contains('hidden')){
-    closeAll();
-    cabecerasH1.classList.toggle('hidden');
-    renderCatalogoEventos(tokenCatalogoEventos);
-  }else{
-    //situo la pantalla en el catalogo de eventos
-    window.scrollTo(0, catalogoEventos.offsetTop);
-  }
-  
+  closeAll();
+  limpiarMapaNavegacion();
+  renderMainPage();
+  window.scrollTo(0, catalogoEventos.offsetTop);
 })
 
 //breadcrumbs
@@ -1046,10 +1111,10 @@ enlaceCatalogoEventos.addEventListener('click', (e) => {
 function renderCuentaUsuario(jwt){
   closeAll();
   console.log(jwt);
-
+  
   let edadUsuarioCuentaUsuario = jwt.userData.userFechaNacimiento.split('-');
   edadUsuarioCuentaUsuario = `${edadUsuarioCuentaUsuario[2]} de ${mes(+edadUsuarioCuentaUsuario[1])} de ${edadUsuarioCuentaUsuario[0]}`;  
-  let enlaceImagenPerfil = jwt.userData.userImagen.replace('../../../', '../apiv4/');
+  let enlaceImagenPerfil = jwt.userData.userImagen.replace('../../img/', 'apiv4/img/');
 
   if(jwt.userData.isAdmin){
     cuentaUsuario.innerHTML = `
@@ -1064,8 +1129,9 @@ function renderCuentaUsuario(jwt){
               <div class="fs-3 mt-4 fw-light ms-1 text-center" id="cuentaUsuarioFechaNacimiento">${edadUsuarioCuentaUsuario}</div>
               <div class="fs-3 mt-4 fw-light ms-1 text-center" id="cuentaUsuarioTelefono">${jwt.userData.telefono}</div>
               <div class="fs-3 mt-4 fw-light ms-1 text-center" id="cuentaUsuarioEntidad">${jwt.userData.entidadOrganizadora}</div>
-              <div class="fs-3 mt-4 fw-light ms-1 text-center" style="cursor: pointer;" id="accesoEventosUsuario"></div>
+              
               <div class="fs-3 mt-4 fw-light ms-1 text-center mt-5 border border-light pt-2 pb-2" id="gestionarCuentaUsuario" style="cursor: pointer;">Gestionar Cuenta</div>
+              <div class="fs-3 mt-4 fw-light ms-1 text-center mt-5 border border-light pt-2 pb-2" id="gestionarEventosUsuario" style="cursor: pointer;">Gestionar Eventos</div>
               
           </div>
         </div>
@@ -1093,13 +1159,13 @@ function renderCuentaUsuario(jwt){
   }
   cuentaUsuario.classList.remove('hidden');
   const gestionarCuentaUsuario = document.getElementById('gestionarCuentaUsuario');
-  const accesoEventosUsuario = document.getElementById('accesoEventosUsuario');
+  const gestionarEventosUsuario = document.getElementById('gestionarEventosUsuario');
   gestionarCuentaUsuario.addEventListener('click', (e) => {
     e.preventDefault();
     modalGestionCuentaTrigger.click();
   });
   
-  accesoEventosUsuario.addEventListener('click', (e) => {
+  gestionarEventosUsuario.addEventListener('click', (e) => {
     e.preventDefault();
     closeAll();
     renderEventosOrganizador(jwt);
@@ -1199,6 +1265,164 @@ modificarUsuarioFormularioModificarCuenta.addEventListener('click', (e) => {
 
   
 });
+
+function renderEventosOrganizador(jwt){
+  console.log('estoy aqui');
+  let listaEventosOrganizador;
+  fetch(urlEventosOrganizador, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+      'Content-Type': 'application/json;utf-8'
+    }
+  })
+  .then(response =>{
+    if(response.status == 201){
+      return response.json();
+    }else if(response.status == 402){ 
+      eventosOrganizador.innerHTML = '<h1>No tienes eventos registrados</h1>';
+    }else{
+      // closeAll();
+      // renderMainPage();
+      console.log('no he recibido mis eventos');
+    }
+  
+  })
+  .then(data => {
+    if(data){
+      localStorage.setItem('jwt', data);
+      listaEventosOrganizador = data;
+      if(listaEventosOrganizador != null && listaEventosOrganizador != undefined){
+        renderEventosOrganizadorPaginados(listaEventosOrganizador);
+      }
+    }else{
+      eventosOrganizador.classList.remove('hidden');
+      eventosOrganizador.innerHTML = '<h1>No tienes eventos registrados</h1>';
+    }
+  });
+
+  
+}
+
+let ultimoEventoRenderizadoOrganizador = 0;
+let cantidadPorPaginaOrganizador = 8;
+
+function renderEventosOrganizadorPaginados(listadoEventosOrganizador){
+  let cantidadTotalEventosOrganizador = listadoEventosOrganizador.length;
+  listadoEventosOrganizador = listadoEventosOrganizador.split('.')[1];
+  
+  listadoEventosOrganizador = atob(listadoEventosOrganizador);
+  listadoEventosOrganizador = JSON.parse(listadoEventosOrganizador);
+  localStorage.setItem('listadoEventosOrganizador', JSON.stringify(listadoEventosOrganizador));
+  listadoEventosOrganizador.userEventos
+    .filter((_,index) => {
+        
+        return index >= ultimoEventoRenderizadoOrganizador && index < ultimoEventoRenderizadoOrganizador + cantidadPorPaginaOrganizador;
+    })
+    .forEach((evento, index) => {
+      let eventoDiv = document.createElement('div');
+      eventoDiv.classList.add('row', 'justify-content-center', 'border-bottom', 'border-light');
+      let nombreEvento = document.createElement('div');
+      nombreEvento.classList.add('col-12', 'col-lg-3', 'p-2', 'mb-5', 'fs-3');
+      nombreEvento.textContent = evento.nombre;
+      let modificarEvento = document.createElement('div');
+      modificarEvento.dataset.idEvento = evento.id;
+      modificarEvento.dataset.indexEvento = index;
+      modificarEvento.dataset.idOrganizador = evento.id_organizador;
+      modificarEvento.classList.add('col-12', 'col-lg-3', 'border', 'border-info', 'p-2', 'mb-5', 'pointer', 'me-lg-3', 'text-center');
+      modificarEvento.textContent = 'Modificar';
+      let eliminarEvento = document.createElement('div');
+      eliminarEvento.dataset.indexEvento = index;
+      eliminarEvento.dataset.idOrganizador = evento.id_organizador;
+      eliminarEvento.dataset.idEvento = evento.id;
+      eliminarEvento.classList.add('col-12', 'col-lg-3', 'border', 'border-danger', 'p-2', 'mb-5', 'pointer', 'text-center');
+      eliminarEvento.textContent = 'Eliminar';
+      eventoDiv.appendChild(nombreEvento);
+      eventoDiv.appendChild(modificarEvento);
+      eventoDiv.appendChild(eliminarEvento);
+      modificarEvento.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeAll();
+        let aIdEvento = e.currentTarget.dataset.idEvento;
+        let aIdOrganizador = e.currentTarget.dataset.idOrganizador;
+        let aIndexEvento = e.currentTarget.dataset.indexEvento;
+        renderEditarEvento(aIdEvento, aIdOrganizador, aIndexEvento);
+      });
+      eliminarEvento.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeAll();
+        
+        handlerEliminarEvento(e.currentTarget.dataset.idEvento);
+      });
+      console.log('llego aqui');
+      contenedorListadoEventosOrganizador.appendChild(eventoDiv);
+      eventosOrganizador.classList.remove('hidden');
+      contenedorListadoEventosOrganizador.classList.remove('hidden');
+    });
+}
+function handlerEliminarEvento(idEvento){
+  fetch(urlDeleteEvento, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+      'Content-Type': 'application/json;utf-8'
+    },
+    body: JSON.stringify({idEvento: idEvento}),
+  })
+  .then(response => {
+    if(response.status == 201){
+      contenedorListadoEventosOrganizador.innerHTML = `
+        <h1 class="col-12 text-center mb-2">Mis Eventos</h1>
+        <h2 class="col-12 text-center mb-5" id="alertEventosOrganizador"><i class="fa-solid fa-person-running"></i></h2>`;
+      closeAll();
+      renderEventosOrganizador(localStorage.getItem('jwt'));
+    }else if(response.status == 402){
+      alertEventosOrganizador.textContent = 'No se ha podido eliminar el evento. Inténtalo más tarde';
+    }else{
+      closeAll();
+      renderMainPage();
+    }
+  })
+}
+function renderEditarEvento(idEvento, idOrganizador, indexEvento){
+  let tokenCatalogoEventosOrganizador = JSON.parse(localStorage.getItem('listadoEventosOrganizador'));
+  console.log(tokenCatalogoEventosOrganizador);
+  nombreFormularioEdicionEvento.value = tokenCatalogoEventosOrganizador.userEventos[indexEvento].nombre;
+  fechaInicioFormularioEdicionEvento.value = tokenCatalogoEventosOrganizador.userEventos[indexEvento].fecha_inicio;
+  fechaFinFormularioEdicionEvento.value = tokenCatalogoEventosOrganizador.userEventos[indexEvento].fecha_fin;
+  closeAll();
+  formularioEdicionEventos.classList.remove('hidden');
+}
+
+editarEventoFormularioEditarEvento.addEventListener('click', (e) => {
+  
+  e.preventDefault();
+  console.log('hola hola');
+  formData = new FormData(formularioEdicionEventos);
+  fetch(urlModificarEvento, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+    },
+    body: formData,
+  })
+  .then(response => {
+    if(response.status == 201){
+      
+      contenedorListadoEventosOrganizador.innerHTML = `
+        <h1 class="col-12 text-center mb-2">Mis Eventos</h1>
+        <h2 class="col-12 text-center mb-5" id="alertEventosOrganizador"><i class="fa-solid fa-person-running"></i></h2>`;
+      closeAll();
+      renderEventosOrganizador(localStorage.getItem('jwt'));
+    }else{
+      contenedorListadoEventosOrganizador.innerHTML = `
+        <h1 class="col-12 text-center mb-2">Mis Eventos</h1>
+        <h2 class="col-12 text-center mb-5" id="alertEventosOrganizador"><i class="fa-solid fa-person-running"></i></h2>`;
+      closeAll();
+      renderEventosOrganizador(localStorage.getItem('jwt'));
+    }
+  })
+});
 //////////////////////////
 //REG EXP
 /////////////////////////
@@ -1212,13 +1436,35 @@ modificarUsuarioFormularioModificarCuenta.addEventListener('click', (e) => {
 //////////////////////////////////////////////////
 let ultimoEventoRenderizado = 0;
 let cantidadPorPagina = 8;
+function filtrarCatalogoEventos(filtro){
+  switch (filtro) {
+    case 'fechaLejana':
+      tokenCatalogoEventos.sort((a, b) => {
+        return new Date(a.fecha_inicio) - new Date(b.fecha_inicio);//si es negativo a es menor que b y va antes; si es negativo a es mayor que b y va despues
+      });
+      break;
+    case 'fechaCercana':
+      tokenCatalogoEventos.sort((a, b) => {
+        return new Date(b.fecha_inicio) - new Date(a.fecha_inicio);
+      });
+      break;
+    case 'cercaDeMi':
+      tokenCatalogoEventos.sort((a, b) => {
+        return a.provincia.localeCompare(b.provincia);
+      });
+      break;
+  }
+  renderCatalogoEventos(tokenCatalogoEventos);
+}
 function renderCatalogoEventos(tokenCatalogoEventos){
+  catalogoEventos.innerHTML = '';
   let cantidadTotalEventos = tokenCatalogoEventos.length;
   tokenCatalogoEventos
     .filter((_,index) => {
         return index >= ultimoEventoRenderizado && index < ultimoEventoRenderizado + cantidadPorPagina;
     })
     .forEach((evento, index) => {
+      console.log(evento);
       let eventoDiv = document.createElement('div');
       eventoDiv.classList.add('cartaEvento');
       eventoDiv.classList.add('card');
@@ -1229,7 +1475,7 @@ function renderCatalogoEventos(tokenCatalogoEventos){
       eventoDiv.dataset.idEvento = evento.id;
       eventoDiv.dataset.idOrganizador = evento.id_organizador;
       eventoDiv.dataset.indexCatalogo = index;
-      let urlCartel = evento.url_cartel.replace('../../', '../apiv4/');
+      let urlCartel = evento.url_cartel.replace('../../', './apiv4/');
 
       eventoDiv.innerHTML = `
         <div class="row">
@@ -1256,7 +1502,7 @@ function renderCatalogoEventos(tokenCatalogoEventos){
           //si no es un usuario logueado le pido que se loguee
           modalTrigger.click();
         }
-        addBreadcrumbEvento(evento.nombre, e);
+        addBreadcrumbEvento(evento.nombre, evento.id, evento.id_organizador, index);
       });
       catalogoEventos.appendChild(eventoDiv);
     });
@@ -1308,13 +1554,15 @@ function addScrollUpButton(){
 //DETALLE DE EVENTO
 ///////////////////////
 
-function renderDetalleEvento (e){
+function renderDetalleEvento (e, idEvento = false, idOrganizador = false, indexCatalogo = false){
   cabecerasH1.classList.toggle('hidden');
-  let eventoSeleccionado = e.currentTarget;
-  console.log(eventoSeleccionado);
-  let idEvento = eventoSeleccionado.dataset.idEvento;
-  let idOrganizador = eventoSeleccionado.dataset.idOrganizador;
-  let indexCatalogo = eventoSeleccionado.dataset.indexCatalogo;
+  if(!idEvento){
+    let eventoSeleccionado = e.currentTarget;
+    console.log(eventoSeleccionado);
+    idEvento = eventoSeleccionado.dataset.idEvento;
+    idOrganizador = eventoSeleccionado.dataset.idOrganizador;
+    indexCatalogo = eventoSeleccionado.dataset.indexCatalogo;
+  }
   tokenCatalogoEventos = JSON.parse(localStorage.getItem('tokenCatalogoEventos'));
   let dataEvento = tokenCatalogoEventos[indexCatalogo];
   closeAll();
@@ -1344,8 +1592,8 @@ function renderDetalleEvento (e){
       tokenCatalogoEventos= localStorage.getItem('tokenCatalogoEventos');
       tokenCatalogoEventos = JSON.parse(tokenCatalogoEventos);
       let datosEvento = tokenCatalogoEventos[indexCatalogo];
-      let urlCartel = datosEvento.url_cartel.replace('../../', '../apiv4/');
-      let urlReglamento = datosEvento.url_reglamento.replace('../../', '../apiv4/');
+      let urlCartel = datosEvento.url_cartel.replace('../../', 'apiv4/');
+      let urlReglamento = datosEvento.url_reglamento.replace('../../', '/apiv4/');
       let usuarioOrganizadorEvento = datosEvento.id_organizador;
       //recojo el nombre del reglamento
       let nombreReglamento = urlReglamento.split('/');
@@ -1373,7 +1621,7 @@ function renderDetalleEvento (e){
                   <div class="col-12 fs-4 mt-4   align-text-middle fw-light"><i class="bi bi-calendar-date me-2"></i>Fecha</div>
                   <div class="col-12 fs-2 mt-2   align-text-middle fw-light ms-3" id="fecha">${datosEvento.fecha_inicio} | ${datosEvento.fecha_fin}</div>
 
-                  <a href="http://localhost:3000/apiv4${datosEvento.url_reglamento}" download="${nombreReglamento}" class="col-12 fs-4 mt-4 align-text-middle fw-light"><i class="bi bi-download pe-2"></i>Descargar Reglamento</a>
+                  <a href="http://localhost:3000/${urlReglamento}" download="${nombreReglamento}" class="col-12 fs-4 mt-4 align-text-middle fw-light"><i class="bi bi-download pe-2"></i>Descargar Reglamento</a>
                   
                   <a class=" pointer col-6 col-md-8 text-center fs-2 mt-5  p-3 fw-light  border border-light rounded " href="tel:${telefonoOrganizador}" style="text-decoration: none;"><i class="bi bi-telephone me-2"></i></i></i>Contactar</a>  
 
@@ -1383,7 +1631,7 @@ function renderDetalleEvento (e){
               <div class="col-md-6 col-xl-4 mb-5 mt-5">
                 <div class="row justify-content-center">                   
                   <div class="col-10">
-                      <img class="w-100 img-fluid rounded img-thumbnail" src="${urlCartel}"></img>
+                      <img class="w-100 img-fluid rounded img-thumbnail" src="http://localhost:3000/${urlCartel}"></img>
                   </div>                    
                 </div>
               </div>
@@ -1430,9 +1678,9 @@ function renderDetalleEvento (e){
           e.preventDefault();
           renderDetalleCarrera(e);
         });
-        div.Carrera.addEventListener('click', (e) => {
+        divCarrera.addEventListener('click', (e) => {
           e.preventDefault();
-          addBreadcrumbCarrera(elemento.nombre, elemento.id, e);
+          addBreadcrumbCarrera(elemento.nombre, elemento.id, elemento.id_evento, index);
         });
         listaCarreras.appendChild(divCarrera);
       })
@@ -1447,18 +1695,22 @@ function renderDetalleEvento (e){
 ///////////////////////
 
 
-function renderDetalleCarrera(e){
+function renderDetalleCarrera(e, idCarrera = false, indexCarrera = false, idEvento = false){
   // console.log(e.currentTarget);
   closeAll();
   let divMap = document.getElementById('map');
-  let carreraSeleccionada = e.currentTarget;
-  let idCarrera = carreraSeleccionada.dataset.idCarrera;
-  let indexCarrera = carreraSeleccionada.dataset.indexCarrera;
-  let idEvento = carreraSeleccionada.dataset.idEvento;
+  if(!idCarrera){
+    console.log('no terngo idCarrera');
+    carreraSeleccionada = e.currentTarget;
+    idCarrera = carreraSeleccionada.dataset.idCarrera;
+    indexCarrera = carreraSeleccionada.dataset.indexCarrera;
+    idEvento = carreraSeleccionada.dataset.idEvento;
+  }
   let catalogoCarrerasEvento = JSON.parse(localStorage.getItem('catalogoCarrerasEvento'));
   carreraSeleccionada = catalogoCarrerasEvento[indexCarrera];
   let a = carreraSeleccionada;
-  
+  console.log(a);
+  console.log(catalogoCarrerasEvento);
   if(a){
     let b = JSON.parse(a.recorrido);
     console.log(typeof b);
@@ -1470,14 +1722,17 @@ function renderDetalleCarrera(e){
       return [elemento[0], elemento[1]];
     });
     detalleCarrera.classList.remove('hidden');
-
-    let mymap = L.map('map').setView(arrayCoordenadasSinAltura[0], 10);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    try{
+        let mymap = L.map('map').setView(arrayCoordenadasSinAltura[0], 10);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, '
-    }).addTo(mymap);
-    L.polyline(arrayCoordenadasSinAltura, { color: '#2b3035', weight: 2 }).addTo(mymap);
-
+        }).addTo(mymap);
+        L.polyline(arrayCoordenadasSinAltura, { color: '#2b3035', weight: 2 }).addTo(mymap);
+    }catch(e){
+      console.log(e);
+    }
+    
     let edadMax = carreraSeleccionada.fecha_nacim_max.split('-');
     let edadMin = carreraSeleccionada.fecha_nacim_min.split('-');
     edadMax = `${edadMax[2]} de ${mes(+edadMax[1])} de ${edadMax[0]}`;
@@ -1783,9 +2038,12 @@ iniciarSesionFormularioLogin.addEventListener('click', (e) => {
       if(data){
         console.log(data);
         localStorage.setItem('jwt', data);
+        data = data.split('.')[1];
+        data = atob(data);
+        data = JSON.parse(data);
         if(data.userData.completado){
           formularioLogin.classList.toggle('hidden');
-          // renderMainPage();
+          renderMainPage();
         }else if(data.isAdmin){
           formularioLogin.classList.toggle('hidden');
           formularioCompletarRegistroOrganizador.classList.toggle('hidden');
@@ -2079,23 +2337,23 @@ function mostrarBreadcrumbs(){
   for(let i = 0; i < breadcrumbs.length; i++){
     breadcrumbs[i].classList.toggle('hidden');
   }
-  if(primeraVezBreadcrumb){
-    let breadcrumb = document.createElement('li');
-    breadcrumb.textContent = 'Limpiar mapa de navegación';
-    breadcrumb.id = 'limpiarMapaNavegacion';
-    breadcrumb.classList.add('breadcrumb-item');
-    breadcrumb.classList.add('active');
-    breadcrumb.classList.add('pointer');
-    breadcrumb.classList.add('hidden');
-    breadcrumb.classList.add('fs-3');
-    breadcrumb.classList.add('breadcrumbPrescindible');
-    breadcrumb.addEventListener('click', (e) => {
-      e.preventDefault();
-      limpiarMapaNavegacion();
-    });
-    breadcrumbsContainer.appendChild(breadcrumb);
-    primeraVezBreadcrumb = false;
-  }
+  // if(primeraVezBreadcrumb){
+  //   let breadcrumb = document.createElement('li');
+  //   breadcrumb.textContent = 'Limpiar mapa de navegación';
+  //   breadcrumb.id = 'limpiarMapaNavegacion';
+  //   breadcrumb.classList.add('breadcrumb-item');
+  //   breadcrumb.classList.add('active');
+  //   breadcrumb.classList.add('pointer');
+  //   breadcrumb.classList.add('hidden');
+  //   breadcrumb.classList.add('fs-3');
+  //   breadcrumb.classList.add('breadcrumbPrescindible');
+  //   breadcrumb.addEventListener('click', (e) => {
+  //     e.preventDefault();
+  //     limpiarMapaNavegacion();
+  //   });
+  //   breadcrumbsContainer.appendChild(breadcrumb);
+  //   primeraVezBreadcrumb = false;
+  // }
   
 }
 function limpiarMapaNavegacion(){
@@ -2104,25 +2362,41 @@ function limpiarMapaNavegacion(){
     breadcrumbs[i].outerHTML = '';
   }
 }
-function addBreadcrumbCarrera(nombreCarrera, e){
+function addBreadcrumbCarrera(nombreCarrera, idCarrera, idEvento, indexCarrera){
   let breadcrumb = document.createElement('li');
-  breadcrumb.textContent = nombreCarrera;
-  // breadcrumb.dataset.idCarrera = idCarrera;
-  breadcrumb.classList.add('breadcrumb-item');
-  breadcrumb.classList.add('active');
-  breadcrumb.classList.add('pointer');
-  breadcrumb.classList.add('breadcrumbPrescindible');
-  breadcrumb.classList.add('fs-3');
-  breadcrumbsContainer.appendChild(breadcrumb);
+  //compruebo si ya existe el breadcrumb de esa carrera
+  let breadcrumbs = document.getElementsByClassName('breadcrumbPrescindible');
+  let existe = false;
+  for(let i = 0; i < breadcrumbs.length; i++){
+    if(breadcrumbs[i].dataset.idCarrera == idCarrera){
+      existe = true;
+    }
+  }
+  if(!existe){
+    breadcrumb.textContent = nombreCarrera;
+    // breadcrumb.dataset.idCarrera = idCarrera;
+    breadcrumb.classList.add('breadcrumb-item');
+    breadcrumb.classList.add('active');
+    // breadcrumb.classList.add('pointer');
+    breadcrumb.classList.add('breadcrumbPrescindible');
+    breadcrumb.classList.add('fs-3');
+    breadcrumb.dataset.idCarrera = idCarrera;
+    breadcrumb.dataset.idEvento = idEvento;
+    breadcrumb.dataset.indexCarrera = indexCarrera;
+    breadcrumbsContainer.appendChild(breadcrumb);
 
-  breadcrumb.addEventListener('click', (e) => {
-    e.preventDefault();
-    renderDetalleCarrera(e);
-  });
+    // breadcrumb.addEventListener('click', (e) => {
+    //   e.preventDefault();
+    //   let aIdCarrera = e.currentTarget.dataset.idCarrera;
+    //   let aIdEvento = e.currentTarget.dataset.idEvento;
+    //   let aIndexCarrera = e.currentTarget.dataset.indexCarrera;
+    //   renderDetalleCarrera(e, aIdCarrera, aIdEvento, aIndexCarrera);
+    // });
+  }
 }
-function addBreadcrumbEvento(nombreEvento, idCarrera, e){
+function addBreadcrumbEvento(nombreEvento, idEvento, idOrganizador, index){
   jwt = localStorage.getItem('jwt');
-  if(jwt){
+  
     let breadcrumb = document.createElement('li');
     breadcrumb.textContent = nombreEvento;
     // breadcrumb.dataset.idCarrera = idCarrera;
@@ -2130,13 +2404,16 @@ function addBreadcrumbEvento(nombreEvento, idCarrera, e){
     breadcrumb.classList.add('active');
     breadcrumb.classList.add('pointer');
     breadcrumb.classList.add('fs-3');
+    breadcrumb.classList.add('breadcrumbPrescindible');
+    breadcrumb.dataset.idEvento = idEvento;
     breadcrumbsContainer.appendChild(breadcrumb);
 
     breadcrumb.addEventListener('click', (e) => {
     e.preventDefault();
-    renderDetalleEvento(e);
+
+    renderDetalleEvento(e, idEvento, idOrganizador, index); 
   });
-  }
+  
 }
 </script>
 

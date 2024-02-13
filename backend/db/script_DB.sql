@@ -36,6 +36,7 @@ CREATE TABLE evento(
     fecha_inicio DATE,
     fecha_fin DATE,
     web VARCHAR(128),
+    ubicacion VARCHAR(128),
     url_reglamento VARCHAR(128),
     url_cartel VARCHAR(128),
     FOREIGN KEY (id_organizador) REFERENCES usuario_organizador (id_usuario) ON DELETE CASCADE
@@ -80,7 +81,7 @@ CREATE TABLE usuario_carrera_favorita(
 
 CREATE TABLE completados(
 	id_usuario INT PRIMARY KEY,
-    FOREIGN KEY (id_usuario) REFERENCES usuario (id)
+    FOREIGN KEY (id_usuario) REFERENCES usuario (id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 DELIMITER $$
 CREATE FUNCTION email_is_admin(p_email VARCHAR(128))
@@ -182,5 +183,31 @@ BEGIN
 END;
 $$
 DELIMITER ; 
+DELIMITER $$
+CREATE FUNCTION isset_ubicacion (p_id_evento INT)
+RETURNS BOOLEAN
+BEGIN
+	DECLARE v_ubicacion INT;
+    SET v_ubicacion = (SELECT ubicacion FROM evento WHERE id = p_id_evento);
+    IF v_ubicacion IS NOT NULL THEN
+		return true;
+	ELSE
+		return false;
+	END IF;
+END;
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE PROCEDURE set_ubicacion (p_ubicacion VARCHAR(64), p_id_evento INT)
+BEGIN 
+	DECLARE v_isset BOOLEAN;
+    
+    SET v_isset = (SELECT isset_ubicacion(p_id_evento));
+    
+    IF NOT v_isset THEN
+		UPDATE evento SET ubicacion = p_ubicacion WHERE id = p_id_evento;
+    END IF;
+END
+$$
+DELIMITER ; 
 
-# SELECT is_admin('abel@email.com');

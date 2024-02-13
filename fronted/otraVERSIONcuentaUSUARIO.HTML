@@ -188,7 +188,7 @@
     
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
       <!--VISUALIZAR EL CATALOGO DE EVENTOS -->
-      <div id="catalogoEventos" class="componente  row justify-content-evenly">
+      <!-- <div id="catalogoEventos" class="componente  row justify-content-evenly">
         <div class="row mt-2">
           <h1 class="col-12 text-left">Rellena los datos que quieras modificar</h1>
         </div>
@@ -214,9 +214,56 @@
             </div>
             <div id="registrarUsuarioFormularioCompletarRegistroUsuario" class="border border-light mb-3 mt-5 col-8 col-md-6 col-xl-5 p-2 rounded text-center" style="cursor: pointer">Modificar</div>
         </div>
-      </div>
-        
+      </div> -->
+      <!-- <div id="eventosOrganizador" class="componente">
+        <div class="row justify-content-center">
+          <div class="col-10">
+            <div class="row justify-copntent-center">
+              <div class="col-12"  id="listadoEventosOrganizador">
+                <h1 class="col-12 text-center mb-5">Mis Eventos</h1>
+                <h2 class="col-12 text-cemter" id="alertEventosOrganizador"></h2>
+                <div class="row justify-content-center border-bottom border-light">
+                  <div class="col-12 col-lg-3 p-2 mb-5">El evento llamado amadeo de laralalalaala</div>
+                  <div class="col-12 col-lg-2 border pointer border-info text-center p-2 me-3 mb-5">Modificar</div>
+                  <div class="col-12 col-lg-2 border pointer border-danger text-center p-2 mb-5">Eliminar</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+                  <!--FORMULARIO DE REGISTRO DE EVENTOS-->
+                  <form class="componente col-10 col-sm-8  col-lg-6 col-xxl-4 redondeada pt-4 pb-4 ps-5 pe-5 bg-dark hidden"  style=" opacity: 0.9;" id="formularioEdicionEventos">
+                    <div class="row mt-2">
+                        <h1 class="col-12 text-left">Edición de Eventos</h1>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="mb-3 col-12">
+                            <label for="nombreFormularioEdicionEvento" class="form-label">Nombre del Evento</label>
+                            <input type="text" class="form-control bg-transparent pointer border border-light" id="nombreFormularioEdicionEvento" name="nombre"  title="Introduce nombre del Evento">
+                        </div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="mb-3 col-12 col-md-5">
+                            <label for="fechaInicioFormularioEdicionEvento" class="form-label">Fecha de Inicio</label>
+                            <input type="date" class="form-control bg-transparent pointer border border-light" id="fechaInicioFormularioEdicionEvento" name="fechaInicio"  title="Introduce fecha de inicio">
+                        </div>
+                        <div class="mb-3 col-12 col-md-5">
+                            <label for="fechaFinFormularioEdicionEvento" class="form-label">Fecha de Finalización</label>
+                            <input type="date" class="form-control bg-transparent pointer border border-light" id="fechaFinFormularioEdicionEvento" name="fechaFin"  title="Introduce fecha de finalización">
+                        </div>
+                    </div>
+                                   
+                    <div class="row justify-content-center">
+                        <div id="formAlertFormularioNuevoEvento" class="m-4">Editar Evento</div>
+                        <!-- <input type="submit" value="Continuar" class="col-4 btn btn-warning" id="registrarEvento" style="color: #2b3035 !important;" name="continuar"> -->
+                        <span   class="col-4 btn btn-warning" id="registrarEventoFormularioNuevoEvento" style="color: #2b3035 !important;" name="continuar"><strong style="color: #2b3035 !important;">Continuar</strong></span>
+                    </div>
+                </form>
             
-        
+        const formularioEdicionEventos = document.getElementById("formularioEdicionEventos");
+        const nombreFormularioEdicionEvento = document.getElementById("nombreFormularioEdicionEvento");
+        const fechaInicioFormularioEdicionEvento = document.getElementById("fechaInicioFormularioEdicionEvento");
+        const fechaFinFormularioEdicionEvento = document.getElementById("fechaFinFormularioEdicionEvento");
 </body>
 </html>
