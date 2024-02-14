@@ -53,6 +53,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $con -> close();
         }else{
             header('HTTP/1.1 500 Internal Server Error');
+            exit();
         }
 
     }else{
@@ -65,6 +66,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $con -> close();
         }else{
             header('HTTP/1.1 500 Internal Server Error');
+            exit();
     }
     
 
@@ -79,23 +81,75 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $con -> close();
         }else{
             header('HTTP/1.1 500 Internal Server Error');
+            exit();
         }
     }
+    $imagen;
+    $nombre;
+    $nickname;
+    $fechaNacimiento;
+    $entidadOrganizadora;
+    $telefono;
+    //pido los datos del usuario para crear un nuevo token
+    $con = new Conexion();
+    $sql = "SELECT nombre, nickname, fecha_nacimiento, imagen FROM usuario WHERE id = ?";
+    if($stmt = $con -> prepare($sql)){
+        $stmt -> bind_param("i", $idUsuario);
+        $stmt -> execute();
+        $stmt -> store_result();
+        $stmt -> bind_result($nombre, $nickname, $fechaNacimiento, $imagen);
+        $stmt -> fetch();
+        $stmt -> close();
+        $con -> close();
+    }else{
+        header('HTTP/1.1 500 Internal Server Error');
+        exit();
+    }
     //creo un token con los nuevos datos del ususario 
-    $pld = [
+    if($decoded->userData->isAdmin){
+        //pido los datos de usuario_organizador
+        $con = new Conexion();
+        $sql = "SELECT entidad_organizadora, telefono FROM usuario_organizador WHERE id_usuario = ?";
+        if($stmt = $con -> prepare($sql)){
+            $stmt -> bind_param("i", $idUsuario);
+            $stmt -> execute();
+            $stmt -> store_result();
+            $stmt -> bind_result($entidadOrganizadora, $telefono);
+            $stmt -> fetch();
+            $stmt -> close();
+            $con -> close();
+        }else{
+            header('HTTP/1.1 500 Internal Server Error');
+            exit();
+        }
+        $pld = [
             'exp' => time() * 1000 + 3600,
             'userData' => [
-                            'userId' => $idUsuario,
-                            'isAdmin' => $decoded->userData->isAdmin,
-                            'userNombre' => $_POST['nombre'],
-                            'userNickname' => $_POST['nickname'],
-                            'userFechaNacimiento' => $_POST['fechaNacimiento'],
-                            'userImagen' => $rutaDestino,
-                            'telefono' => $_POST['telefono'],
-                            'entidadOrganizadora' => $_POST['entidadOrganizadora'],
-                            'completado' => true
-                        ]
-    ];
+                'userId' => $idUsuario,
+                'isAdmin' => $decoded->userData->isAdmin,
+                'userNombre' => $nombre,
+                'userNickname' => $nickname,
+                'userFechaNacimiento' => $fechaNacimiento,
+                'userImagen' => $imagen,
+                'telefono' => $telefono,
+                'entidadOrganizadora' => $entidadOrganizadora,
+                'completado' => true
+            ]
+        ];
+    }else{
+        $pld = [
+            'exp' => time() * 1000 + 3600,
+            'userData' => [
+                'userId' => $idUsuario,
+                'isAdmin' => $decoded->userData->isAdmin,
+                'userNombre' => $nombre,
+                'userNickname' => $nickname,
+                'userFechaNacimiento' => $fechaNacimiento,
+                'userImagen' => $imagen,
+                'completado' => true
+            ]
+        ];
+    }
     $token = JWT::encode($pld, $jwtkey, 'HS256');
     echo json_encode($token);
     header('HTTP/1.1 201 OK');

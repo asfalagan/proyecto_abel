@@ -33,7 +33,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
     
     $conexion = new Conexion;
     if($conexion->connect_error){
-        enviarRespuesta(500, "Error en la conexión a la base de datos");
+        header("HTTP/1.1 500 Error en la conexión a la base de datos");
         exit();
     }
     $sql = "SELECT * FROM evento WHERE id_organizador = $idOrganizador";

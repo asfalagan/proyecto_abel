@@ -19,7 +19,7 @@ if($method == "OPTIONS") {
 if($_SERVER['REQUEST_METHOD'] === 'GET'){
     $conexion = new Conexion;
     if($conexion->connect_error){
-        enviarRespuesta(500, "Error en la conexión a la base de datos");
+        header("HTTP/1.1 500 Error en la conexión a la base de datos");
         exit();
     }
     $sql = "SELECT * FROM evento";
@@ -30,9 +30,6 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
     while($row = $result->fetch_assoc()){
         $eventos[] = $row;
     }
-    // echo '<pre>';
-    // var_dump($eventos);
-    // echo '</pre>';
     $stmt->close();
     $conexion->close();
     header("HTTP/1.1 201 OK");

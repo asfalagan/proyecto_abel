@@ -35,7 +35,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
         $idEvento = $_GET['idEvento'];
         $conexion = new Conexion;
         if($conexion->connect_error){
-            enviarRespuesta(500, "Error en la conexión a la base de datos");
+            header("HTTP/1.1 500 Error en la conexión a la base de datos");
             exit();
         }
         $sql = "SELECT * FROM carrera WHERE id_evento = ?";
@@ -54,7 +54,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
         echo json_encode($carreras);
     }else{
         header("HTTP/1.1 400 Bad Request");
-        echo json_encode(["error" => "No se ha especificado el idEvento"]);
+        exit();
     }
 }
 ?>

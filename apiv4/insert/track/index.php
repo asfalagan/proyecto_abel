@@ -35,7 +35,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         exit();
     }
     $json_data = file_get_contents("php://input");    
-    //convierto el json data en texto plano
     $json_data = json_encode($json_data);
     $idUsuario = $decoded->userData->userId;
     $idEvento = $decoded->eventData->eventoId;
@@ -63,8 +62,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $stmt -> execute();
             $stmt -> close();
             $con -> close();
-            
-            //creo el jwt
 
             $con = new Conexion();
             $sql = "CALL set_ubicacion(?, ?)";
@@ -91,8 +88,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             
         }else{
             header("HTTP/1.1 400 BadRequest");
-            //muestro el error
-            echo json_encode($con -> error);
+            exit();
         }
     }
 }

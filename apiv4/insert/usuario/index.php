@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $emailTest;
     $conTest = new Conexion();
     if ($conTest->connect_error) {
-        enviarRespuesta(500, "Error en la conexión a la base de datos");
+        header("HTTP/1.1 500 Error en la conexión a la base de datos");
         exit();
     }
     if(!isset($email)||!isset($passwd)){enviarRespuesta(400, "Error Al Registrar usuario COD 1");}
@@ -37,12 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conTest->close();
     
     if ($emailTest == $email) {
-        enviarRespuesta(202, "Email ya registrado");
+        header("HTTP/1.1 202 Email ya registrado en la base de datos");
     
     } else {
         $con = new Conexion();
         if ($con->connect_error) {
-            enviarRespuesta(500, "Error en la conexión a la base de datos");
+            header("HTTP/1.1 500 Error en la conexión a la base de datos");
             exit();
         }
         if($isAdmin){
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sql  = "SELECT id FROM usuario WHERE email = ?";
                 $con = new Conexion();
                 if ($con->connect_error) {
-                    enviarRespuesta(500, "Error en la conexión a la base de datos");
+                    
                     exit();
                 }
                 if($stmt = $con->prepare($sql)){
@@ -88,21 +88,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt->close();
                     $con->close();
                     header("HTTP/1.1 400 Bad Request");
+                    exit();
                 }
             } else {
                 $con->close();
                 header("HTTP/1.1 400 Bad Request");
+                exit();
             }
         }
     }
 } else {
-    enviarRespuesta(400, "Bad Request");
+    header('HTTP/ 1.1 400 Bad Request');
+    exit();
 }
-function enviarRespuesta($codigo, $mensaje)
-{
-    http_response_code($codigo);
-    header('Content-Type: application/json');
-    echo json_encode(array('mensaje' => $mensaje));
-}
+
 
 ?>

@@ -44,8 +44,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $stmt -> close();
         $con -> close();
         header('HTTP/1.1 201 OK');
+        exit();
     }else{
         header('HTTP/1.1 500 Internal Server Error');
+        exit();
     }
 }
 ?>
